@@ -1,0 +1,272 @@
+@extends('layouts.app')
+
+@section('title', 'PT Sahabat Sawit — Perkebunan Kelapa Sawit Berkelanjutan di Rokan Hilir, Riau')
+
+@section('content')
+
+    {{-- 1. HERO SECTION --}}
+    <x-hero :stats="$stats" />
+
+    {{-- 2. TENTANG KAMI --}}
+    <section class="py-20 lg:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="relative">
+                    <img src="{{ asset('images/tentang-kami.jpg') }}"
+                         alt="Aktivitas perkebunan kelapa sawit PT Sahabat Sawit"
+                         class="rounded-brand shadow-xl w-full h-[420px] object-cover"
+                         onerror="this.src='https://placehold.co/700x500/1F5F3B/F5F1E8?text=PT+Sahabat+Sawit'">
+                    <div class="absolute -bottom-6 -right-6 hidden md:flex bg-gold text-white font-heading font-bold rounded-brand px-6 py-4 shadow-lg">
+                        15+ Tahun Pengalaman
+                    </div>
+                </div>
+                <div>
+                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tentang Kami</span>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">PT Sahabat Sawit Rokan Sejahtera</h2>
+                    <p class="mt-2 font-heading text-lg text-palm-leaf">Berkembang Bersama Alam dan Masyarakat</p>
+                    <p class="mt-6 text-gray-text leading-relaxed">
+                        PT Sahabat Sawit adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit, berlokasi di Kabupaten Rokan Hilir, Provinsi Riau. Kami berkomitmen mengelola perkebunan secara profesional, produktif, dan bertanggung jawab, dengan tetap menjaga kelestarian lingkungan serta memberikan manfaat nyata bagi masyarakat sekitar.
+                    </p>
+                    <p class="mt-4 text-gray-text leading-relaxed">
+                        Dengan dukungan tim yang berpengalaman dan standar operasional yang terukur, kami terus bertumbuh menjadi mitra terpercaya dalam industri kelapa sawit di Riau.
+                    </p>
+                    <a href="{{ route('about') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-primary-green text-white font-heading font-semibold hover:bg-dark-green transition-all duration-300">
+                        Selengkapnya
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 3. VISI & MISI --}}
+    <section class="py-20 lg:py-28 bg-cream">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Visi & Misi</span>
+                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Arah dan Tujuan Kami</h2>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Visi -->
+                <div class="bg-white rounded-brand p-8 shadow-lg border-t-4 border-gold">
+                    <div class="w-14 h-14 rounded-full bg-primary-green/10 flex items-center justify-center mb-5">
+                        <svg class="w-7 h-7 text-primary-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    </div>
+                    <h3 class="font-heading font-bold text-xl text-dark-green mb-3">Visi</h3>
+                    <p class="text-gray-text leading-relaxed">
+                        Menjadi perusahaan perkebunan kelapa sawit yang unggul, profesional, bertanggung jawab, dan berkelanjutan.
+                    </p>
+                </div>
+
+                <!-- Misi -->
+                <div class="bg-white rounded-brand p-8 shadow-lg border-t-4 border-primary-green">
+                    <h3 class="font-heading font-bold text-xl text-dark-green mb-5">Misi</h3>
+                    <ul class="space-y-4">
+                        @foreach($missions as $mission)
+                        <li class="flex items-start gap-3">
+                            <span class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-light-green/20 text-primary-green flex items-center justify-center">
+                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                            </span>
+                            <span class="text-gray-text leading-relaxed">{{ $mission }}</span>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 4. KEUNGGULAN PERUSAHAAN --}}
+    <section class="py-20 lg:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keunggulan Kami</span>
+                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Mengapa Memilih SSRS?</h2>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                @php
+                    $icons = [
+                        'leaf' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l6-6M12 21a9 9 0 100-18 9 9 0 000 18z"/>',
+                        'cog' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>',
+                        'handshake' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"/>',
+                        'shield' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>',
+                        'globe' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/>',
+                        'chart' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>',
+                    ];
+                @endphp
+                @foreach($advantages as $adv)
+                <div class="group bg-cream rounded-brand p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-gold/40">
+                    <div class="w-14 h-14 rounded-full bg-primary-green flex items-center justify-center mb-5 group-hover:bg-gold transition-colors duration-300">
+                        <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
+                            {!! $icons[$adv['icon']] ?? '' !!}
+                        </svg>
+                    </div>
+                    <h3 class="font-heading font-semibold text-lg text-dark-green mb-2">{{ $adv['title'] }}</h3>
+                    <p class="text-sm text-gray-text leading-relaxed">{{ $adv['desc'] }}</p>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+
+    {{-- 5. PERKEBUNAN KAMI --}}
+    <section class="py-20 lg:py-28 bg-dark-green text-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div>
+                    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Area Operasional</span>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl">Perkebunan Kami</h2>
+                    <p class="mt-4 text-white/75 leading-relaxed">
+                        Beroperasi dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau, dengan sistem pengelolaan lahan yang terintegrasi dan berorientasi pada keberlanjutan jangka panjang.
+                    </p>
+
+                    <div class="mt-8 grid grid-cols-2 gap-6">
+                        <div>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Lokasi</p>
+                            <p class="mt-1 font-heading font-semibold">Rokan Hilir, Riau</p>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Luas Area</p>
+                            <p class="mt-1 font-heading font-semibold">10.000+ Ha*</p>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Sistem Pengelolaan</p>
+                            <p class="mt-1 font-heading font-semibold">Terintegrasi & Modern</p>
+                        </div>
+                        <div>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Komitmen</p>
+                            <p class="mt-1 font-heading font-semibold">Ramah Lingkungan</p>
+                        </div>
+                    </div>
+                    <p class="mt-4 text-xs text-white/40">*Data placeholder — sesuaikan dengan data aktual perusahaan.</p>
+
+                    <a href="{{ route('plantation') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-gold text-dark-green font-heading font-semibold hover:bg-light-green transition-all duration-300">
+                        Lihat Detail Perkebunan
+                    </a>
+                </div>
+
+                <div class="rounded-brand overflow-hidden shadow-2xl border border-white/10">
+                    <!-- Placeholder Google Maps embed -->
+                    <iframe
+                        src="https://www.google.com/maps?q=Rokan+Hilir,+Riau&output=embed"
+                        class="w-full h-[380px]" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade"
+                        title="Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {{-- 6. PRODUK --}}
+    <section class="py-20 lg:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Produk Kami</span>
+                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Hasil Perkebunan Berkualitas</h2>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($products as $product)
+                <div class="rounded-brand overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
+                    <div class="h-56 overflow-hidden">
+                        <img src="{{ asset('images/products/' . $product['image']) }}"
+                             alt="{{ $product['name'] }} — PT Sahabat Sawit"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.src='https://placehold.co/500x400/2E7D32/F5F1E8?text={{ urlencode($product['name']) }}'">
+                    </div>
+                    <div class="p-6 bg-cream">
+                        <h3 class="font-heading font-semibold text-lg text-dark-green">{{ $product['name'] }}</h3>
+                        <p class="mt-2 text-sm text-gray-text leading-relaxed">{{ $product['desc'] }}</p>
+                    </div>
+                </div>
+                @endforeach
+            </div>
+
+            <div class="mt-10 text-center">
+                <a href="{{ route('products') }}" class="inline-flex items-center gap-2 px-7 py-3 rounded-brand border-2 border-primary-green text-primary-green font-heading font-semibold hover:bg-primary-green hover:text-white transition-all duration-300">
+                    Lihat Semua Produk
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- 7. KEBERLANJUTAN --}}
+    <section class="py-20 lg:py-28 bg-cream">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-2xl mx-auto">
+                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keberlanjutan</span>
+                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Komitmen untuk Keberlanjutan</h2>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                <ul class="space-y-5">
+                    @foreach(['Perlindungan lingkungan', 'Pengelolaan sumber daya', 'Keselamatan dan kesehatan kerja', 'Pemberdayaan masyarakat', 'Praktik perkebunan yang bertanggung jawab'] as $item)
+                    <li class="flex items-start gap-4 bg-white rounded-brand p-5 shadow-sm">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-light-green/20 text-palm-leaf flex items-center justify-center">
+                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+                        </span>
+                        <span class="font-heading font-medium text-dark-green pt-1.5">{{ $item }}</span>
+                    </li>
+                    @endforeach
+                </ul>
+
+                <div data-counter-section class="grid grid-cols-2 gap-6">
+                    <div class="bg-primary-green text-white rounded-brand p-8 text-center">
+                        <p data-counter="100%" class="font-heading font-extrabold text-4xl md:text-5xl text-gold">100%</p>
+                        <p class="mt-3 text-sm text-white/80">Komitmen terhadap keberlanjutan</p>
+                    </div>
+                    <div class="bg-dark-green text-white rounded-brand p-8 text-center">
+                        <p data-counter="0" class="font-heading font-extrabold text-4xl md:text-5xl text-gold">0</p>
+                        <p class="mt-3 text-sm text-white/80">Toleransi terhadap praktik kerja yang tidak aman</p>
+                    </div>
+                </div>
+            </div>
+            <p class="mt-6 text-xs text-gray-text text-center">*Angka statistik dapat diperbarui melalui data perusahaan.</p>
+        </div>
+    </section>
+
+    {{-- 8. BERITA TERBARU --}}
+    <section class="py-20 lg:py-28 bg-white">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
+                <div>
+                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Berita</span>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berita Terbaru</h2>
+                </div>
+                <a href="{{ route('news') }}" class="hidden md:inline-flex items-center gap-2 text-primary-green font-heading font-semibold hover:text-dark-green transition-colors">
+                    Lihat Semua Berita →
+                </a>
+            </div>
+
+            <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
+                @foreach($news as $item)
+                <article class="rounded-brand overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
+                    <div class="h-48 overflow-hidden">
+                        <img src="https://placehold.co/500x300/1F5F3B/F5F1E8?text={{ urlencode($item['category']) }}"
+                             alt="{{ $item['title'] }}" class="w-full h-full object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center gap-3 text-xs text-gray-text">
+                            <span class="px-3 py-1 rounded-full bg-light-green/20 text-palm-leaf font-semibold">{{ $item['category'] }}</span>
+                            <span>{{ $item['date'] }}</span>
+                        </div>
+                        <h3 class="mt-4 font-heading font-semibold text-lg text-dark-green leading-snug">{{ $item['title'] }}</h3>
+                        <p class="mt-2 text-sm text-gray-text leading-relaxed">{{ $item['excerpt'] }}</p>
+                        <a href="{{ route('news.show', $item['slug']) }}" class="mt-4 inline-flex items-center gap-1 text-primary-green font-heading font-semibold text-sm hover:text-gold transition-colors">
+                            Baca Selengkapnya →
+                        </a>
+                    </div>
+                </article>
+                @endforeach
+            </div>
+        </div>
+    </section>
+                </div>
+            </div>
+        </div>
+    </section>
+
+@endsection
