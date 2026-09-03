@@ -21,10 +21,8 @@
                 <h3 class="font-heading font-semibold text-white mb-4">Tautan Cepat</h3>
                 <ul class="space-y-2 text-sm text-white/70">
                     <li><a href="{{ route('about') }}" class="hover:text-gold transition-colors">Tentang Kami</a></li>
-                    <li><a href="{{ route('plantation') }}" class="hover:text-gold transition-colors">Perkebunan</a></li>
                     <li><a href="{{ route('products') }}" class="hover:text-gold transition-colors">Produk</a></li>
                     <li><a href="{{ route('sustainability') }}" class="hover:text-gold transition-colors">Keberlanjutan</a></li>
-                    <li><a href="{{ route('career') }}" class="hover:text-gold transition-colors">Karier</a></li>
                 </ul>
             </div>
 

@@ -6,13 +6,14 @@ class AboutController extends Controller
 {
     public function index()
     {
-        $milestones = [
-            ['year' => '2010', 'text' => 'Pendirian PT Sahabat Sawit di Rokan Hilir, Riau.'],
-            ['year' => '2014', 'text' => 'Perluasan area perkebunan dan peningkatan kapasitas produksi.'],
-            ['year' => '2019', 'text' => 'Penerapan standar keberlanjutan pada seluruh unit operasional.'],
-            ['year' => '2026', 'text' => 'Terus tumbuh sebagai mitra terpercaya industri kelapa sawit lokal.'],
-        ];
+        $organisasi = [
+    ['nama' => 'Nama Direktur',   'jabatan' => 'Direktur Utama',        'photo' => 'direktur.jpg'],
+    ['nama' => 'Nama Manajer 1',  'jabatan' => 'Manajer Operasional',   'photo' => 'manajer-ops.jpg'],
+    ['nama' => 'Nama Manajer 2',  'jabatan' => 'Manajer Keuangan',      'photo' => 'manajer-keu.jpg'],
+    ['nama' => 'Nama Staf',       'jabatan' => 'Kepala Kebun',          'photo' => 'kepala-kebun.jpg'],
+    // tambahkan sesuai jumlah anggota tim
+];
 
-        return view('about', compact('milestones'));
+        return view('about', compact('organisasi'));
     }
 }

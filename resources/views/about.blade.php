@@ -31,14 +31,23 @@
 </section>
 
 <section class="py-20 bg-cream">
-    <div class="max-w-5xl mx-auto px-6 lg:px-8">
-        <h2 class="text-center font-heading font-bold text-2xl md:text-3xl text-dark-green mb-14">Perjalanan Kami</h2>
-        <div class="space-y-8 border-l-2 border-primary-green/30 pl-8">
-            @foreach($milestones as $m)
-            <div class="relative">
-                <span class="absolute -left-[38px] top-1 w-4 h-4 rounded-full bg-gold border-4 border-cream"></span>
-                <p class="font-heading font-bold text-primary-green">{{ $m['year'] }}</p>
-                <p class="mt-1 text-gray-text">{{ $m['text'] }}</p>
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tim Kami</span>
+            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Struktur Organisasi</h2>
+        </div>
+
+        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+            @foreach($organisasi as $o)
+            <div class="org-card text-center">
+                <div class="org-photo-wrap mx-auto mb-4">
+                    <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
+                         alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
+                         class="org-photo"
+                         onerror="this.src='https://placehold.co/300x300/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
+                </div>
+                <p class="font-heading font-bold text-dark-green leading-snug">{{ $o['nama'] }}</p>
+                <p class="mt-1 text-xs text-gold font-heading font-semibold uppercase tracking-wide">{{ $o['jabatan'] }}</p>
             </div>
             @endforeach
         </div>

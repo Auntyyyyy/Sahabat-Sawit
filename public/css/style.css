@@ -52,3 +52,30 @@ a:focus-visible, button:focus-visible, input:focus-visible, textarea:focus-visib
     -webkit-box-orient: vertical;
     overflow: hidden;
 }
+
+/* ==========================================================================
+   Struktur Organisasi
+   ========================================================================== */
+.org-card {
+    transition: transform 0.3s ease;
+}
+.org-card:hover {
+    transform: translateY(-4px);
+}
+
+.org-photo-wrap {
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    padding: 4px;
+    background: linear-gradient(135deg, #D4A017, #8DBF44);
+}
+
+.org-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #F5F1E8;
+    display: block;
+}

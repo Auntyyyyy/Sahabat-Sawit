@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'PT Sahabat Sawit — Perkebunan Kelapa Sawit Berkelanjutan di Rokan Hilir, Riau')
+@section('title', 'PT Sahabat Sawit Rokan Sejahtera')
 
 @section('content')
 
@@ -17,7 +17,7 @@
                          class="rounded-brand shadow-xl w-full h-[420px] object-cover"
                          onerror="this.src='https://placehold.co/700x500/1F5F3B/F5F1E8?text=PT+Sahabat+Sawit'">
                     <div class="absolute -bottom-6 -right-6 hidden md:flex bg-gold text-white font-heading font-bold rounded-brand px-6 py-4 shadow-lg">
-                        15+ Tahun Pengalaman
+                        5+ Tahun Pengalaman
                     </div>
                 </div>
                 <div>
@@ -159,75 +159,7 @@
             </div>
         </div>
     </section>
-
-    {{-- 6. PRODUK --}}
-    <section class="py-20 lg:py-28 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Produk Kami</span>
-                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Hasil Perkebunan Berkualitas</h2>
-            </div>
-
-            <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($products as $product)
-                <div class="rounded-brand overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 group">
-                    <div class="h-56 overflow-hidden">
-                        <img src="{{ asset('images/products/' . $product['image']) }}"
-                             alt="{{ $product['name'] }} — PT Sahabat Sawit"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                             onerror="this.src='https://placehold.co/500x400/2E7D32/F5F1E8?text={{ urlencode($product['name']) }}'">
-                    </div>
-                    <div class="p-6 bg-cream">
-                        <h3 class="font-heading font-semibold text-lg text-dark-green">{{ $product['name'] }}</h3>
-                        <p class="mt-2 text-sm text-gray-text leading-relaxed">{{ $product['desc'] }}</p>
-                    </div>
-                </div>
-                @endforeach
-            </div>
-
-            <div class="mt-10 text-center">
-                <a href="{{ route('products') }}" class="inline-flex items-center gap-2 px-7 py-3 rounded-brand border-2 border-primary-green text-primary-green font-heading font-semibold hover:bg-primary-green hover:text-white transition-all duration-300">
-                    Lihat Semua Produk
-                </a>
-            </div>
-        </div>
-    </section>
-
-    {{-- 7. KEBERLANJUTAN --}}
-    <section class="py-20 lg:py-28 bg-cream">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keberlanjutan</span>
-                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Komitmen untuk Keberlanjutan</h2>
-            </div>
-
-            <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-                <ul class="space-y-5">
-                    @foreach(['Perlindungan lingkungan', 'Pengelolaan sumber daya', 'Keselamatan dan kesehatan kerja', 'Pemberdayaan masyarakat', 'Praktik perkebunan yang bertanggung jawab'] as $item)
-                    <li class="flex items-start gap-4 bg-white rounded-brand p-5 shadow-sm">
-                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-light-green/20 text-palm-leaf flex items-center justify-center">
-                            <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-                        </span>
-                        <span class="font-heading font-medium text-dark-green pt-1.5">{{ $item }}</span>
-                    </li>
-                    @endforeach
-                </ul>
-
-                <div data-counter-section class="grid grid-cols-2 gap-6">
-                    <div class="bg-primary-green text-white rounded-brand p-8 text-center">
-                        <p data-counter="100%" class="font-heading font-extrabold text-4xl md:text-5xl text-gold">100%</p>
-                        <p class="mt-3 text-sm text-white/80">Komitmen terhadap keberlanjutan</p>
-                    </div>
-                    <div class="bg-dark-green text-white rounded-brand p-8 text-center">
-                        <p data-counter="0" class="font-heading font-extrabold text-4xl md:text-5xl text-gold">0</p>
-                        <p class="mt-3 text-sm text-white/80">Toleransi terhadap praktik kerja yang tidak aman</p>
-                    </div>
-                </div>
-            </div>
-            <p class="mt-6 text-xs text-gray-text text-center">*Angka statistik dapat diperbarui melalui data perusahaan.</p>
-        </div>
-    </section>
-
+    
     {{-- 8. BERITA TERBARU --}}
     <section class="py-20 lg:py-28 bg-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">

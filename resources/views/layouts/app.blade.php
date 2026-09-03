@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@yield('title', 'SSRS — Perkebunan Kelapa Sawit Berkelanjutan')</title>
+    <title>@yield('title', 'PT. SAHABAT SAWIT ROKAN SEJAHTERA')</title>
     <meta name="description" content="@yield('description', 'PT Sahabat Sawit adalah perusahaan perkebunan kelapa sawit yang berlokasi di Kabupaten Rokan Hilir, Provinsi Riau, berkomitmen pada praktik perkebunan yang profesional dan berkelanjutan.')">
 
     <!-- Google Fonts -->
@@ -76,15 +76,7 @@
             }
         });
 
-        // Mobile menu toggle
-        const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        if (menuBtn && mobileMenu) {
-            menuBtn.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
+    
         // Statistik counter animasi sederhana (opsional, dipakai di section keberlanjutan/hero)
         function animateCounters() {
             document.querySelectorAll('[data-counter]').forEach(el => {
