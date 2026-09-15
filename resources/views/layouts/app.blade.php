@@ -5,11 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title', 'PT. SAHABAT SAWIT ROKAN SEJAHTERA')</title>
     <meta name="description" content="@yield('description', 'PT Sahabat Sawit adalah perusahaan perkebunan kelapa sawit yang berlokasi di Kabupaten Rokan Hilir, Provinsi Riau, berkomitmen pada praktik perkebunan yang profesional dan berkelanjutan.')">
+    <link rel="icon" type="image/png" href="{{ asset('images/logo.png') }}">
+
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <!-- Tailwind CSS (CDN, dev only — pada produksi gunakan build Tailwind via npm) -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -46,6 +50,7 @@
 </head>
 <body class="font-body text-dark-text bg-body-bg antialiased">
 
+    @include('components.splash-screen')
     @include('components.navbar')
 
     <main>

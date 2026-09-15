@@ -8,28 +8,30 @@
     <x-hero :stats="$stats" />
 
     {{-- 2. TENTANG KAMI --}}
-    <section class="py-20 lg:py-28 bg-white">
+    <section class="pt-16 pb-10 lg:pt-20 lg:pb-14 bg-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div class="relative">
-                    <img src="{{ asset('images/tentang-kami.jpg') }}"
+                    <img src="{{ asset('images/tangki.png') }}"
                          alt="Aktivitas perkebunan kelapa sawit PT Sahabat Sawit"
                          class="rounded-brand shadow-xl w-full h-[420px] object-cover"
                          onerror="this.src='https://placehold.co/700x500/1F5F3B/F5F1E8?text=PT+Sahabat+Sawit'">
                     <div class="absolute -bottom-6 -right-6 hidden md:flex bg-gold text-white font-heading font-bold rounded-brand px-6 py-4 shadow-lg">
-                        5+ Tahun Pengalaman
+                        3+ Tahun Pengalaman
                     </div>
                 </div>
                 <div>
                     <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tentang Kami</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">PT Sahabat Sawit Rokan Sejahtera</h2>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">PT. Sahabat Sawit Rokan Sejahtera</h2>
                     <p class="mt-2 font-heading text-lg text-palm-leaf">Berkembang Bersama Alam dan Masyarakat</p>
-                    <p class="mt-6 text-gray-text leading-relaxed">
+                    <p class="mt-6 text-gray-text leading-relaxed text-justify">
                         PT Sahabat Sawit adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit, berlokasi di Kabupaten Rokan Hilir, Provinsi Riau. Kami berkomitmen mengelola perkebunan secara profesional, produktif, dan bertanggung jawab, dengan tetap menjaga kelestarian lingkungan serta memberikan manfaat nyata bagi masyarakat sekitar.
                     </p>
-                    <p class="mt-4 text-gray-text leading-relaxed">
+                    <p class="mt-4 text-gray-text leading-relaxed text-justify">
                         Dengan dukungan tim yang berpengalaman dan standar operasional yang terukur, kami terus bertumbuh menjadi mitra terpercaya dalam industri kelapa sawit di Riau.
                     </p>
+                    {{-- NOTE: route('about') dibiarkan seperti semula. Jika halaman "Tentang Kami" belum dibuat,
+                         ganti href="{{ route('about') }}" di bawah ini menjadi href="#" juga. --}}
                     <a href="{{ route('about') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-primary-green text-white font-heading font-semibold hover:bg-dark-green transition-all duration-300">
                         Selengkapnya
                         <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
@@ -39,46 +41,8 @@
         </div>
     </section>
 
-    {{-- 3. VISI & MISI --}}
-    <section class="py-20 lg:py-28 bg-cream">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto">
-                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Visi & Misi</span>
-                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Arah dan Tujuan Kami</h2>
-            </div>
-
-            <div class="mt-14 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                <!-- Visi -->
-                <div class="bg-white rounded-brand p-8 shadow-lg border-t-4 border-gold">
-                    <div class="w-14 h-14 rounded-full bg-primary-green/10 flex items-center justify-center mb-5">
-                        <svg class="w-7 h-7 text-primary-green" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    </div>
-                    <h3 class="font-heading font-bold text-xl text-dark-green mb-3">Visi</h3>
-                    <p class="text-gray-text leading-relaxed">
-                        Menjadi perusahaan perkebunan kelapa sawit yang unggul, profesional, bertanggung jawab, dan berkelanjutan.
-                    </p>
-                </div>
-
-                <!-- Misi -->
-                <div class="bg-white rounded-brand p-8 shadow-lg border-t-4 border-primary-green">
-                    <h3 class="font-heading font-bold text-xl text-dark-green mb-5">Misi</h3>
-                    <ul class="space-y-4">
-                        @foreach($missions as $mission)
-                        <li class="flex items-start gap-3">
-                            <span class="mt-1 flex-shrink-0 w-6 h-6 rounded-full bg-light-green/20 text-primary-green flex items-center justify-center">
-                                <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
-                            </span>
-                            <span class="text-gray-text leading-relaxed">{{ $mission }}</span>
-                        </li>
-                        @endforeach
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
     {{-- 4. KEUNGGULAN PERUSAHAAN --}}
-    <section class="py-20 lg:py-28 bg-white">
+    <section class="pt-10 pb-16 lg:pt-14 lg:pb-20 bg-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="text-center max-w-2xl mx-auto">
                 <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keunggulan Kami</span>
@@ -111,15 +75,15 @@
         </div>
     </section>
 
-    {{-- 5. PERKEBUNAN KAMI --}}
-    <section class="py-20 lg:py-28 bg-dark-green text-white">
+    {{-- 5. PETA LOKASI --}}
+    <section class="py-16 lg:py-20 bg-dark-green text-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
                 <div>
-                    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Area Operasional</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl">Perkebunan Kami</h2>
-                    <p class="mt-4 text-white/75 leading-relaxed">
-                        Beroperasi dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau, dengan sistem pengelolaan lahan yang terintegrasi dan berorientasi pada keberlanjutan jangka panjang.
+                    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl">bertumbuh bersama dari sumber terbaik</h2>
+                    <p class="mt-4 text-white/75 leading-relaxed text-justify">
+                    Bahan baku berkualitas berasal dari kebun yang dikelola secara mandiri serta kemitraan dengan petani kelapa sawit. Bersama para mitra, PT. Sahabat Sawit Rokan Sejahtera membangun rantai pasok yang konsisten, berkelanjutan, dan memberikan manfaat bagi masyarakat sekitar.
                     </p>
 
                     <div class="mt-8 grid grid-cols-2 gap-6">
@@ -129,21 +93,23 @@
                         </div>
                         <div>
                             <p class="text-white/50 text-xs uppercase tracking-wide">Luas Area</p>
-                            <p class="mt-1 font-heading font-semibold">10.000+ Ha*</p>
+                            <p class="mt-1 font-heading font-semibold">11.392+ (Ha)</p>
                         </div>
                         <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Sistem Pengelolaan</p>
-                            <p class="mt-1 font-heading font-semibold">Terintegrasi & Modern</p>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Kemitraan</p>
+                            <p class="mt-1 font-heading font-semibold">9348,891(Ha)</p>
                         </div>
                         <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Komitmen</p>
-                            <p class="mt-1 font-heading font-semibold">Ramah Lingkungan</p>
+                            <p class="text-white/50 text-xs uppercase tracking-wide">Diusahan sendiri</p>
+                            <p class="mt-1 font-heading font-semibold">2043,75(Ha)</p>
                         </div>
                     </div>
-                    <p class="mt-4 text-xs text-white/40">*Data placeholder — sesuaikan dengan data aktual perusahaan.</p>
+                    <p class="mt-4 text-xs text-white/40">*SK : SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
 
+                    {{-- FIX: halaman Perkebunan belum ada, route('plantation') diganti href="#" --}}
                     <a href="{{ route('plantation') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-gold text-dark-green font-heading font-semibold hover:bg-light-green transition-all duration-300">
                         Lihat Detail Perkebunan
+                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                     </a>
                 </div>
 
@@ -159,46 +125,4 @@
             </div>
         </div>
     </section>
-    
-    {{-- 8. BERITA TERBARU --}}
-    <section class="py-20 lg:py-28 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-                <div>
-                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Berita</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berita Terbaru</h2>
-                </div>
-                <a href="{{ route('news') }}" class="hidden md:inline-flex items-center gap-2 text-primary-green font-heading font-semibold hover:text-dark-green transition-colors">
-                    Lihat Semua Berita →
-                </a>
-            </div>
-
-            <div class="mt-14 grid grid-cols-1 md:grid-cols-3 gap-8">
-                @foreach($news as $item)
-                <article class="rounded-brand overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
-                    <div class="h-48 overflow-hidden">
-                        <img src="https://placehold.co/500x300/1F5F3B/F5F1E8?text={{ urlencode($item['category']) }}"
-                             alt="{{ $item['title'] }}" class="w-full h-full object-cover">
-                    </div>
-                    <div class="p-6">
-                        <div class="flex items-center gap-3 text-xs text-gray-text">
-                            <span class="px-3 py-1 rounded-full bg-light-green/20 text-palm-leaf font-semibold">{{ $item['category'] }}</span>
-                            <span>{{ $item['date'] }}</span>
-                        </div>
-                        <h3 class="mt-4 font-heading font-semibold text-lg text-dark-green leading-snug">{{ $item['title'] }}</h3>
-                        <p class="mt-2 text-sm text-gray-text leading-relaxed">{{ $item['excerpt'] }}</p>
-                        <a href="{{ route('news.show', $item['slug']) }}" class="mt-4 inline-flex items-center gap-1 text-primary-green font-heading font-semibold text-sm hover:text-gold transition-colors">
-                            Baca Selengkapnya →
-                        </a>
-                    </div>
-                </article>
-                @endforeach
-            </div>
-        </div>
-    </section>
-                </div>
-            </div>
-        </div>
-    </section>
-
 @endsection

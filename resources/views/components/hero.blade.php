@@ -1,14 +1,21 @@
 @props(['stats' => []])
 
 <section class="relative min-h-[85vh] lg:min-h-[95vh] flex items-center bg-dark-green overflow-hidden">
-    <!-- Background Image & Overlay -->
-    <div class="absolute inset-0">
-        <img src="{{ asset('images/hero-perkebunan.jpg') }}"
-             alt="Perkebunan kelapa sawit PT Sahabat Sawit di pagi hari, Rokan Hilir, Riau"
-             class="w-full h-full object-cover"
-             onerror="this.style.opacity='0'">
-        <div class="absolute inset-0 bg-gradient-to-b from-dark-green/90 via-dark-green/70 to-dark-green/95 lg:bg-gradient-to-r lg:from-dark-green/95 lg:via-dark-green/75 lg:to-transparent"></div>
-    </div>
+    <!-- Background Video & Overlay -->
+<div class="absolute inset-0">
+    <video
+        class="w-full h-full object-cover"
+        autoplay
+        muted
+        loop
+        playsinline
+        poster="{{ asset('images/tangki.png') }}"
+        onerror="this.style.display='none'">
+        <source src="{{ asset('images/tangki.png') }}" type="video/mp4">
+        Browser Anda tidak mendukung tag video.
+    </video>
+    <div class="absolute inset-0 bg-gradient-to-b from-dark-green/90 via-dark-green/70 to-dark-green/95 lg:bg-gradient-to-r lg:from-dark-green/95 lg:via-dark-green/75 lg:to-transparent"></div>
+</div>
 
     <!-- Main Content Container -->
     <div class="relative w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-20 lg:py-28 text-center lg:text-left">
@@ -25,7 +32,7 @@
 
             <!-- Subtitle -->
             <p class="mt-4 sm:mt-6 text-sm sm:text-base md:text-lg text-white/80 leading-relaxed max-w-xl mx-auto lg:mx-0">
-                PT Sahabat Sawit Rokan Sejahtera berkomitmen untuk mengembangkan industri kelapa sawit yang produktif, bertanggung jawab, dan berkelanjutan bagi masyarakat serta lingkungan di Rokan Hilir, Riau.
+                PT. Sahabat Sawit Rokan Sejahtera berkomitmen untuk mengembangkan industri kelapa sawit yang produktif, bertanggung jawab, dan berkelanjutan bagi masyarakat serta lingkungan di Rokan Hilir, Riau.
             </p>
 
             <!-- Call to Action Buttons -->

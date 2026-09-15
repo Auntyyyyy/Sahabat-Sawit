@@ -9,9 +9,9 @@ class HomeController extends Controller
     public function index()
     {
         $stats = [
-            ['label' => 'Hektar Perkebunan Terkelola', 'value' => '10.000+'],
-            ['label' => 'Tahun Pengalaman', 'value' => '15+'],
-            ['label' => 'Tenaga Kerja Lokal', 'value' => '1.200+'],
+            ['label' => 'Hektar Perkebunan Terkelola', 'value' => '11392+'],
+            ['label' => 'Tahun Pengalaman', 'value' => '3+'],
+            ['label' => 'Tenaga Kerja Lokal', 'value' => '0+'],
             ['label' => 'Komitmen Keberlanjutan', 'value' => '100%'],
         ];
 
