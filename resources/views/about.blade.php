@@ -222,20 +222,48 @@
             <p class="mt-4 text-gray-text leading-relaxed">
                 Komitmen kami terhadap standar mutu, keamanan, dan keberlanjutan dibuktikan melalui sertifikasi resmi berikut.
             </p>
-        </div>
+         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-            @foreach($sertifikasi as $item)
-            <div class="cert-card bg-white rounded-brand shadow-lg overflow-hidden">
-                <div class="cert-photo-wrap">
-                    <img src="{{ asset('images/' . $item['photo']) }}"
-                         alt="Sertifikat"
-                         class="cert-photo"
-                         onerror="this.src='https://placehold.co/800x1000/1F5F3B/F5F1E8?text=Sertifikat'">
+                <div class="flex flex-wrap justify-center gap-6">                @foreach($sertifikasi as $item)
+                <div class="cert-card bg-white rounded-brand shadow-lg overflow-hidden">
+                    <div class="cert-photo-wrap">
+                        <img src="{{ asset('images/' . $item['photo']) }}"
+                            alt="Sertifikat"
+                            class="cert-photo"
+                            onclick="openCertLightbox(this.src)"
+                            onerror="this.src='https://placehold.co/800x1000/1F5F3B/F5F1E8?text=Sertifikat'">
+                    </div>
                 </div>
+                @endforeach
             </div>
-            @endforeach
+
+            <!-- Lightbox modal, taruh sekali saja di akhir section -->
+            <div id="certLightbox" class="cert-lightbox" onclick="closeCertLightbox()">
+                <span class="cert-lightbox-close" onclick="closeCertLightbox()">&times;</span>
+                <img id="certLightboxImg" src="" alt="Sertifikat diperbesar">
+            </div>    
         </div>
-    </div>
 </section>
 @endsection
+
+@push('scripts')
+<script>
+    function openCertLightbox(src) {
+        const lightbox = document.getElementById('certLightbox');
+        const img = document.getElementById('certLightboxImg');
+        img.src = src;
+        lightbox.classList.add('active');
+        document.body.style.overflow = 'hidden'; // cegah scroll di belakang
+    }
+
+    function closeCertLightbox() {
+        document.getElementById('certLightbox').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    // Tutup dengan tombol Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeCertLightbox();
+    });
+</script>
+@endpush

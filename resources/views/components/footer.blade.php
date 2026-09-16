@@ -4,15 +4,15 @@
 
             <!-- Logo & Deskripsi -->
             <div>
-                <a href="{{ route('home') }}" class="footer-logo-wrap inline-flex items-center gap-3 mb-4">
+               <a href="{{ route('home') }}" class="footer-logo-wrap inline-flex items-center gap-3 mb-4">
                     <img src="{{ asset('images/logo.png') }}" alt="PT. Sahabat Sawit Rokan Sejahtera" class="footer-logo">
-                <span class="navbar-brand-text flex flex-col leading-tight">
-        <span class="font-heading font-bold text-base md:text-lg text-dark-green">Sahabat Sawit</span>
-        <span class="font-heading text-[11px] md:text-xs text-gray-text tracking-wide -mt-0.5">Rokan Sejahtera</span>
-    </span>
+                    <span class="footer-brand-text flex flex-col leading-tight">
+                        <span class="font-heading font-bold text-base md:text-lg text-white">Sahabat Sawit</span>
+                        <span class="font-heading text-[11px] md:text-xs text-white/60 tracking-wide -mt-0.5">Rokan Sejahtera</span>
+                    </span>
                 </a>
                 <p class="text-sm footer-text leading-relaxed text-justify">
-                    Perusahaan perkebunan kelapa sawit yang tumbuh dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau, dengan komitmen pada produktivitas dan keberlanjutan.
+                    Perusahaan perkebunan dan industri kelapa sawit di Rokan Hilir, Riau, yang berkomitmen pada pertumbuhan berkelanjutan, kelestarian lingkungan, dan kesejahteraan masyarakat.
                 </p>
             </div>
 
@@ -29,41 +29,51 @@
             <!-- Alamat -->
             <div>
                 <h3 class="font-heading font-semibold footer-heading mb-4">Alamat</h3>
-                <ul class="space-y-4 text-sm footer-text">
+                    <ul class="space-y-4 text-sm footer-text">
                     <li>
-                        <span class="block font-heading font-medium text-white mb-0.5">Kantor Pusat</span>
+                        <span class="block font-heading font-medium footer-addr-label mb-0.5">Kantor Pusat</span>
                         <span>Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36. Kel. Hamdan, Kec. Medan Maimun, Kota Medan, Sumatera Utara</span>
                     </li>
                     <li>
-                        <span class="block font-heading font-medium text-white mb-0.5">Site / Produksi</span>
+                        <span class="block font-heading font-medium footer-addr-label mb-0.5">Site / Produksi</span>
                         <span>Jl. Lintas Medan KM 1, RT/RW 001/001 Kepenghuluan Sungai Meranti, Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983</span>
                     </li>
                 </ul>
             </div>
 
             <!-- Kontak -->
-            <<div>
-            <h3 class="font-heading font-bold text-lg text-dark-green mb-1">Kontak</h3>
-            <div class="w-10 h-0.5 bg-secondary-green mb-4"></div>
+            <div>
+                <h3 class="font-heading font-semibold footer-heading mb-4">Kontak</h3>
+                <div class="space-y-3 text-sm footer-text">
+                    <a href="mailto:ptsahabatsawitrokansejahtera@gmail.com"
+                       class="flex items-center gap-2 footer-link">
+                        <i class="bi bi-envelope-fill"></i>
+                        <span>ptsahabatsawitrokansejahtera@gmail.com</span>
+                    </a>
+                    <a href="https://wa.me/628139654581"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       class="flex items-center gap-2 footer-link">
+                        <i class="bi bi-telephone-fill"></i>
+                        <span>0813-965-4581</span>
+                    </a>
+                </div>
+            </div>
 
-            {{-- Email --}}
-            <a href="mailto:ptsahabatsawitrokansejahtera@gmail.com"
-            class="flex items-center gap-2 text-dark-text/80 hover:text-secondary-green transition-colors mb-3">
-                <i class="bi bi-envelope-fill"></i>
-                <span>ptsahabatsawitrokansejahtera@gmail.com</span>
-            </a>
-
-            {{-- WhatsApp --}}
-            <a href="https://wa.me/628139654581"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-2 text-dark-text/80 hover:text-secondary-green transition-colors">
-                <i class="bi bi-telephone-fill"></i>
-                <span>0813-965-4581</span>
-            </a>
         </div>
-        
-        <div class="footer-bottom mt-12 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
+
+        <!-- Logo Sertifikasi -->
+        <div class="footer-cert mt-12 pt-8 border-t border-white/10">
+            <span class="footer-cert-label">Sertifikasi Resmi</span>
+            <div class="footer-cert-logos">
+                <img src="{{ asset('images/halal.jpeg') }}" alt="Sertifikat Halal" class="footer-cert-logo">
+                <img src="{{ asset('images/ispo.jpeg') }}" alt="Sertifikat ISPO" class="footer-cert-logo">
+                <img src="{{ asset('images/tsi.jpeg') }}" alt="TSI" class="footer-cert-logo">
+                <img src="{{ asset('images/kan.jpeg') }}" alt="KAN" class="footer-cert-logo">
+            </div>
+        </div>
+
+        <div class="footer-bottom mt-8 pt-8 flex flex-col md:flex-row items-center justify-between gap-4 text-sm">
             <p>&copy; {{ date('Y') }} PT Sahabat Sawit Rokan Sejahtera. All Rights Reserved.</p>
             <div class="flex gap-6">
                 <a href="#" class="footer-link">Privacy Policy</a>

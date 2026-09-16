@@ -255,6 +255,57 @@
     }
 }
 
+.footer-cert-label {
+    display: block;
+    font-family: var(--font-heading, inherit);
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: #6b7280;              /* diganti dari rgba putih */
+    margin-bottom: 16px;
+}
+
+.footer-cert-logos {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 20px;
+}
+
+.footer-cert-logo {
+    height: 48px;
+    width: auto;
+    object-fit: contain;
+    border: 1px solid #e2e8e2;
+    padding: 6px 10px;
+    border-radius: 8px;
+    opacity: 0.9;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.footer-cert-logo:hover {
+    opacity: 1;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 480px) {
+    .footer-cert-logo {
+        height: 38px;
+    }
+}
+
+.footer-brand-text span {
+    color: #ffffff !important;
+}
+
+.footer-brand-text span:first-child {
+    color: #1f4d2c !important;
+}
+
+.footer-brand-text span:last-child {
+    color: #6b7280 !important;
+}
 /* ============================
    VISI & MISI
    ============================ */
@@ -311,6 +362,10 @@
 
 .vm-list li:last-child {
     grid-column: 1 / -1;
+}
+
+.footer-addr-label {
+    color: #1f4d2c;
 }
 
 /* ============================
@@ -2539,4 +2594,102 @@ body {
         width: 34px;
         height: 34px;
     }
+}
+
+
+/* ==========================================================================
+   Sertifikasi
+   ========================================================================== */
+
+.cert-card {
+    width: 320px;   /* sesuaikan dengan selera, ini yang menentukan lebar tiap kartu */
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.cert-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 24px rgba(31, 95, 59, 0.15);
+}
+
+.cert-photo-wrap {
+    width: 100%;
+    height: 340px;          /* ukuran medium yang konsisten di semua kartu */
+    background: #f5f1e8;    /* warna cream, biar area kosong di sekitar gambar tidak putih polos */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+}
+
+.cert-photo {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;    /* seluruh isi sertifikat tetap terlihat, tidak terpotong */
+    border-radius: 4px;
+}
+
+@media (max-width: 640px) {
+    .cert-photo-wrap {
+        height: 280px;
+    }
+}
+
+/* Kursor menandakan gambar bisa diklik */
+.cert-photo {
+    cursor: zoom-in;
+    transition: opacity 0.2s ease;
+}
+.cert-photo:hover {
+    opacity: 0.9;
+}
+
+/* Lightbox overlay */
+.cert-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    cursor: zoom-out;
+    animation: certFadeIn 0.2s ease;
+}
+
+.cert-lightbox.active {
+    display: flex;
+}
+
+.cert-lightbox img {
+    max-width: 90vw;
+    max-height: 90vh;
+    object-fit: contain;
+    border-radius: 8px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    animation: certZoomIn 0.25s ease;
+}
+
+.cert-lightbox-close {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    font-size: 36px;
+    color: #fff;
+    cursor: pointer;
+    line-height: 1;
+}
+
+@keyframes certFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes certZoomIn {
+    from { transform: scale(0.9); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
