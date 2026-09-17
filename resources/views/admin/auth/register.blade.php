@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Admin - PT. Sahabat Sawit Rokan Sejahtera</title>
+    <title>Daftar Akun Staff - PT. Sahabat Sawit Rokan Sejahtera</title>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,7 +22,7 @@
 
         html, body {
             margin: 0;
-            height: 100%;
+            min-height: 100%;
             font-family: 'Inter', sans-serif;
             color: #1F2933;
         }
@@ -107,13 +107,13 @@
             padding: 2rem 6vw;
         }
 
-        /* ================= KARTU LOGIN ================= */
+        /* ================= KARTU REGISTER ================= */
         .login-card {
             background: var(--cream);
             border-radius: 20px;
             padding: 2.75rem 2.5rem;
             width: 100%;
-            max-width: 380px;
+            max-width: 400px;
             box-shadow: 0 24px 60px rgba(0,0,0,.35);
         }
 
@@ -181,8 +181,10 @@
             margin-bottom: .4rem;
         }
 
+        .field input[type="text"],
         .field input[type="email"],
-        .field input[type="password"] {
+        .field input[type="password"],
+        .field select {
             width: 100%;
             padding: .68rem .85rem;
             border: 1px solid #D9D2C3;
@@ -193,22 +195,26 @@
             transition: border-color .2s;
         }
 
-        .field input:focus {
+        .field select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236B7280' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right .85rem center;
+            background-size: 18px;
+        }
+
+        .field input:focus,
+        .field select:focus {
             outline: none;
             border-color: var(--secondary-green);
             box-shadow: 0 0 0 3px rgba(46,125,50,.15);
         }
 
-        .remember-row {
-            display: flex;
-            align-items: center;
-            gap: .5rem;
-            margin-bottom: 1.4rem;
-            font-size: .85rem;
-            color: #6B7280;
+        .field .hint {
+            font-size: .75rem;
+            color: #9CA3AF;
+            margin-top: .35rem;
         }
-
-        .remember-row input { accent-color: var(--secondary-green); }
 
         .btn-submit {
             width: 100%;
@@ -239,6 +245,19 @@
 
         .alert-box ul { margin: 0; padding-left: 1.1rem; }
 
+        .back-link {
+            text-align: center;
+            margin-top: 1.25rem;
+            font-size: .85rem;
+            color: #6B7280;
+        }
+
+        .back-link a {
+            color: var(--primary-green);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
         /* ================= RESPONSIVE ================= */
         @media (max-width: 900px) {
             .welcome-copy { display: none; }
@@ -257,7 +276,7 @@
         <div class="welcome-copy">
             <div class="eyebrow-mark"></div>
             <h1>Panel pengelolaan PT. Sahabat Sawit Rokan Sejahtera</h1>
-            <p>Kelola konten, produk, dan data operasional perkebunan dari satu tempat. Masuk dengan akun admin Anda untuk melanjutkan.</p>
+            <p>Buat akun staff untuk mengakses panel sesuai jabatan Anda. Akun akan otomatis diarahkan ke dashboard yang sesuai setelah login.</p>
         </div>
 
         <div class="login-card">
@@ -268,7 +287,7 @@
                     <span>Rokan Sejahtera</span>
                 </div>
             </div>
-            <h2>TEXTNYA BELUM TAU MAU DI BUAT APA</h2>
+            <h2>Daftar Akun Staff</h2>
             <p class="subtitle">Khusus untuk tim internal yang berwenang</p>
 
             @if ($errors->any())
@@ -281,34 +300,46 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('admin.login') }}">
+            <form method="POST" action="{{ route('admin.register.store') }}">
                 @csrf
 
                 <div class="field">
+                    <label for="name">Nama Lengkap</label>
+                    <input type="text" id="name" name="name" value="{{ old('name') }}" required autofocus>
+                </div>
+
+                <div class="field">
                     <label for="email">Email</label>
-                    <input type="email" id="email" name="email" value="{{ old('email') }}" required autofocus>
+                    <input type="email" id="email" name="email" value="{{ old('email') }}" required>
+                </div>
+
+                <div class="field">
+                    <label for="role">Jabatan</label>
+                    <select id="role" name="role" required>
+                        <option value="" disabled {{ old('role') ? '' : 'selected' }}>Pilih jabatan</option>
+                        <option value="general_officer" {{ old('role') === 'general_officer' ? 'selected' : '' }}>General Officer</option>
+                        <option value="hr" {{ old('role') === 'hr' ? 'selected' : '' }}>HR</option>
+                    </select>
+                    <p class="hint">Akun Admin tidak dapat dibuat melalui form ini.</p>
                 </div>
 
                 <div class="field">
                     <label for="password">Password</label>
-                    <input type="password" id="password" name="password" required>
+                    <input type="password" id="password" name="password" required minlength="8">
                 </div>
 
-                <div class="remember-row">
-                    <input type="checkbox" name="remember" id="remember">
-                    <label for="remember">Ingat saya</label>
+                <div class="field">
+                    <label for="password_confirmation">Konfirmasi Password</label>
+                    <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
                 </div>
 
-                <button type="submit" class="btn-submit">Masuk</button>
+                <button type="submit" class="btn-submit">Daftar</button>
             </form>
 
-            <p style="text-align:center; margin-top:1.25rem; font-size:.85rem; color:#6B7280;">
-                Belum punya akun?
-                <a href="{{ route('admin.register') }}" style="color: var(--primary-green); font-weight:600; text-decoration:none;">
-                    Daftar di sini
-                </a>
+            <p class="back-link">
+                Sudah punya akun?
+                <a href="{{ route('admin.login') }}">Masuk di sini</a>
             </p>
-            
         </div>
     </div>
 </body>

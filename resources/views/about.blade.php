@@ -190,27 +190,31 @@
     </div>
 </section>
 
-<section class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-cream">
+<section class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-cream org-bg-pattern">    
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
             <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tim Kami</span>
             <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Struktur Organisasi</h2>
         </div>
 
-        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
-            @foreach($organisasi as $o)
-            <div class="org-card text-center">
-                <div class="org-photo-wrap mx-auto mb-4">
-                    <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
-                         alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
-                         class="org-photo"
-                         onerror="this.src='https://placehold.co/300x300/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
-                </div>
-                <p class="font-heading font-bold text-dark-green leading-snug">{{ $o['nama'] }}</p>
-                <p class="mt-1 text-xs text-gold font-heading font-semibold uppercase tracking-wide">{{ $o['jabatan'] }}</p>
+        @php $levels = collect($organisasi)->groupBy('level')->sortKeys(); @endphp
+
+        @foreach($levels as $level => $anggota)
+            <div class="flex flex-wrap justify-center gap-x-6 gap-y-12 mb-12 last:mb-0">
+                @foreach($anggota as $o)
+                    <div class="org-card text-center w-36 sm:w-40 lg:w-48">
+                        <div class="org-photo-wrap mx-auto mb-4">
+                            <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
+                                 alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
+                                 class="org-photo"
+                                 onerror="this.src='https://placehold.co/300x300/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
+                        </div>
+                        <p class="font-heading font-bold text-dark-green leading-snug">{{ $o['nama'] }}</p>
+                        <p class="mt-1 text-xs text-gold font-heading font-semibold uppercase tracking-wide">{{ $o['jabatan'] }}</p>
+                    </div>
+                @endforeach
             </div>
-            @endforeach
-        </div>
+        @endforeach
     </div>
 </section>
 
