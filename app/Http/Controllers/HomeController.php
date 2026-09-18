@@ -11,7 +11,7 @@ class HomeController extends Controller
         $stats = [
             ['label' => 'Hektar Perkebunan Terkelola', 'value' => '11392+'],
             ['label' => 'Tahun Pengalaman', 'value' => '3+'],
-            ['label' => 'Tenaga Kerja Lokal', 'value' => '0+'],
+            ['label' => 'Tenaga Kerja Lokal', 'value' => '150+'],
             ['label' => 'Komitmen Keberlanjutan', 'value' => '100%'],
         ];
 

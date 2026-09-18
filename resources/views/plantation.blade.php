@@ -8,12 +8,26 @@
     <div class="absolute inset-0 bg-dark-green/80"></div>
 
     <div class="relative max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
-        <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">DARI BUMI ROKAN HILIR</h1>
-        <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
-            Bertumbuh bersama dari sumber terbaik.
-        </p>
+    <div class="hero-top-row">
+        <nav aria-label="Breadcrumb" class="breadcrumb-pill">
+            <a href="{{ route('home') }}" class="breadcrumb-link" aria-label="Home">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
+                </svg>
+            </a>
+            <svg class="breadcrumb-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+            </svg>
+            <span class="breadcrumb-current text-light-green">Perkebunan Kami</span>
+        </nav>
     </div>
+    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
+    <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">DARI BUMI ROKAN HILIR</h1>
+    <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
+        Bertumbuh bersama dari sumber terbaik.
+    </p>
+</div>
 </section>
 
 <section class="py-16 lg:py-20 bg-white">
@@ -62,7 +76,8 @@
                 <div class="mitra-slide">
                     <img src="{{ asset('images/' . $photo['src']) }}"
                          alt="{{ $photo['title'] ?? 'Perkebunan mitra PT Sahabat Sawit' }}"
-                         class="mitra-slide-img"
+                         class="mitra-slide-img cursor-zoom-in"
+                         onclick="mitraOpenLightbox(this.src, this.alt)"
                          onerror="this.src='https://placehold.co/900x600/6B8E23/F5F1E8?text=Kebun+Mitra'">
                 </div>
                 @endforeach
@@ -102,12 +117,50 @@
     </div>
 </section>
 
+<!-- Lightbox untuk gambar mitra yang diklik -->
+<div id="mitraLightbox" class="mitra-lightbox" onclick="mitraCloseLightbox()">
+    <button type="button" class="mitra-lightbox-close" onclick="mitraCloseLightbox()" aria-label="Tutup">&times;</button>
+    <img id="mitraLightboxImg" src="" alt="" class="mitra-lightbox-img" onclick="event.stopPropagation()">
+</div>
+
 @php
 $mitraCaptions = array_map(fn($p) => [
     'title' => $p['title'] ?? '',
     'desc'  => $p['desc'] ?? '',
 ], $mitra_photos);
 @endphp
+
+<style>
+.mitra-lightbox {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    z-index: 9999;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+}
+.mitra-lightbox.is-open { display: flex; }
+.mitra-lightbox-img {
+    max-width: 100%;
+    max-height: 90vh;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.mitra-lightbox-close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    color: white;
+    font-size: 2rem;
+    line-height: 1;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.cursor-zoom-in { cursor: zoom-in; }
+</style>
 
 <script>
 (function () {
@@ -192,6 +245,28 @@ $mitraCaptions = array_map(fn($p) => [
             render();
         }
         deltaX = 0;
+    });
+
+    // --- Lightbox untuk gambar mitra ---
+    window.mitraOpenLightbox = function (src, alt) {
+        const lightbox = document.getElementById('mitraLightbox');
+        const img = document.getElementById('mitraLightboxImg');
+        img.src = src;
+        img.alt = alt;
+        lightbox.classList.add('is-open');
+        document.body.style.overflow = 'hidden';
+    };
+
+    window.mitraCloseLightbox = function () {
+        document.getElementById('mitraLightbox').classList.remove('is-open');
+        document.body.style.overflow = '';
+    };
+
+    // Tutup lightbox dengan tombol Escape
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            mitraCloseLightbox();
+        }
     });
 })();
 </script>

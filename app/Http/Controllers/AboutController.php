@@ -30,7 +30,7 @@ class AboutController extends Controller
 
     // Level 5 — Officer & Staf
     ['nama' => 'Elisa Mutiara',             'jabatan' => 'Human Resources & ISPO Officer',      'photo' => 'manajer-keu.jpg',   'level' => 5],
-    ['nama' => 'Sintia Pakpahan',           'jabatan' => 'Personnel Officer',                   'photo' => 'kepala-kebun.jpg',  'level' => 5],
+    ['nama' => 'Sintia Talesta Pakpahan',   'jabatan' => 'Personnel Officer',                   'photo' => 'kepala-kebun.jpg',  'level' => 5],
     ['nama' => 'Fadlan Rahim',              'jabatan' => 'HSE Officer',                         'photo' => 'kepala-kebun.jpg',  'level' => 5],
     ['nama' => 'Dwi Jasri Agustin',         'jabatan' => 'General Affair Officer',              'photo' => 'kepala-kebun.jpg',  'level' => 5],
     ['nama' => 'Ihsanul Ramadhan Rasyid',   'jabatan' => 'Civil & IT Support Officer',          'photo' => 'kepala-kebun.jpg',  'level' => 5],

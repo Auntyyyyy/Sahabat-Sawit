@@ -3,18 +3,77 @@
 @section('title', 'Produk — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative bg-dark-green text-white py-20 bg-cover bg-center"
-         style="background-image: url('{{ asset('images/sawittangan.jpg') }}');">
-    <div class="absolute inset-0 bg-dark-green/80"></div>
-
-    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Produk Kami</span>
-        <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">Hasil Perkebunan Berkualitas</h1>
-        <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
-            Produk unggulan dari perkebunan kelapa sawit PT Sahabat Sawit di Rokan Hilir, Riau.
-        </p>
+<section class="relative bg-dark-green text-white hero-product-slider">
+    <div class="hero-slider-track" id="heroProductSlides">
+        @forelse($products as $index => $product)
+        <div class="hero-slide">
+            <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/1600x900/164A2E/F5F1E8?text=' . urlencode($product->name) }}"
+                 alt="{{ $product->name }}"
+                 class="hero-slide-img"
+                 loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                 {{ $index === 0 ? 'fetchpriority=high' : '' }}
+                 onerror="this.onerror=null;this.src='https://placehold.co/1600x900/164A2E/F5F1E8?text={{ urlencode($product->name) }}'">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <span class="hero-slide-eyebrow text-light-green">PT Sahabat Sawit</span>
+                <h1 class="hero-slide-title font-heading">{{ $product->name }}</h1>
+                <p class="hero-slide-desc">{{ $product->description }}</p>
+                <a href="{{ route('products.show', $product->slug) }}"
+                   class="hero-slide-btn bg-secondary-green hover:bg-dark-green">
+                    Baca Selengkapnya
+                </a>
+            </div>
+        </div>
+        @empty
+        <div class="hero-slide">
+            <div class="hero-slide-overlay"></div>
+            <div class="hero-slide-content">
+                <span class="hero-slide-eyebrow text-light-green">Produk Kami</span>
+                <h1 class="hero-slide-title font-heading">Hasil Perkebunan Berkualitas</h1>
+                <p class="hero-slide-desc">
+                    Produk unggulan dari perkebunan kelapa sawit PT Sahabat Sawit di Rokan Hilir, Riau.
+                </p>
+            </div>
+        </div>
+        @endforelse
     </div>
+
+    @if($products->count() > 1)
+    <button type="button" class="hero-slide-arrow hero-slide-arrow-left" onclick="heroProductSlideGo(-1)" aria-label="Produk sebelumnya">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+        </svg>
+    </button>
+    <button type="button" class="hero-slide-arrow hero-slide-arrow-right" onclick="heroProductSlideGo(1)" aria-label="Produk berikutnya">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+        </svg>
+    </button>
+    @endif
 </section>
+
+<script>
+(function () {
+    const track = document.getElementById('heroProductSlides');
+    if (!track) return;
+    const slides = [...track.children];
+    const total = slides.length;
+    let current = 0;
+
+    function render() {
+        slides.forEach(function (slide, i) {
+            slide.style.transform = `translateX(${(i - current) * 100}%)`;
+        });
+    }
+
+    window.heroProductSlideGo = function (dir) {
+        current = (current + dir + total) % total;
+        render();
+    };
+
+    render();
+})();
+</script>
 
 <section class="py-16 bg-cream">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
@@ -146,10 +205,10 @@
             </div>
         </div>
 
-        <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-            <div>
+        <div class="mt-16 grid grid-cols-1 lg:grid-cols-2 gap-10 items-start">
+            <div class="region-map-wrap">
                 <img src="{{ asset('images/sebaranid.png') }}" alt="Peta Daerah Penghasil Kelapa Sawit di Indonesia"
-                     class="rounded-brand shadow-lg w-full h-80 object-cover"
+                     class="rounded-brand shadow-lg w-full h-80 lg:h-[30rem] object-cover"
                      onerror="this.src='https://placehold.co/600x400/6B8E23/F5F1E8?text=Peta+Sebaran+Sawit'">
             </div>
             <div>
@@ -163,10 +222,18 @@
                 </p>
 
                 <div class="region-grid">
-                    <div class="region-card">
-                        <span class="region-rank">01</span>
+                    <div class="region-card region-card-highlight">
+                        <span class="region-rank">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z" />
+                            </svg>
+                        </span>
                         <div class="region-content">
-                            <h4 class="region-name">Riau</h4>
+                            <div class="region-name-row">
+                                <h4 class="region-name">Riau</h4>
+                                <span class="region-badge">Lokasi Kebun Kami</span>
+                            </div>
                             <p class="region-note text-justify">Provinsi dengan luas areal sawit terbesar di Indonesia, termasuk lokasi kebun PT. Sahabat Sawit Rokan Sejahtera.</p>
                         </div>
                     </div>
@@ -265,9 +332,10 @@
             <a href="{{ route('products.show', $product->slug) }}"
                class="product-card rounded-brand overflow-hidden shadow-lg group block">
                 <div class="product-img-wrap">
-                    <img src="{{ $product->image ? asset('storage/' . $product->image) : '' }}" alt="{{ $product->name }}"
+                    <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/500x400/2E7D32/F5F1E8?text=' . urlencode($product->name) }}" alt="{{ $product->name }}"
                          class="product-img"
-                         onerror="this.src='https://placehold.co/500x400/2E7D32/F5F1E8?text={{ urlencode($product->name) }}'">
+                         loading="lazy"
+                         onerror="this.onerror=null;this.src='https://placehold.co/500x400/2E7D32/F5F1E8?text={{ urlencode($product->name) }}'">
                 </div>
                 <div class="p-6 bg-cream product-card-body">
                     <div>

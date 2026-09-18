@@ -7,14 +7,49 @@
 {{-- ============================= --}}
 {{-- HERO SECTION - HALAMAN KONTAK --}}
 {{-- ============================= --}}
-<section class="bg-dark-green py-20 md:py-28">
-    <div class="max-w-3xl mx-auto px-6 text-center">
-        <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Kontak</span>
-        <h1 class="mt-3 font-heading font-bold text-4xl md:text-5xl text-white">Hubungi Kami</h1>
-        <p class="mt-5 text-white/80 leading-relaxed text-base md:text-lg">
+<section class="relative contact-hero py-20 md:py-28 overflow-hidden">
+    <!-- Aksen bentuk dekoratif -->
+    <div class="contact-hero-shape contact-hero-shape-1"></div>
+    <div class="contact-hero-shape contact-hero-shape-2"></div>
+
+    <div class="relative max-w-3xl mx-auto px-6 text-center">
+
+        <!-- Breadcrumb -->
+        <div class="contact-fade contact-delay-1 flex items-center justify-center gap-2 text-sm text-white/60 mb-5">
+            <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
+            <span>/</span>
+            <span class="text-white/90">Kontak</span>
+        </div>
+
+        <!-- Icon aksen -->
+        <div class="contact-fade contact-delay-2 flex justify-center mb-5">
+            <div class="contact-icon-badge">
+                <i class="bi bi-chat-dots-fill"></i>
+            </div>
+        </div>
+
+        <span class="contact-fade contact-delay-3 block font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Kontak</span>
+        <h1 class="contact-fade contact-delay-4 mt-3 font-heading font-bold text-4xl md:text-5xl text-white">Hubungi Kami</h1>
+        <p class="contact-fade contact-delay-5 mt-5 text-white/80 leading-relaxed text-base md:text-lg">
             Kami terbuka untuk menjalin kerja sama, kemitraan, maupun menjawab pertanyaan
             seputar PT. Sahabat Sawit Rokan Sejahtera. Sampaikan langsung melalui WhatsApp kami.
         </p>
+
+        <!-- Chip Info Cepat -->
+        <div class="contact-fade contact-delay-6 flex flex-wrap justify-center gap-3 mt-8">
+            <div class="contact-info-chip">
+                <i class="bi bi-lightning-charge-fill"></i>
+                <span>Respon Cepat via WhatsApp</span>
+            </div>
+            <div class="contact-info-chip">
+                <i class="bi bi-clock-fill"></i>
+                <span>Senin–Jumat, 08.00–17.00 WIB</span>
+            </div>
+            <div class="contact-info-chip">
+                <i class="bi bi-geo-alt-fill"></i>
+                <span>2 Lokasi: Medan & Rokan Hilir</span>
+            </div>
+        </div>
     </div>
 </section>
 

@@ -3,16 +3,41 @@
 @section('title', 'Tentang Kami — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative bg-dark-green text-white py-14 lg:py-16 bg-cover bg-center bg-no-repeat" style="background-image: url('{{ asset('images/herotentang.png') }}');">
-    <!-- Overlay -->
-    <div class="absolute inset-0 bg-dark-green/80"></div>
+<section class="relative min-h-screen flex items-center bg-dark-green text-white bg-cover bg-center bg-no-repeat hero-section" style="background-image: url('{{ asset('images/herotentang.png') }}');">
+    <!-- Overlay Gradient -->
+    <div class="absolute inset-0 hero-overlay"></div>
 
-    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
-        <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">Mengenal PT. Sahabat Sawit Rokan Sejahtera</h1>
-        <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
+    <div class="relative w-full max-w-5xl mx-auto px-6 lg:px-8 text-center">
+
+        <!-- Breadcrumb -->
+        <div class="hero-fade hero-delay-1 flex items-center justify-center gap-2 text-sm text-white/60 mb-4">
+            <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
+            <span>/</span>
+            <span class="text-white/90">Tentang Kami</span>
+        </div>
+
+        <span class="hero-fade hero-delay-2 block font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
+        <h1 class="hero-fade hero-delay-3 mt-3 font-heading font-bold text-3xl md:text-5xl">Mengenal PT. Sahabat Sawit Rokan Sejahtera</h1>
+        <p class="hero-fade hero-delay-4 mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
             Perusahaan perkebunan kelapa sawit yang tumbuh dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau.
         </p>
+
+        <!-- Badge Statistik -->
+        <div class="hero-fade hero-delay-5 flex flex-wrap justify-center gap-3 mt-8">
+            <span class="hero-badge">Beroperasi sejak 2023</span>
+            <span class="hero-badge">Kabupaten Rokan Hilir</span>
+            <span class="hero-badge">Standar ISPO & RSPO</span>
+        </div>
+
+        <!-- Tombol CTA -->
+        <div class="hero-fade hero-delay-6 mt-8">
+            <a href="#awal-perjalanan" class="hero-cta">
+                Awal Perjalanan
+                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+                </svg>
+            </a>
+        </div>
     </div>
 </section>
 
@@ -22,7 +47,7 @@
              class="rounded-brand shadow-xl w-full h-[420px] object-cover"
              onerror="this.src='https://placehold.co/700x500/1F5F3B/F5F1E8?text=PT+Sahabat+Sawit'">
         <div>
-            <h2 class="font-heading font-bold text-2xl md:text-3xl text-dark-green">Berkembang Bersama Alam dan Masyarakat</h2>
+            <h2 class="font-heading font-bold text-2xl md:text-3xl text-dark-green">Berkembang Bersama Alam dan Masyarakat.</h2>
             <p class="mt-5 text-gray-text leading-relaxed text-justify">
                 PT. Sahabat Sawit Rokan Sejahtera adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit di Kabupaten Rokan Hilir, Riau. Sejak berdiri, kami berkomitmen mengelola perkebunan secara profesional dan bertanggung jawab, sekaligus menjaga kelestarian lingkungan dan memberikan manfaat bagi masyarakat sekitar.
             </p>
@@ -33,7 +58,7 @@
     </div>
 </section>
 
-<section class="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-white">
+<section id="struktur-organisasi" class="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-white">
     <div class="max-w-5xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
             <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Awal perjalanan</span>
@@ -190,7 +215,7 @@
     </div>
 </section>
 
-<section class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-cream org-bg-pattern">    
+<section id="struktur-organisasi" class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-cream org-bg-pattern">    
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
             <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tim Kami</span>
