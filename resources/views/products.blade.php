@@ -6,7 +6,7 @@
 <section class="relative bg-dark-green text-white hero-product-slider">
     <div class="hero-slider-track" id="heroProductSlides">
         @forelse($products as $index => $product)
-        <div class="hero-slide">
+        <div class="hero-product-slide">
             <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/1600x900/164A2E/F5F1E8?text=' . urlencode($product->name) }}"
                  alt="{{ $product->name }}"
                  class="hero-slide-img"
@@ -14,25 +14,32 @@
                  {{ $index === 0 ? 'fetchpriority=high' : '' }}
                  onerror="this.onerror=null;this.src='https://placehold.co/1600x900/164A2E/F5F1E8?text={{ urlencode($product->name) }}'">
             <div class="hero-slide-overlay"></div>
-            <div class="hero-slide-content">
-                <span class="hero-slide-eyebrow text-light-green">PT Sahabat Sawit</span>
-                <h1 class="hero-slide-title font-heading">{{ $product->name }}</h1>
-                <p class="hero-slide-desc">{{ $product->description }}</p>
-                <a href="{{ route('products.show', $product->slug) }}"
-                   class="hero-slide-btn bg-secondary-green hover:bg-dark-green">
-                    Baca Selengkapnya
-                </a>
+            <div class="hero-slide-inner">
+                <div class="hero-slide-content">
+                    <span class="hero-slide-eyebrow text-light-green">PT. Sahabat Sawit Rokan Sejahtera</span>
+                    <h1 class="hero-slide-title font-heading">{{ $product->name }}</h1>
+                    <p class="hero-slide-desc">{{ $product->description }}</p>
+                    <a href="{{ route('products.show', $product->slug) }}"
+                       class="hero-slide-btn bg-secondary-green hover:bg-dark-green">
+                        Baca Selengkapnya
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                        </svg>
+                    </a>
+                </div>
             </div>
         </div>
         @empty
-        <div class="hero-slide">
+        <div class="hero-product-slide">
             <div class="hero-slide-overlay"></div>
-            <div class="hero-slide-content">
-                <span class="hero-slide-eyebrow text-light-green">Produk Kami</span>
-                <h1 class="hero-slide-title font-heading">Hasil Perkebunan Berkualitas</h1>
-                <p class="hero-slide-desc">
-                    Produk unggulan dari perkebunan kelapa sawit PT Sahabat Sawit di Rokan Hilir, Riau.
-                </p>
+            <div class="hero-slide-inner">
+                <div class="hero-slide-content">
+                    <span class="hero-slide-eyebrow text-light-green">Produk Kami</span>
+                    <h1 class="hero-slide-title font-heading">Hasil Perkebunan Berkualitas</h1>
+                    <p class="hero-slide-desc">
+                        Produk unggulan dari perkebunan kelapa sawit PT Sahabat Sawit di Rokan Hilir, Riau.
+                    </p>
+                </div>
             </div>
         </div>
         @endforelse

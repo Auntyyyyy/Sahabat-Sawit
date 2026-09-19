@@ -71,36 +71,74 @@
     </div>
 </section>
 
-<section class="py-16 lg:py-20 bg-cream">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        @foreach($pillars as $pillar)
-        <div class="bg-white rounded-brand p-7 shadow-md hover:shadow-lg transition-all duration-300">
-            <div class="w-12 h-12 rounded-full bg-light-green/20 flex items-center justify-center mb-4">
-                <svg class="w-6 h-6 text-palm-leaf" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg>
+{{-- ============================= --}}
+{{-- TIGA PILAR KEBERLANJUTAN --}}
+{{-- ============================= --}}
+<section class="py-20 lg:py-24 bg-cream">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Fondasi Kami</span>
+            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Pilar Keberlanjutan</h2>
+            <p class="mt-4 text-gray-text leading-relaxed">
+                Setiap keputusan operasional kami berpijak pada tiga pilar utama ini, demi keberlanjutan
+                usaha dan manfaat jangka panjang bagi lingkungan serta masyarakat sekitar.
+            </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+            @foreach($pillars as $pillar)
+            <div class="group relative bg-white rounded-brand border border-dark-green/10 p-8 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden">
+
+                <span class="block font-heading font-extrabold text-3xl text-secondary-green/40 group-hover:text-secondary-green transition-colors duration-300 mb-4">
+                    {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
+                </span>
+
+                <h3 class="relative font-heading font-bold text-lg text-dark-green mb-2.5">{{ $pillar['title'] }}</h3>
+                <p class="relative text-sm text-gray-text leading-relaxed">{{ $pillar['desc'] }}</p>
+
+                <span class="absolute bottom-0 left-0 w-0 group-hover:w-full h-1 bg-secondary-green transition-all duration-500"></span>
             </div>
-            <h3 class="font-heading font-semibold text-lg text-dark-green mb-2">{{ $pillar['title'] }}</h3>
-            <p class="text-sm text-gray-text leading-relaxed">{{ $pillar['desc'] }}</p>
+            @endforeach
         </div>
-        @endforeach
     </div>
 </section>
 
-<section data-counter-section class="py-16 lg:py-20 bg-white">
-    <div class="max-w-4xl mx-auto px-6 lg:px-8 grid grid-cols-1 md:grid-cols-2 gap-6">
-        @foreach($statistics as $stat)
-        <div class="{{ $loop->first ? 'bg-primary-green' : 'bg-dark-green' }} text-white rounded-brand p-10 text-center">
-            <p data-counter="{{ $stat['value'] }}" class="font-heading font-extrabold text-5xl text-gold">0</p>
-            <p class="mt-3 text-white/80">{{ $stat['label'] }}</p>
+{{-- ============================= --}}
+{{-- KEBERLANJUTAN DALAM ANGKA --}}
+{{-- ============================= --}}
+<section data-counter-section class="relative py-20 lg:py-24 bg-dark-green overflow-hidden">
+    <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(circle at 20% 20%, #ffffff, transparent 45%), radial-gradient(circle at 85% 75%, #ffffff, transparent 40%);"></div>
+
+    <div class="relative max-w-6xl mx-auto px-6 lg:px-8">
+        <div class="text-center max-w-2xl mx-auto mb-14">
+            <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Pencapaian Kami</span>
+            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-white">Keberlanjutan dalam Angka</h2>
+            <p class="mt-4 text-white/70 leading-relaxed">
+                Sejumlah pencapaian yang mencerminkan konsistensi kami dalam menjalankan praktik berkelanjutan.
+            </p>
         </div>
-        @endforeach
+
+        <div class="flex flex-wrap justify-center gap-4 md:gap-6">
+            @foreach($statistics as $stat)
+            <div class="w-[47%] sm:w-56 md:w-60 bg-white/10 border border-white/15 rounded-brand p-6 md:p-8 text-center backdrop-blur-sm hover:bg-white/15 hover:-translate-y-1 transition-all duration-300">
+                <p data-counter="{{ $stat['value'] }}" class="font-heading font-extrabold text-3xl md:text-5xl text-gold">0</p>
+                <p class="mt-3 text-xs md:text-base text-white/70 leading-snug">{{ $stat['label'] }}</p>
+            </div>
+            @endforeach
+        </div>
+
+        <p class="text-center mt-8 text-xs text-white/40">*Angka statistik dapat diperbarui melalui data perusahaan.</p>
     </div>
-    <p class="text-center mt-6 text-xs text-gray-text">*Angka statistik dapat diperbarui melalui data perusahaan.</p>
 </section>
 
+{{-- ============================= --}}
+{{-- PROGRAM CSR --}}
+{{-- ============================= --}}
 <section class="pt-16 pb-20 lg:pt-20 lg:pb-24 bg-cream">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
-            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-wide">Program CSR</span>
+            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Program CSR</span>
             <h2 class="mt-3 font-heading font-bold text-2xl md:text-4xl text-dark-green">
                 Kontribusi Kami untuk Masyarakat
             </h2>
@@ -110,16 +148,18 @@
         </div>
 
         <!-- Kartu Kategori CSR -->
-        <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4" id="csr-tabs">
-            @foreach($csrCategories as $index => $category)
-            <button type="button"
-                    class="csr-tab-btn {{ $index === 0 ? 'active' : '' }}"
-                    data-target="csr-panel-{{ $index }}"
-                    onclick="switchCsrTab({{ $index }})">
-                <span class="csr-tab-icon">{{ $category['icon'] }}</span>
-                <span class="csr-tab-title">{{ $category['title'] }}</span>
-            </button>
-            @endforeach
+        <div class="mt-12 bg-white rounded-brand border border-dark-green/10 shadow-sm p-3 md:p-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="csr-tabs">
+                @foreach($csrCategories as $index => $category)
+                <button type="button"
+                        class="csr-tab-btn {{ $index === 0 ? 'active' : '' }}"
+                        data-target="csr-panel-{{ $index }}"
+                        onclick="switchCsrTab({{ $index }})">
+                    <span class="csr-tab-icon">{{ $category['icon'] }}</span>
+                    <span class="csr-tab-title">{{ $category['title'] }}</span>
+                </button>
+                @endforeach
+            </div>
         </div>
 
         <!-- Deskripsi & Galeri Kegiatan per Kategori, dengan navigasi kategori di sisi kiri-kanan -->
@@ -178,6 +218,18 @@
                     aria-label="Ke kategori {{ $category['title'] }}">
             </button>
             @endforeach
+        </div>
+
+        <!-- CTA penutup -->
+        <div class="mt-16 text-center">
+            <p class="font-body text-dark-text text-base md:text-lg font-medium mb-5">
+                Ingin tahu lebih jauh tentang komitmen keberlanjutan kami atau berdiskusi soal kerja sama program CSR?
+            </p>
+            <a href="{{ url('/kontak') }}"
+               class="inline-flex items-center gap-2.5 bg-secondary-green hover:bg-dark-green text-white font-heading font-semibold text-sm md:text-base px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
+                <span>Hubungi Tim Kami</span>
+                <i class="bi bi-arrow-right"></i>
+            </a>
         </div>
     </div>
 </section>
