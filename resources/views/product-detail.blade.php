@@ -40,62 +40,82 @@
 </section>
 
 <section class="py-16 md:py-20 bg-white relative">
-    <div class="max-w-5xl mx-auto px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-            {{-- Gambar utama produk — klik untuk memperbesar --}}
+        {{-- ===== Bagian 1: Badge + Deskripsi (teks kiri, gambar kanan) — mengikuti referensi ===== --}}
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div>
+                <h2 class="font-heading font-bold text-2xl md:text-3xl text-dark-green mb-5">Detail Produk</h2>
+
+                @if(!empty($product->category))
+                <span class="inline-block mb-5 px-4 py-1.5 rounded-full border border-secondary-green text-secondary-green font-heading font-semibold text-sm">
+                    {{ $product->category }}
+                </span>
+                @endif
+
+                <p class="text-gray-text leading-relaxed text-justify text-base md:text-lg product-detail-desc">
+                    {{ $product->detail }}
+                </p>
+            </div>
+
             <div class="detail-image-frame" onclick="productOpenLightbox(this.querySelector('img').src, '{{ $product->name }}')">
-                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/600x500/2E7D32/F5F1E8?text=' . urlencode($product->name) }}"
+                <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/700x600/2E7D32/F5F1E8?text=' . urlencode($product->name) }}"
                      alt="{{ $product->name }}"
-                     class="rounded-brand shadow-lg w-full h-[380px] object-cover"
-                     onerror="this.onerror=null;this.src='https://placehold.co/600x500/2E7D32/F5F1E8?text={{ urlencode($product->name) }}'">
+                     class="rounded-2xl shadow-xl w-full h-[420px] md:h-[480px] object-cover"
+                     onerror="this.onerror=null;this.src='https://placehold.co/700x600/2E7D32/F5F1E8?text={{ urlencode($product->name) }}'">
                 <span class="detail-image-zoom" aria-hidden="true">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16zM11 8v6M8 11h6" />
                     </svg>
                 </span>
             </div>
-
-            <div>
-                <h2 class="font-heading font-bold text-xl text-dark-green mb-4">Deskripsi</h2>
-                <p class="text-gray-text leading-relaxed text-justify product-detail-desc">{{ $product->detail }}</p>
-
-                @if(!empty($product->manfaat))
-                <div class="mt-8">
-                    <h3 class="font-heading font-bold text-xl text-dark-green mb-4">Manfaat</h3>
-                    <div class="feature-grid">
-                        @foreach($product->manfaat as $manfaat)
-                        <div class="feature-item">
-                            <span class="feature-icon">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
-                                </svg>
-                            </span>
-                            <p>{{ $manfaat }}</p>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-
-                @if(!empty($product->spesifikasi))
-                <div class="mt-8">
-                    <h3 class="font-heading font-bold text-xl text-dark-green mb-4">Spesifikasi</h3>
-                    <div class="spec-table">
-                        @foreach($product->spesifikasi as $key => $val)
-                        <div class="spec-row">
-                            <span class="spec-label">{{ $key }}</span>
-                            <span class="spec-value">{{ $val }}</span>
-                        </div>
-                        @endforeach
-                    </div>
-                </div>
-                @endif
-            </div>
         </div>
 
+        {{-- ===== Bagian 2: Manfaat — layout alternating, gambar kiri / teks kanan ala referensi ===== --}}
+        @if(!empty($product->manfaat))
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center mt-20 md:mt-24">
+            <div class="order-2 lg:order-1">
+                <img src="{{ $product->media->first() ? asset('storage/' . $product->media->first()->file_path) : ($product->image ? asset('storage/' . $product->image) : 'https://placehold.co/700x600/2E7D32/F5F1E8?text=' . urlencode($product->name)) }}"
+                     alt="Manfaat {{ $product->name }}"
+                     class="rounded-2xl shadow-xl w-full h-[380px] md:h-[440px] object-cover"
+                     onerror="this.onerror=null;this.src='https://placehold.co/700x600/2E7D32/F5F1E8?text={{ urlencode($product->name) }}'">
+            </div>
+
+            <div class="order-1 lg:order-2">
+                <h3 class="font-heading font-bold text-xl md:text-2xl text-dark-green mb-6">Manfaat</h3>
+                <div class="flex flex-col gap-4">
+                    @foreach($product->manfaat as $manfaat)
+                    <div class="flex items-start gap-3">
+                        <span class="flex-shrink-0 w-6 h-6 rounded-full bg-secondary-green/10 text-secondary-green flex items-center justify-center mt-0.5">
+                            <svg class="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                            </svg>
+                        </span>
+                        <p class="text-gray-text leading-relaxed">{{ $manfaat }}</p>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+        @endif
+
+        {{-- ===== Bagian 3: Spesifikasi — tabel bersih, full width ===== --}}
+        @if(!empty($product->spesifikasi))
+        <div class="mt-20 md:mt-24">
+            <h3 class="font-heading font-bold text-xl md:text-2xl text-dark-green mb-6 text-center">Spesifikasi</h3>
+            <div class="spec-table max-w-3xl mx-auto">
+                @foreach($product->spesifikasi as $key => $val)
+                <div class="spec-row">
+                    <span class="spec-label">{{ $key }}</span>
+                    <span class="spec-value">{{ $val }}</span>
+                </div>
+                @endforeach
+            </div>
+        </div>
+        @endif
+
         <!-- CTA — ajakan kontak untuk produk ini -->
-        <div class="product-cta mt-14">
+        <div class="product-cta mt-20">
             <div class="product-cta-text">
                 <h3 class="font-heading font-bold text-xl md:text-2xl text-dark-green">
                     Tertarik dengan {{ $product->name }}?

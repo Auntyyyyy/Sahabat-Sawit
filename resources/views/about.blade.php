@@ -58,7 +58,7 @@
     </div>
 </section>
 
-<section id="struktur-organisasi" class="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-white">
+<section id="awal-perjalanan" class="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-white">
     <div class="max-w-5xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
             <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Awal perjalanan</span>
@@ -81,42 +81,26 @@
     </div>
 </section>
 
-<section class="py-14 lg:py-16 bg-dark-green text-white">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+<section class="py-14 lg:py-16 bg-cream">
+    <div class="max-w-4xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Arah Kami</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl">Visi & Misi</h2>
+            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-wide">Arah Kami</span>
+            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Visi & Misi</h2>
         </div>
 
-        <div class="flex flex-col gap-8">
-
+        <div class="vm-stack">
             <!-- Visi -->
-            <div class="vm-card vm-card-visi flex flex-col sm:flex-row sm:items-center gap-6 bg-white/5 border border-white/10 rounded-brand p-8">
-                <div class="vm-icon shrink-0">
-                    <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                    </svg>
-                </div>
-                <div>
-                    <h3 class="font-heading font-bold text-xl text-light-green mb-2">Visi</h3>
-                    <p class="text-white/80 leading-relaxed text-justify">
-                        Menjadi perusahaan PKS dengan standar ISPO dan RSPO berskala internasional, berteknologi tinggi, dan berwawasan lingkungan.
-                    </p>
-                </div>
+            <div class="vm-stack-card">
+                <h3 class="vm-stack-title text-secondary-green">Visi</h3>
+                <p class="vm-stack-text">
+                    Menjadi perusahaan PKS dengan standar ISPO dan RSPO berskala internasional, berteknologi tinggi, dan berwawasan lingkungan.
+                </p>
             </div>
 
             <!-- Misi -->
-            <div class="vm-card bg-white/5 border border-white/10 rounded-brand p-8">
-                <div class="flex items-center gap-3 mb-6">
-                    <div class="vm-icon shrink-0">
-                        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                    </div>
-                    <h3 class="font-heading font-bold text-xl text-light-green">Misi</h3>
-                </div>
-                <ul class="vm-list grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-5 text-white/80 leading-relaxed">
+            <div class="vm-stack-card vm-stack-card-secondary">
+                <h3 class="vm-stack-title text-dark-green">Misi</h3>
+                <ul class="vm-stack-list">
                     <li>Memprioritaskan pelayanan penerimaan TBS masyarakat sekitar PKS.</li>
                     <li>Turut serta membina petani sawit untuk meningkatkan kualitas dan kuantitas TBS.</li>
                     <li>Melakukan pengolahan yang efisien dan efektif dengan standar loses di bawah acuan.</li>
@@ -215,33 +199,171 @@
     </div>
 </section>
 
-<section id="struktur-organisasi" class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-cream org-bg-pattern">    
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tim Kami</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Struktur Organisasi</h2>
+{{-- ============================= --}}
+{{-- TIM KAMI — STRUKTUR ORGANISASI (carousel per level) --}}
+{{-- ============================= --}}
+@php
+    $orgLevelLabels = [
+        1 => 'Pimpinan Tertinggi',
+        2 => 'Direksi',
+        3 => 'Manajer',
+        4 => 'Kepala & Supervisor',
+        5 => 'Officer & Staf',
+    ];
+    $orgSorted = collect($organisasi)->sortBy('level')->values();
+@endphp
+
+<section id="struktur-organisasi" class="relative py-20 lg:py-24 bg-cream overflow-hidden">
+
+    <div class="absolute inset-0 pointer-events-none"
+         style="background-image: radial-gradient(rgba(31,95,59,0.08) 1px, transparent 1px); background-size: 24px 24px;"></div>
+
+    <div class="relative max-w-7xl mx-auto px-6 lg:px-8">
+
+        <div class="text-center max-w-2xl mx-auto mb-16">
+            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Tim Kami</span>
+            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Struktur Organisasi</h2>
+            <p class="mt-4 text-gray-text leading-relaxed">
+                Dipimpin oleh tim profesional yang berpengalaman di industri kelapa sawit,
+                berkomitmen menjalankan perusahaan secara transparan dan bertanggung jawab.
+            </p>
         </div>
 
-        @php $levels = collect($organisasi)->groupBy('level')->sortKeys(); @endphp
+        {{-- Judul level ini satu-satunya, dan berubah otomatis lewat JS mengikuti
+             kartu yang sedang berada di tengah area carousel saat digeser --}}
+        <h3 class="org-level-title" id="orgLevelTitle">
+            {{ $orgLevelLabels[$orgSorted->first()['level'] ?? 1] ?? 'Struktur' }}
+        </h3>
 
-        @foreach($levels as $level => $anggota)
-            <div class="flex flex-wrap justify-center gap-x-6 gap-y-12 mb-12 last:mb-0">
-                @foreach($anggota as $o)
-                    <div class="org-card text-center w-36 sm:w-40 lg:w-48">
-                        <div class="org-photo-wrap mx-auto mb-4">
-                            <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
-                                 alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
-                                 class="org-photo"
-                                 onerror="this.src='https://placehold.co/300x300/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
-                        </div>
-                        <p class="font-heading font-bold text-dark-green leading-snug">{{ $o['nama'] }}</p>
-                        <p class="mt-1 text-xs text-gold font-heading font-semibold uppercase tracking-wide">{{ $o['jabatan'] }}</p>
+        <div class="org-carousel-wrap">
+            <button type="button" class="org-arrow org-arrow-left" id="orgArrowLeft" aria-label="Sebelumnya">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                </svg>
+            </button>
+
+            <div class="org-track" id="orgTrack">
+                @foreach($orgSorted as $o)
+                <div class="org-card" data-level="{{ $o['level'] }}">
+                    <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
+                         alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
+                         onerror="this.onerror=null;this.src='https://placehold.co/400x520/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
+                    <div class="org-card-overlay"></div>
+                    <div class="org-card-info">
+                        <p class="org-card-name">{{ $o['nama'] }}</p>
+                        <p class="org-card-jabatan">{{ $o['jabatan'] }}</p>
                     </div>
+                </div>
                 @endforeach
             </div>
-        @endforeach
+
+            <button type="button" class="org-arrow org-arrow-right" id="orgArrowRight" aria-label="Selanjutnya">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                </svg>
+            </button>
+        </div>
+
+        <div class="org-dots" id="orgDots"></div>
     </div>
 </section>
+
+<script>
+(function () {
+    const track = document.getElementById('orgTrack');
+    if (!track) return;
+
+    const titleEl = document.getElementById('orgLevelTitle');
+    const dotsWrap = document.getElementById('orgDots');
+    const leftBtn = document.getElementById('orgArrowLeft');
+    const rightBtn = document.getElementById('orgArrowRight');
+    const cards = [...track.children];
+
+    const levelLabels = @json($orgLevelLabels);
+
+    function cardStep() {
+        const card = cards[0];
+        if (!card) return track.clientWidth;
+        const style = window.getComputedStyle(track);
+        const gap = parseFloat(style.columnGap || style.gap || 0);
+        return card.getBoundingClientRect().width + gap;
+    }
+
+    function pageCount() {
+        const step = cardStep();
+        const perView = Math.max(1, Math.round(track.clientWidth / step));
+        return Math.max(1, Math.ceil(cards.length / perView));
+    }
+
+    function buildDots() {
+        dotsWrap.innerHTML = '';
+        const pages = pageCount();
+        for (let i = 0; i < pages; i++) {
+            const dot = document.createElement('button');
+            dot.type = 'button';
+            dot.className = 'org-dot';
+            dot.setAttribute('aria-label', 'Halaman ' + (i + 1));
+            dot.addEventListener('click', function () {
+                track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' });
+            });
+            dotsWrap.appendChild(dot);
+        }
+    }
+
+    // Kartu aktif dihitung dari posisi scroll (bukan posisi tengah viewport),
+    // supaya di awal (scrollLeft 0, belum digeser) kartu PERTAMA yang aktif
+    function activeIndex() {
+        const step = cardStep();
+        const idx = Math.round(track.scrollLeft / step);
+        return Math.min(cards.length - 1, Math.max(0, idx));
+    }
+
+    function syncState() {
+        const idx = activeIndex();
+        const active = cards[idx];
+        if (active) {
+            const level = active.dataset.level;
+            titleEl.textContent = levelLabels[level] || titleEl.textContent;
+
+            // Perbesar kartu yang sedang aktif, kembalikan yang lain ke ukuran normal
+            cards.forEach(function (card) {
+                card.classList.toggle('is-active', card === active);
+            });
+        }
+
+        const dots = [...dotsWrap.children];
+        if (dots.length) {
+            const perView = Math.max(1, Math.round(track.clientWidth / cardStep()));
+            const activePage = Math.floor(idx / perView);
+            dots.forEach(function (d, i) {
+                d.classList.toggle('is-active', i === activePage);
+            });
+        }
+    }
+
+    // Geser satu foto per klik panah (bukan satu halaman penuh)
+    leftBtn.addEventListener('click', function () {
+        track.scrollBy({ left: -cardStep(), behavior: 'smooth' });
+    });
+    rightBtn.addEventListener('click', function () {
+        track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+    });
+
+    let scrollTimer;
+    track.addEventListener('scroll', function () {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(syncState, 80);
+    });
+
+    window.addEventListener('resize', function () {
+        buildDots();
+        syncState();
+    });
+
+    buildDots();
+    syncState();
+})();
+</script>
 
 <section class="pt-8 pb-14 lg:pt-10 lg:pb-16 bg-cream">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
