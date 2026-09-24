@@ -11,31 +11,35 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bitter:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
 
     <!-- Tailwind CSS (CDN, dev only — pada produksi gunakan build Tailwind via npm) -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
+        // Semua nilai di bawah ini SENGAJA menunjuk ke variabel CSS yang
+        // didefinisikan di :root pada style.css (bukan ditulis hex/nama
+        // font langsung di sini) — supaya kalau mau ganti font atau warna
+        // situs, cukup ubah satu tempat: style.css.
         tailwind.config = {
             theme: {
                 extend: {
                     colors: {
-                        'primary-green': '#1F5F3B',
-                        'secondary-green': '#2E7D32',
-                        'dark-green': '#123524',
-                        'light-green': '#8DBF44',
-                        'palm-leaf': '#4F772D',
-                        'gold': '#D4A017',
-                        'cream': '#F5F1E8',
-                        'dark-text': '#1F2933',
-                        'gray-text': '#6B7280',
-                        'body-bg': '#F8FAF7',
+                        'primary-green': 'rgb(var(--primary-green-rgb) / <alpha-value>)',
+                        'secondary-green': 'rgb(var(--secondary-green-rgb) / <alpha-value>)',
+                        'dark-green': 'rgb(var(--dark-green-rgb) / <alpha-value>)',
+                        'light-green': 'rgb(var(--light-green-rgb) / <alpha-value>)',
+                        'palm-leaf': 'rgb(var(--palm-leaf-rgb) / <alpha-value>)',
+                        'gold': 'rgb(var(--gold-rgb) / <alpha-value>)',
+                        'cream': 'rgb(var(--cream-rgb) / <alpha-value>)',
+                        'dark-text': 'rgb(var(--dark-text-rgb) / <alpha-value>)',
+                        'gray-text': 'rgb(var(--gray-text-rgb) / <alpha-value>)',
+                        'body-bg': 'rgb(var(--body-bg-rgb) / <alpha-value>)',
                     },
                     fontFamily: {
-                        heading: ['Poppins', 'sans-serif'],
-                        body: ['Inter', 'sans-serif'],
+                        heading: ['var(--font-heading)'],
+                        body: ['var(--font-body)'],
                     },
                     borderRadius: {
                         'brand': '16px',

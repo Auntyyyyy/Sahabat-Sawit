@@ -243,8 +243,9 @@
             </button>
 
             <div class="org-track" id="orgTrack">
+                <div class="org-spacer" aria-hidden="true"></div>
                 @foreach($orgSorted as $o)
-                <div class="org-card" data-level="{{ $o['level'] }}">
+                <div class="org-card" data-level-label="{{ $orgLevelLabels[$o['level']] ?? 'Level ' . $o['level'] }}">
                     <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
                          alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
                          onerror="this.onerror=null;this.src='https://placehold.co/400x520/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
@@ -277,16 +278,25 @@
     const dotsWrap = document.getElementById('orgDots');
     const leftBtn = document.getElementById('orgArrowLeft');
     const rightBtn = document.getElementById('orgArrowRight');
-    const cards = [...track.children];
+    const spacer = track.querySelector('.org-spacer');
+    const cards = [...track.querySelectorAll('.org-card')];
 
-    const levelLabels = @json($orgLevelLabels);
+    function trackGap() {
+        const style = window.getComputedStyle(track);
+        return parseFloat(style.columnGap || style.gap || 0);
+    }
 
     function cardStep() {
         const card = cards[0];
         if (!card) return track.clientWidth;
-        const style = window.getComputedStyle(track);
-        const gap = parseFloat(style.columnGap || style.gap || 0);
-        return card.getBoundingClientRect().width + gap;
+        return card.getBoundingClientRect().width + trackGap();
+    }
+
+    // Lebar ruang kosong di awal (spacer + jaraknya) — ini yang membuat
+    // kartu pertama baru "mengisi" begitu digeser sekali
+    function spacerWidth() {
+        if (!spacer) return 0;
+        return spacer.getBoundingClientRect().width + trackGap();
     }
 
     function pageCount() {
@@ -304,7 +314,7 @@
             dot.className = 'org-dot';
             dot.setAttribute('aria-label', 'Halaman ' + (i + 1));
             dot.addEventListener('click', function () {
-                track.scrollTo({ left: i * track.clientWidth, behavior: 'smooth' });
+                track.scrollTo({ left: spacerWidth() + i * track.clientWidth, behavior: 'smooth' });
             });
             dotsWrap.appendChild(dot);
         }
@@ -314,7 +324,8 @@
     // supaya di awal (scrollLeft 0, belum digeser) kartu PERTAMA yang aktif
     function activeIndex() {
         const step = cardStep();
-        const idx = Math.round(track.scrollLeft / step);
+        const adjusted = Math.max(0, track.scrollLeft - spacerWidth());
+        const idx = Math.round(adjusted / step);
         return Math.min(cards.length - 1, Math.max(0, idx));
     }
 
@@ -322,8 +333,7 @@
         const idx = activeIndex();
         const active = cards[idx];
         if (active) {
-            const level = active.dataset.level;
-            titleEl.textContent = levelLabels[level] || titleEl.textContent;
+            titleEl.textContent = active.dataset.levelLabel || titleEl.textContent;
 
             // Perbesar kartu yang sedang aktif, kembalikan yang lain ke ukuran normal
             cards.forEach(function (card) {
@@ -339,14 +349,29 @@
                 d.classList.toggle('is-active', i === activePage);
             });
         }
+
+        // Nonaktifkan panah begitu sudah mencapai ujung carousel
+        const atStart = track.scrollLeft <= 1;
+        const atEnd = track.scrollLeft >= track.scrollWidth - track.clientWidth - 1;
+        leftBtn.classList.toggle('is-disabled', atStart);
+        leftBtn.disabled = atStart;
+        rightBtn.classList.toggle('is-disabled', atEnd);
+        rightBtn.disabled = atEnd;
     }
 
-    // Geser satu foto per klik panah (bukan satu halaman penuh)
+    // Geser satu foto per klik panah (bukan satu halaman penuh).
+    // Klik kanan pertama kali (masih di zona ruang kosong) langsung
+    // melompati seluruh spacer sekaligus, supaya kartu pertama mepet
+    // penuh ke kiri — bukan berhenti di tengah ruang kosong.
     leftBtn.addEventListener('click', function () {
         track.scrollBy({ left: -cardStep(), behavior: 'smooth' });
     });
     rightBtn.addEventListener('click', function () {
-        track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+        if (track.scrollLeft < spacerWidth() - 4) {
+            track.scrollTo({ left: spacerWidth(), behavior: 'smooth' });
+        } else {
+            track.scrollBy({ left: cardStep(), behavior: 'smooth' });
+        }
     });
 
     let scrollTimer;

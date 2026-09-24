@@ -63,9 +63,9 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-1">Total Artikel</div>
-                            <h2 class="fw-bold mb-0">{{ $stats['total_articles'] ?? 0 }}</h2>
-                            <small class="text-muted">artikel dipublikasikan</small>
+                            <div class="text-muted small mb-1">Total Berita</div>
+                            <h2 class="fw-bold mb-0">{{ $stats['total_berita'] ?? 0 }}</h2>
+                            <small class="text-muted">berita dipublikasikan</small>
                         </div>
                         <div class="stat-icon stat-icon--gold">
                             <i class="bi bi-newspaper"></i>
@@ -106,8 +106,8 @@
                 <a href="{{ Route::has('admin.products.create') ? route('admin.products.create') : '#' }}" class="quick-action-btn">
                     <i class="bi bi-plus-circle"></i> Tambah Produk
                 </a>
-                <a href="{{ Route::has('admin.articles.create') ? route('admin.articles.create') : '#' }}" class="quick-action-btn">
-                    <i class="bi bi-pencil-square"></i> Tulis Artikel
+                <a href="{{ Route::has('admin.berita.create') ? route('admin.berita.create') : '#' }}" class="quick-action-btn">
+                    <i class="bi bi-newspaper"></i> Tambah Berita
                 </a>
                 <a href="{{ Route::has('admin.pages.index') ? route('admin.pages.index') : '#' }}" class="quick-action-btn">
                     <i class="bi bi-file-earmark-richtext"></i> Kelola Halaman

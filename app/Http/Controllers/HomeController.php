@@ -101,3 +101,6 @@ class HomeController extends Controller
         return view('home', compact('stats', 'advantages', 'missions', 'products', 'news'));
     }
 }
+
+
+

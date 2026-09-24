@@ -133,7 +133,7 @@
 </section>
 
 {{-- ============================= --}}
-{{-- PROGRAM CSR --}}
+{{-- PROGRAM CSR (sekarang dari database, dikelola dari admin) --}}
 {{-- ============================= --}}
 <section class="pt-16 pb-20 lg:pt-20 lg:pb-24 bg-cream">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
@@ -143,9 +143,11 @@
                 Kontribusi Kami untuk Masyarakat
             </h2>
             <p class="mt-4 text-gray-text leading-relaxed">
-                Lima pilar utama program tanggung jawab sosial perusahaan yang kami jalankan secara berkelanjutan.
+                Pilar-pilar utama program tanggung jawab sosial perusahaan yang kami jalankan secara berkelanjutan.
             </p>
         </div>
+
+        @if($csrCategories->isNotEmpty())
 
         <!-- Kartu Kategori CSR -->
         <div class="mt-12 bg-white rounded-brand border border-dark-green/10 shadow-sm p-3 md:p-4">
@@ -155,8 +157,8 @@
                         class="csr-tab-btn {{ $index === 0 ? 'active' : '' }}"
                         data-target="csr-panel-{{ $index }}"
                         onclick="switchCsrTab({{ $index }})">
-                    <span class="csr-tab-icon">{{ $category['icon'] }}</span>
-                    <span class="csr-tab-title">{{ $category['title'] }}</span>
+                    <span class="csr-tab-icon">{{ $category->icon }}</span>
+                    <span class="csr-tab-title">{{ $category->title }}</span>
                 </button>
                 @endforeach
             </div>
@@ -172,33 +174,38 @@
                 @foreach($csrCategories as $index => $category)
                 <div id="csr-panel-{{ $index }}" class="csr-panel {{ $index === 0 ? 'active' : '' }}">
                     <div class="csr-panel-desc">
-                        <h3 class="font-heading font-bold text-xl text-dark-green">{{ $category['title'] }}</h3>
-                        <p class="mt-2 text-gray-text leading-relaxed">{{ $category['desc'] }}</p>
+                        <h3 class="font-heading font-bold text-xl text-dark-green">{{ $category->title }}</h3>
+                        <p class="mt-2 text-gray-text leading-relaxed">{{ $category->description }}</p>
                     </div>
 
-                    <div class="csr-gallery csr-gallery-{{ count($category['activities']) }}">
-                        @foreach($category['activities'] as $activity)
+                    @if($category->activities->isNotEmpty())
+                    <div class="csr-gallery csr-gallery-{{ $category->activities->count() }}">
+                        @foreach($category->activities as $activity)
                         <div class="csr-timeline-card">
-                            <img src="{{ asset('images/csr/' . $activity['image']) }}" alt="{{ $activity['title'] }}"
+                            <img src="{{ $activity->image ? asset('storage/' . $activity->image) : 'https://placehold.co/500x300/164A2E/F5F1E8?text=Foto+Kegiatan' }}"
+                                 alt="{{ $activity->title }}"
                                  class="csr-timeline-img"
                                  onerror="this.onerror=null;this.src='https://placehold.co/500x300/164A2E/F5F1E8?text=Foto+Kegiatan'">
                             <div class="csr-timeline-body">
                                 <div class="csr-timeline-meta">
                                     <span class="csr-meta-date">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                        {{ $activity['date'] }}
+                                        {{ $activity->date }}
                                     </span>
                                     <span class="csr-meta-location">
                                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                        {{ $activity['location'] }}
+                                        {{ $activity->location }}
                                     </span>
                                 </div>
-                                <h4 class="csr-timeline-title">{{ $activity['title'] }}</h4>
-                                <p class="csr-timeline-story">{{ $activity['story'] }}</p>
+                                <h4 class="csr-timeline-title">{{ $activity->title }}</h4>
+                                <p class="csr-timeline-story">{{ $activity->story }}</p>
                             </div>
                         </div>
                         @endforeach
                     </div>
+                    @else
+                    <p class="text-gray-text text-sm mt-6">Belum ada kegiatan untuk kategori ini.</p>
+                    @endif
                 </div>
                 @endforeach
             </div>
@@ -215,10 +222,16 @@
                     class="csr-dot {{ $index === 0 ? 'active' : '' }}"
                     data-dot-index="{{ $index }}"
                     onclick="switchCsrTab({{ $index }})"
-                    aria-label="Ke kategori {{ $category['title'] }}">
+                    aria-label="Ke kategori {{ $category->title }}">
             </button>
             @endforeach
         </div>
+
+        @else
+        <div class="text-center py-16">
+            <p class="text-gray-text">Belum ada kategori CSR yang ditambahkan.</p>
+        </div>
+        @endif
 
         <!-- CTA penutup -->
         <div class="mt-16 text-center">

@@ -40,15 +40,26 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.berita.*') ? 'active' : '' }}" href="{{ route('admin.berita.index') }}">
+                    <i class="bi bi-newspaper"></i> <span>Kelola Berita</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}" href="{{ route('admin.pages.index') }}">
                     <i class="bi bi-file-earmark-text"></i> <span>Kelola Halaman</span>
                 </a>
+            </li>
+                <li class="nav-item">
+                    <a class="nav-link {{ request()->routeIs('admin.csr-categories.*') ? 'active' : '' }}" href="{{ route('admin.csr-categories.index') }}">
+                        <i class="bi bi-heart"></i> <span>Kelola CSR</span>
+                    </a>
+                </li>
             </li>
         </ul>
 
         <div class="mt-auto sidebar-footer">
             <a class="nav-link" href="{{ route('home') }}" target="_blank">
-                <i class="bi bi-box-arrow-up-right"></i> <span>Kembali ke Beranda</span>
+                <i class="bi bi-box-arrow-up-right"></i> <span></span>
             </a>
         </div>
     </nav>

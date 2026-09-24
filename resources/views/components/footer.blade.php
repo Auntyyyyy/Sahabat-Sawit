@@ -4,7 +4,7 @@
 
             <!-- Logo & Deskripsi -->
             <div>
-               <a href="{{ route('home') }}" class="footer-logo-wrap inline-flex items-center gap-3 mb-4">
+               <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer" class="footer-logo-wrap inline-flex items-center gap-3 mb-4">
                     <img src="{{ asset('images/logo.png') }}" alt="PT. Sahabat Sawit Rokan Sejahtera" class="footer-logo">
                     <span class="footer-brand-text flex flex-col leading-tight">
                         <span class="font-heading font-bold text-base md:text-lg text-white">Sahabat Sawit</span>
