@@ -42,8 +42,8 @@
                     </div>
                 </div>
 
-                <a href="{{ route('products') }}" class="nav-link px-2 py-1.5 rounded-md transition-colors {{ request()->routeIs('products*') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('sustainability') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('sustainability') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                <a href="{{ route('products') }}" class="nav-link px-2 py-1.5 rounded-md transition-colors {{ request()->routeIs('products*') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('contact') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('contact') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Masuk Admin -->
@@ -51,7 +51,7 @@
                     <button id="media-menu-btn" type="button"
                             class="media-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'nav-link-active font-semibold' : '' }}"
                             aria-haspopup="true" aria-expanded="false">
-                        <span>Media</span>
+                        <span>Kabar & Berita</span>
                         <svg class="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
@@ -59,7 +59,7 @@
                     <div id="media-menu-dropdown"
                          class="hidden absolute left-0 mt-2 w-64 bg-white rounded-brand shadow-lg border border-gray-100 overflow-hidden z-50">
                         <a href="{{ route('media.berita') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('media.berita') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Berita & Galeri Kegiatan
+                            Berita
                         </a>
                         <a href="{{ route('admin.login') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
                             Masuk Admin
@@ -126,8 +126,8 @@
                     </div>
                 </div>
 
-                <a href="{{ route('products') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('products*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('sustainability') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('sustainability') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                <a href="{{ route('products') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('products*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('contact') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('contact') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Masuk Admin -->
@@ -135,7 +135,7 @@
                     <button id="media-accordion-btn" type="button"
                             class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
                             aria-expanded="false">
-                        <span>Media</span>
+                        <span>Kabar & Berita</span>
                         <svg id="media-accordion-icon" class="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>

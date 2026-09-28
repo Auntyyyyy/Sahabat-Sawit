@@ -88,6 +88,7 @@
     </style>
 </head>
 <body>
+    @include('components.splash-screen')
     <main class="halaman">
         <svg class="pelepah" viewBox="0 0 400 400" fill="none" stroke="#2f5a3a" stroke-width="3" stroke-linecap="round" aria-hidden="true">
             <path d="M380 380 C 300 250, 220 130, 40 30"/>
