@@ -45,15 +45,19 @@
                 </a>
             </li>
             <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.pengetahuan.*') ? 'active' : '' }}" href="{{ route('admin.pengetahuan.index') }}">
+                    <i class="bi bi-lightbulb"></i> <span>Kelola Pengetahuan</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ request()->routeIs('admin.csr-categories.*') ? 'active' : '' }}" href="{{ route('admin.csr-categories.index') }}">
+                    <i class="bi bi-heart"></i> <span>Kelola CSR</span>
+                </a>
+            </li>
+            <li class="nav-item">
                 <a class="nav-link {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}" href="{{ route('admin.pages.index') }}">
                     <i class="bi bi-file-earmark-text"></i> <span>Kelola Halaman</span>
                 </a>
-            </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ request()->routeIs('admin.csr-categories.*') ? 'active' : '' }}" href="{{ route('admin.csr-categories.index') }}">
-                        <i class="bi bi-heart"></i> <span>Kelola CSR</span>
-                    </a>
-                </li>
             </li>
         </ul>
 

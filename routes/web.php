@@ -8,6 +8,7 @@ use App\Http\Controllers\SustainabilityController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PlantationController;
 use App\Http\Controllers\BeritaController;
+use App\Http\Controllers\PengetahuanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -68,3 +69,5 @@ require __DIR__.'/admin.php';
 |--------------------------------------------------------------------------*/
 Route::get('/media/berita', [BeritaController::class, 'index'])->name('media.berita');
 Route::get('/media/berita/{berita:slug}', [BeritaController::class, 'show'])->name('media.berita.show');
+Route::get('/media/pengetahuan', [PengetahuanController::class, 'index'])->name('media.pengetahuan');
+Route::get('/media/pengetahuan/{pengetahuan:slug}', [PengetahuanController::class, 'show'])->name('media.pengetahuan.show'); 

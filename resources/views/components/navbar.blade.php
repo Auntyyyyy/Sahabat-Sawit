@@ -3,8 +3,7 @@
         <div class="navbar-shell flex items-center justify-between h-20 navbar-row">
             <span class="navbar-shell-bg" aria-hidden="true"></span>
 
-            {{-- Logo + nama perusahaan: klik menuju Landing Page (tab yang sama) --}}
-            <a href="{{ route('landing') }}" class="navbar-brand flex items-center gap-3">
+            <a href="{{ route('home') }}" class="navbar-brand flex items-center gap-3">
                 <img src="{{ asset('images/logo (2).png') }}" alt="PT. Sahabat Sawit Rokan Sejahtera" class="navbar-logo">
                 <span class="navbar-brand-text flex flex-col leading-tight">
                     <span class="brand-title font-heading font-bold text-base md:text-lg">Sahabat Sawit</span>
@@ -14,52 +13,28 @@
 
             <nav class="hidden lg:flex items-center gap-6 xl:gap-8 font-heading font-medium text-sm">
                 <a href="{{ route('home') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('home') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_beranda') }}</a>
-
-                <!-- Menu Tentang Kami (Desktop) — dropdown: Profil Perusahaan, Profil Manajemen, Nilai Perusahaan, Sertifikasi & Penghargaan -->
-                <div class="relative">
-                    <button id="about-menu-btn" type="button"
-                            class="about-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('about') || request()->routeIs('about.*') ? 'nav-link-active font-semibold' : '' }}"
-                            aria-haspopup="true" aria-expanded="false">
-                        <span>{{ __('messages.nav_tentang') }}</span>
-                        <svg class="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div id="about-menu-dropdown"
-                         class="hidden absolute left-0 mt-2 w-64 bg-white rounded-brand shadow-lg border border-gray-100 overflow-hidden z-50">
-                        <a href="{{ route('about') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('about') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Profil Perusahaan
-                        </a>
-                        <a href="{{ route('about.struktur') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('about.struktur') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Profil Manajemen
-                        </a>
-                        <a href="{{ route('about.nilai') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('about.nilai') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Nilai Perusahaan
-                        </a>
-                        <a href="{{ route('about.sertifikasi') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('about.sertifikasi') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Sertifikasi & Penghargaan
-                        </a>
-                    </div>
-                </div>
-
-                <a href="{{ route('sustainability') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('sustainability') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                <a href="{{ route('about') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('about') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_tentang') }}</a>
                 <a href="{{ route('products') }}" class="nav-link px-2 py-1.5 rounded-md transition-colors {{ request()->routeIs('products*') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_produk') }}</a>
+                <a href="{{ route('sustainability') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('sustainability') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
                 <a href="{{ route('contact') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('contact') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
-                <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Masuk Admin -->
+                <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
                 <div class="relative">
                     <button id="media-menu-btn" type="button"
                             class="media-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'nav-link-active font-semibold' : '' }}"
                             aria-haspopup="true" aria-expanded="false">
-                        <span>Kabar & Berita</span>
+                        <span>Media</span>
                         <svg class="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
                     <div id="media-menu-dropdown"
                          class="hidden absolute left-0 mt-2 w-64 bg-white rounded-brand shadow-lg border border-gray-100 overflow-hidden z-50">
-                        <a href="{{ route('media.berita') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('media.berita') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Berita
+                        <a href="{{ route('media.berita') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('media.berita') || request()->routeIs('media.berita.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
+                            Berita & Galeri Kegiatan
+                        </a>
+                        <a href="{{ route('media.pengetahuan') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
+                            Pengetahuan
                         </a>
                         <a href="{{ route('admin.login') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
                             Masuk Admin
@@ -99,50 +74,27 @@
         <div id="mobile-menu" class="mobile-menu-panel hidden lg:hidden py-4 font-heading font-medium text-sm">
             <div class="flex flex-col gap-3">
                 <a href="{{ route('home') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('home') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_beranda') }}</a>
-
-                <!-- Menu Tentang Kami (Mobile) — accordion: 4 sub-halaman -->
-                <div class="border-t border-gray-100 pt-3">
-                    <button id="about-accordion-btn" type="button"
-                            class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('about') || request()->routeIs('about.*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
-                            aria-expanded="false">
-                        <span>{{ __('messages.nav_tentang') }}</span>
-                        <svg id="about-accordion-icon" class="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
-                        </svg>
-                    </button>
-                    <div id="about-accordion-panel" class="hidden flex flex-col gap-1 mt-1 pl-4">
-                        <a href="{{ route('about') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('about') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
-                            Profil Perusahaan
-                        </a>
-                        <a href="{{ route('about.struktur') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('about.struktur') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
-                            Profil Manajemen
-                        </a>
-                        <a href="{{ route('about.nilai') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('about.nilai') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
-                            Nilai Perusahaan
-                        </a>
-                        <a href="{{ route('about.sertifikasi') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('about.sertifikasi') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
-                            Sertifikasi & Penghargaan
-                        </a>
-                    </div>
-                </div>
-
-                <a href="{{ route('sustainability') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('sustainability') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                <a href="{{ route('about') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('about') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_tentang') }}</a>
                 <a href="{{ route('products') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('products*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_produk') }}</a>
+                <a href="{{ route('sustainability') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('sustainability') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
                 <a href="{{ route('contact') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('contact') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
-                <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Masuk Admin -->
+                <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
                 <div class="border-t border-gray-100 pt-3">
                     <button id="media-accordion-btn" type="button"
                             class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
                             aria-expanded="false">
-                        <span>Kabar & Berita</span>
+                        <span>Media</span>
                         <svg id="media-accordion-icon" class="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
                     <div id="media-accordion-panel" class="hidden flex flex-col gap-1 mt-1 pl-4">
-                        <a href="{{ route('media.berita') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('media.berita') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
+                        <a href="{{ route('media.berita') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('media.berita') || request()->routeIs('media.berita.show') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
                             Berita & Galeri Kegiatan
+                        </a>
+                        <a href="{{ route('media.pengetahuan') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
+                            Pengetahuan
                         </a>
                         <a href="{{ route('admin.login') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
                             Masuk Admin
@@ -256,9 +208,7 @@
     .site-navbar.is-scrolled .mobile-menu-btn{ color: var(--nv-dark-green); }
     .site-navbar.is-scrolled .mobile-menu-btn:hover{ background: rgba(0,0,0,0.05); }
 
-    .about-menu-btn,
     .media-menu-btn{ cursor: pointer; background: none; border: none; padding: 0; font: inherit; }
-    .about-menu-btn[aria-expanded="true"] svg,
     .media-menu-btn[aria-expanded="true"] svg{ transform: rotate(180deg); }
 
     .mobile-menu-panel{
@@ -268,10 +218,7 @@
         margin-top: 8px;
         padding-left: 8px;
         padding-right: 8px;
-        max-height: calc(100vh - 100px);
-        overflow-y: auto;
     }
-    #about-accordion-btn[aria-expanded="true"] #about-accordion-icon,
     #media-accordion-btn[aria-expanded="true"] #media-accordion-icon{ transform: rotate(180deg); }
 
     body.navbar-force-solid .site-navbar{ padding-top: 14px; }
@@ -324,14 +271,11 @@
 
         const langBtn = document.getElementById('lang-switch-btn');
         const langDropdown = document.getElementById('lang-switch-dropdown');
-        const aboutBtn = document.getElementById('about-menu-btn');
-        const aboutDropdown = document.getElementById('about-menu-dropdown');
         const mediaBtn = document.getElementById('media-menu-btn');
         const mediaDropdown = document.getElementById('media-menu-dropdown');
 
         function closeAllDropdowns() {
             if (langDropdown) { langDropdown.classList.add('hidden'); langBtn?.setAttribute('aria-expanded', false); }
-            if (aboutDropdown) { aboutDropdown.classList.add('hidden'); aboutBtn?.setAttribute('aria-expanded', false); }
             if (mediaDropdown) { mediaDropdown.classList.add('hidden'); mediaBtn?.setAttribute('aria-expanded', false); }
         }
 
@@ -342,16 +286,6 @@
                 closeAllDropdowns();
                 langDropdown.classList.toggle('hidden', !isHidden);
                 langBtn.setAttribute('aria-expanded', isHidden);
-            });
-        }
-
-        if (aboutBtn && aboutDropdown) {
-            aboutBtn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const isHidden = aboutDropdown.classList.contains('hidden');
-                closeAllDropdowns();
-                aboutDropdown.classList.toggle('hidden', !isHidden);
-                aboutBtn.setAttribute('aria-expanded', isHidden);
             });
         }
 
@@ -367,22 +301,11 @@
 
         document.addEventListener('click', (e) => {
             const clickedInsideLang = langDropdown && (langDropdown.contains(e.target) || e.target === langBtn);
-            const clickedInsideAbout = aboutDropdown && (aboutDropdown.contains(e.target) || e.target === aboutBtn || aboutBtn?.contains(e.target));
             const clickedInsideMedia = mediaDropdown && (mediaDropdown.contains(e.target) || e.target === mediaBtn || mediaBtn?.contains(e.target));
-            if (!clickedInsideLang && !clickedInsideAbout && !clickedInsideMedia) {
+            if (!clickedInsideLang && !clickedInsideMedia) {
                 closeAllDropdowns();
             }
         });
-
-        const aboutAccBtn = document.getElementById('about-accordion-btn');
-        const aboutAccPanel = document.getElementById('about-accordion-panel');
-        if (aboutAccBtn && aboutAccPanel) {
-            aboutAccBtn.addEventListener('click', () => {
-                const isHidden = aboutAccPanel.classList.contains('hidden');
-                aboutAccPanel.classList.toggle('hidden');
-                aboutAccBtn.setAttribute('aria-expanded', isHidden);
-            });
-        }
 
         const mediaAccBtn = document.getElementById('media-accordion-btn');
         const mediaAccPanel = document.getElementById('media-accordion-panel');

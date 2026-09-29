@@ -11,7 +11,7 @@
     <section class="pt-16 pb-10 lg:pt-20 lg:pb-14 bg-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative">
+                <div class="relative scroll-reveal">
                     <img src="{{ asset('images/tangki.png') }}"
                          alt="Aktivitas perkebunan kelapa sawit PT Sahabat Sawit"
                          class="rounded-brand shadow-xl w-full h-[420px] object-cover"
@@ -20,7 +20,7 @@
                         3+ Tahun Pengalaman
                     </div>
                 </div>
-                <div>
+                <div class="scroll-reveal" style="transition-delay: .12s;">
                     <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tentang Kami</span>
                     <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">PT. Sahabat Sawit Rokan Sejahtera</h2>
                     <p class="mt-2 font-heading text-lg text-palm-leaf">Berkembang Bersama Alam dan Masyarakat</p>
@@ -44,12 +44,12 @@
     {{-- 4. KEUNGGULAN PERUSAHAAN --}}
     <section class="pt-10 pb-16 lg:pt-14 lg:pb-20 bg-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto">
+            <div class="text-center max-w-2xl mx-auto scroll-reveal">
                 <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keunggulan Kami</span>
                 <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Mengapa Memilih SSRS?</h2>
             </div>
 
-            <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-reveal-group">
                 @php
                     $icons = [
                         'leaf' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l6-6M12 21a9 9 0 100-18 9 9 0 000 18z"/>',
@@ -61,7 +61,7 @@
                     ];
                 @endphp
                 @foreach($advantages as $adv)
-                <div class="group bg-cream rounded-brand p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-gold/40">
+                <div class="group bg-cream rounded-brand p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-gold/40 scroll-reveal">
                     <div class="w-14 h-14 rounded-full bg-primary-green flex items-center justify-center mb-5 group-hover:bg-gold transition-colors duration-300">
                         <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
                             {!! $icons[$adv['icon']] ?? '' !!}
@@ -79,7 +79,7 @@
     <section class="py-16 lg:py-20 bg-dark-green text-white">
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div>
+                <div class="scroll-reveal">
                     <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
                     <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl">bertumbuh bersama dari sumber terbaik</h2>
                     <p class="mt-4 text-white/75 leading-relaxed text-justify">
@@ -113,7 +113,7 @@
                     </a>
                 </div>
 
-                <div class="rounded-brand overflow-hidden shadow-2xl border border-white/10">
+                <div class="rounded-brand overflow-hidden shadow-2xl border border-white/10 scroll-reveal" style="transition-delay: .12s;">
                     <!-- Placeholder Google Maps embed -->
                     <iframe
                         src="https://www.google.com/maps?q=Rokan+Hilir,+Riau&output=embed"

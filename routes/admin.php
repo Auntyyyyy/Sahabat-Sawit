@@ -10,9 +10,7 @@ use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
-
-// Tempelkan file ini di routes/web.php dengan: require __DIR__.'/admin.php';
-// atau daftarkan sebagai file route terpisah di bootstrap/app.php
+use App\Http\Controllers\Admin\PengetahuanController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -32,7 +30,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('logout');
 
     // Dashboard admin: HANYA role admin
-    Route::middleware(['auth', 'admin:admin'])->group(function () {
+        Route::middleware(['auth', 'admin:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('products', ProductController::class)->except(['show']);
         Route::resource('berita', BeritaController::class)
@@ -45,6 +43,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('csr-categories.activities', CsrActivityController::class)
             ->except(['show', 'index'])
             ->shallow();
+        Route::resource('pengetahuan', PengetahuanController::class)->except(['show']);
     });
 });
 
