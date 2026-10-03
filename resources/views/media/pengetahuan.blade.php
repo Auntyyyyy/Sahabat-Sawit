@@ -3,20 +3,42 @@
 @section('title', 'Pengetahuan Kelapa Sawit — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative min-h-[40vh] flex items-center bg-dark-green text-white">
-    <div class="absolute inset-0 hero-overlay"></div>
+
+{{-- Header band: foto asli jadi background hero, dengan gradasi gelap di
+     atasnya supaya teks tetap kontras — pola yang sama dengan hero halaman
+     Profil Perusahaan & Kontak. Icon badge lampu dipertahankan sebagai
+     aksen tematik "Pengetahuan". --}}
+<section class="relative min-h-[44vh] flex items-center bg-dark-green text-white overflow-hidden">
+
+    {{-- TODO: ganti path foto di bawah dengan foto asli kamu (mis. suasana
+         perkebunan, pabrik, atau aktivitas edukasi/pelatihan karyawan) --}}
+    <div class="absolute inset-0">
+        <img src="{{ asset('images/sawitangkong.jpg') }}"
+             alt=""
+             class="w-full h-full object-cover"
+             onerror="this.src='https://placehold.co/1600x700/2F6B3F/F5F1E8?text=Foto+Pengetahuan'">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-b from-dark-green/90 via-dark-green/80 to-dark-green/95"></div>
 
     <div class="relative w-full max-w-5xl mx-auto px-6 lg:px-8 text-center py-16">
-        <div class="flex items-center justify-center gap-2 text-sm text-white/60 mb-4">
+        <div class="flex items-center justify-center gap-2 text-sm text-white/60 mb-5">
             <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
             <span>/</span>
             <span class="text-white/90">Pengetahuan</span>
         </div>
 
+        <!-- Icon badge lampu -->
+        <div class="flex justify-center mb-4">
+            <div class="sustain-icon-badge">
+                <i class="bi bi-lightbulb-fill text-xl"></i>
+            </div>
+        </div>
+
         <span class="block font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Media</span>
         <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">SahabatPedia</h1>
         <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
-Ruang informasi yang menghadirkan pengetahuan, fakta menarik, berita, dan wawasan seputar kelapa sawit.        </p>
+            Ruang informasi yang menghadirkan pengetahuan, fakta menarik, berita, dan wawasan seputar kelapa sawit.
+        </p>
     </div>
 </section>
 
@@ -29,9 +51,9 @@ Ruang informasi yang menghadirkan pengetahuan, fakta menarik, berita, dan wawasa
                 <p class="text-gray-text">Belum ada konten pengetahuan yang dipublikasikan.</p>
             </div>
         @else
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 scroll-reveal-group">
                 @foreach($pengetahuans as $item)
-                <a href="{{ route('media.pengetahuan.show', $item->slug) }}" class="pengetahuan-card group block rounded-brand overflow-hidden bg-white border border-dark-green/10 shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <a href="{{ route('media.pengetahuan.show', $item->slug) }}" class="pengetahuan-card group block rounded-brand overflow-hidden bg-white border border-dark-green/10 shadow-sm hover:shadow-xl transition-shadow duration-300 scroll-reveal">
                     <div class="aspect-[4/3] overflow-hidden bg-cream">
                         <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x450/2F6B3F/F5F1E8?text=' . urlencode($item->judul) }}"
                              alt="{{ $item->judul }}"

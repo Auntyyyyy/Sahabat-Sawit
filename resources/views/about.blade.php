@@ -28,17 +28,6 @@
             <span class="hero-badge">Kabupaten Rokan Hilir</span>
             <span class="hero-badge">Standar ISPO & RSPO</span>
         </div>
-
-        <!-- Tombol CTA -->
-        <div class="hero-fade hero-delay-6 mt-8">
-            <a href="#awal-perjalanan" class="hero-cta">
-                Awal Perjalanan
-                <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
-                </svg>
-            </a>
-        </div>
-    </div>
 </section>
 
 <section class="pt-14 pb-8 lg:pt-16 lg:pb-10 bg-white">

@@ -22,8 +22,8 @@
                 </div>
                 <div class="scroll-reveal" style="transition-delay: .12s;">
                     <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tentang Kami</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">PT. Sahabat Sawit Rokan Sejahtera</h2>
-                    <p class="mt-2 font-heading text-lg text-palm-leaf">Berkembang Bersama Alam dan Masyarakat</p>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berkembang Bersama Alam dan Masyarakat</h2>
+                    <p class="mt-2 font-heading text-lg text-palm-leaf">PT. Sahabat Sawit Rokan Sejahtera</p>
                     <p class="mt-6 text-gray-text leading-relaxed text-justify">
                         PT Sahabat Sawit adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit, berlokasi di Kabupaten Rokan Hilir, Provinsi Riau. Kami berkomitmen mengelola perkebunan secara profesional, produktif, dan bertanggung jawab, dengan tetap menjaga kelestarian lingkungan serta memberikan manfaat nyata bagi masyarakat sekitar.
                     </p>
@@ -123,6 +123,68 @@
                     </iframe>
                 </div>
             </div>
+        </div>
+    </section>
+
+    {{-- 6. BERITA & GALERI KEGIATAN --}}
+    <section class="py-16 lg:py-20 bg-cream">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+ 
+            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 scroll-reveal">
+                <div>
+                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Media</span>
+                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berita & Galeri Kegiatan</h2>
+                    <p class="mt-3 text-gray-text leading-relaxed max-w-xl">
+                        Dokumentasi terbaru seputar aktivitas PT. Sahabat Sawit Rokan Sejahtera.
+                    </p>
+                </div>
+ 
+                <a href="{{ route('media.berita') }}"
+                   class="shrink-0 inline-flex items-center gap-2 font-heading font-semibold text-dark-green hover:text-primary-green transition-colors group">
+                    Lihat Semua Berita
+                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                    </svg>
+                </a>
+            </div>
+ 
+            @if(isset($latestBerita) && $latestBerita->isNotEmpty())
+            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-reveal-group">
+                @foreach($latestBerita as $item)
+                <a href="{{ route('media.berita.show', $item->slug) }}"
+                   class="group block bg-white rounded-brand overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 scroll-reveal">
+                    <div class="aspect-[4/3] overflow-hidden bg-cream">
+                        <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x450/1F5F3B/F5F1E8?text=' . urlencode($item->judul) }}"
+                             alt="{{ $item->judul }}"
+                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x450/1F5F3B/F5F1E8?text={{ urlencode($item->judul) }}'">
+                    </div>
+                    <div class="p-5">
+                        <span class="text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
+                            {{ $item->tanggal->translatedFormat('d F Y') }}
+                        </span>
+                        <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
+                            {{ $item->judul }}
+                        </h3>
+                        <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-2">
+                            {{ $item->deskripsi_singkat }}
+                        </p>
+                        <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-dark-green group-hover:gap-2.5 transition-all">
+                            Baca Selengkapnya
+                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+            @else
+            <div class="mt-12 text-center py-10 bg-white rounded-brand">
+                <p class="text-gray-text">Belum ada berita yang dipublikasikan.</p>
+            </div>
+            @endif
+ 
         </div>
     </section>
 @endsection

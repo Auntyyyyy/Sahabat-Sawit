@@ -4,7 +4,24 @@
 
 @section('content')
 <section class="relative bg-dark-green text-white overflow-hidden hero-detail-fullscreen">
-    <div class="absolute inset-0 bg-dark-green/70"></div>
+
+    {{-- Background hero: pakai foto artikel sendiri kalau ada, supaya tiap
+         artikel punya identitas visual masing-masing — bukan hijau polos
+         berulang di semua artikel. --}}
+    @if($pengetahuan->gambar)
+        <div class="absolute inset-0">
+            <img src="{{ asset('storage/' . $pengetahuan->gambar) }}"
+                 alt=""
+                 class="w-full h-full object-cover"
+                 onerror="this.onerror=null;this.src='https://placehold.co/1600x900/2F6B3F/F5F1E8?text={{ urlencode($pengetahuan->judul) }}'">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-t from-dark-green via-dark-green/85 to-dark-green/35"></div>
+    @else
+        {{-- Fallback kalau artikel belum punya gambar: pola titik halus,
+             senada dengan header band di halaman Tentang Kami --}}
+        <div class="absolute inset-0 pointer-events-none opacity-[0.4]" style="background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 22px 22px;"></div>
+        <div class="absolute inset-0 bg-dark-green/70"></div>
+    @endif
 
     <div class="relative max-w-4xl mx-auto px-6 lg:px-8 w-full">
         <nav aria-label="Breadcrumb" class="flex mb-5">
