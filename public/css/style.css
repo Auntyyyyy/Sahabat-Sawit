@@ -2818,3 +2818,197 @@ body { background-color: var(--sw-cream); }
 @media (max-width: 480px) {
     .process-arrow { width: 34px; height: 34px; }
 }
+
+/* ================= STAT CARDS (baris atas) ================= */
+.stat-cards-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border: 1px solid #eef0f4;
+}
+
+.stat-card-icon {
+    width: 36px;
+    height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    background: #eef2ff;
+    color: #1e3a8a;
+    font-size: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.stat-card-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--muted, #6b7280);
+    margin-bottom: 0.25rem;
+}
+
+.stat-card-value {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #1f2937;
+}
+
+@media (max-width: 1100px) {
+    .stat-cards-row {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (max-width: 640px) {
+    .stat-cards-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ================= DONUT CHART (Divisi) ================= */
+.donut-panel-body {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.donut-chart {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.donut-chart::after {
+    content: '';
+    position: absolute;
+    inset: 22%;
+    background: #ffffff;
+    border-radius: 50%;
+}
+
+.donut-legend {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+    min-width: 160px;
+}
+
+.donut-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.875rem;
+}
+
+.donut-legend-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    flex-shrink: 0;
+}
+
+.donut-legend-label {
+    flex: 1;
+    color: #374151;
+}
+
+.donut-legend-value {
+    font-weight: 600;
+    color: #1f2937;
+}
+
+/* ================= PANEL FOOT NOTE (rata-rata masa kerja) ================= */
+.panel-foot-note {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed #e5e7eb;
+    font-size: 0.8rem;
+    color: var(--muted, #6b7280);
+}
+
+/* ================= STACKED BAR CHART (Gender x Usia) ================= */
+.stacked-bar-legend {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.8rem;
+    color: #374151;
+    margin-bottom: 1.25rem;
+}
+
+.stacked-bar-legend .legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 999px;
+    margin-right: 0.35rem;
+}
+
+.legend-dot.male {
+    background: #0f766e;
+}
+
+.legend-dot.female {
+    background: #f59e0b;
+}
+
+.stacked-bar-chart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+    height: 180px;
+    padding-top: 0.5rem;
+}
+
+.stacked-bar-col {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: 100%;
+}
+
+.stacked-bar-stack {
+    width: 100%;
+    max-width: 48px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    border-radius: 4px 4px 0 0;
+    overflow: hidden;
+    background: #f3f4f6;
+}
+
+.stacked-bar-seg {
+    width: 100%;
+    transition: height 0.3s ease;
+}
+
+.stacked-bar-seg.male {
+    background: #0f766e;
+}
+
+.stacked-bar-seg.female {
+    background: #f59e0b;
+}
+
+.stacked-bar-label {
+    margin-top: 0.5rem;
+    font-size: 0.75rem;
+    color: var(--muted, #6b7280);
+    text-align: center;
+}
