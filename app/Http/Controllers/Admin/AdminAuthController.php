@@ -17,8 +17,19 @@ class AdminAuthController extends Controller
      */
     protected array $allowedRoles = ['admin', 'general_officer', 'hr'];
 
-    public function showLoginForm(): View
+    /**
+     * FIX: kalau sudah login, jangan tampilkan form login lagi — langsung lempar ke
+     * dashboard sesuai role. Sebelumnya hal ini ditangani middleware 'guest' yang
+     * redirect ke RouteServiceProvider::HOME (/home), padahal route itu tidak ada
+     * di proyek ini sehingga muncul 404. Sekarang redirect-nya lewat redirectByRole(),
+     * yang sudah tahu role dan tujuan dashboard masing-masing.
+     */
+    public function showLoginForm(): View|RedirectResponse
     {
+        if (Auth::check()) {
+            return $this->redirectByRole(Auth::user());
+        }
+
         return view('admin.auth.login');
     }
 
@@ -50,8 +61,15 @@ class AdminAuthController extends Controller
         ])->onlyInput('email');
     }
 
-    public function showRegisterForm(): View
+    /**
+     * FIX: sama seperti showLoginForm() — cek dulu apakah sudah login.
+     */
+    public function showRegisterForm(): View|RedirectResponse
     {
+        if (Auth::check()) {
+            return $this->redirectByRole(Auth::user());
+        }
+
         return view('admin.auth.register');
     }
 

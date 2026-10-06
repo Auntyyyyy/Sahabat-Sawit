@@ -28,7 +28,7 @@
 </section>
 
 {{-- ============================= --}}
-{{-- TIM KAMI — STRUKTUR ORGANISASI (dikelompokkan per level, hierarki visual) --}}
+{{-- TIM KAMI — STRUKTUR ORGANISASI (dikelompokkan per level, tanpa foto) --}}
 {{-- ============================= --}}
 @php
     $orgLevelLabels = [
@@ -39,14 +39,32 @@
         5 => 'Officer & Staf',
     ];
 
-    // Ukuran kartu mengecil seiring turunnya tingkatan — inilah yang membuat
-    // hierarki terasa, bukan cuma daftar foto datar.
+    // Lebar kartu mengecil seiring turunnya tingkatan — ini yang bikin hierarki
+    // tetap terasa walau tidak ada foto.
     $orgLevelCardSize = [
-        1 => 'w-60 sm:w-72',
-        2 => 'w-52 sm:w-64',
-        3 => 'w-44 sm:w-52',
-        4 => 'w-36 sm:w-44',
-        5 => 'w-32 sm:w-40',
+        1 => 'w-64 sm:w-72',
+        2 => 'w-56 sm:w-64',
+        3 => 'w-48 sm:w-56',
+        4 => 'w-40 sm:w-48',
+        5 => 'w-36 sm:w-44',
+    ];
+
+    // Nama & jabatan ikut mengecil per level
+    $orgLevelTextSize = [
+        1 => ['nama' => 'text-lg md:text-xl', 'jabatan' => 'text-xs md:text-sm'],
+        2 => ['nama' => 'text-base md:text-lg', 'jabatan' => 'text-xs md:text-sm'],
+        3 => ['nama' => 'text-sm md:text-base', 'jabatan' => 'text-xs'],
+        4 => ['nama' => 'text-sm', 'jabatan' => 'text-[11px]'],
+        5 => ['nama' => 'text-xs md:text-sm', 'jabatan' => 'text-[11px]'],
+    ];
+
+    // Ukuran lingkaran ikon ikut mengecil per level
+    $orgLevelIconSize = [
+        1 => 'w-16 h-16',
+        2 => 'w-14 h-14',
+        3 => 'w-12 h-12',
+        4 => 'w-10 h-10',
+        5 => 'w-9 h-9',
     ];
 
     $orgLevels = collect($organisasi)->groupBy('level')->sortKeys();
@@ -85,24 +103,20 @@
                 </span>
             </div>
 
-            <div class="flex flex-wrap justify-center gap-6 md:gap-8">
+            <div class="flex flex-wrap justify-center gap-5 md:gap-6">
                 @foreach($anggota as $o)
-                <div class="group {{ $orgLevelCardSize[$level] ?? 'w-36 sm:w-44' }}">
-                    <div class="relative aspect-[3/4] rounded-brand overflow-hidden shadow-md group-hover:shadow-2xl group-hover:-translate-y-1.5 transition-all duration-300">
-                        <img src="{{ asset('images/organisasi/' . $o['photo']) }}"
-                             alt="{{ $o['nama'] }} — {{ $o['jabatan'] }}"
-                             class="w-full h-full object-cover"
-                             onerror="this.onerror=null;this.src='https://placehold.co/400x520/1F5F3B/F5F1E8?text={{ urlencode($o['nama']) }}'">
-                        <div class="absolute inset-0 bg-gradient-to-t from-dark-green/90 via-dark-green/15 to-transparent"></div>
-                        <div class="absolute bottom-0 left-0 right-0 p-3 md:p-4">
-                            <p class="font-heading font-bold text-white leading-snug {{ $level <= 2 ? 'text-base md:text-lg' : 'text-xs md:text-sm' }}">
-                                {{ $o['nama'] }}
-                            </p>
-                            <p class="mt-0.5 text-[11px] md:text-xs text-white/75 leading-snug">
-                                {{ $o['jabatan'] }}
-                            </p>
-                        </div>
+                <div class="org-name-card {{ $orgLevelCardSize[$level] ?? 'w-36 sm:w-44' }}">
+                    <div class="org-name-icon {{ $orgLevelIconSize[$level] ?? 'w-10 h-10' }}">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
                     </div>
+                    <p class="org-name-text {{ $orgLevelTextSize[$level]['nama'] ?? 'text-sm' }}">
+                        {{ $o['nama'] }}
+                    </p>
+                    <p class="org-name-jabatan {{ $orgLevelTextSize[$level]['jabatan'] ?? 'text-[11px]' }}">
+                        {{ $o['jabatan'] }}
+                    </p>
                 </div>
                 @endforeach
             </div>
@@ -110,4 +124,48 @@
         @endforeach
     </div>
 </section>
+
+<style>
+    .org-name-card{
+        display:flex;
+        flex-direction:column;
+        align-items:center;
+        text-align:center;
+        background:#ffffff;
+        border-radius:1rem;
+        padding:1.5rem 1rem 1.25rem;
+        box-shadow:0 6px 18px rgba(22,74,46,0.08);
+        border-top:3px solid var(--secondary-green);
+        transition:transform .25s ease, box-shadow .25s ease, border-color .25s ease;
+    }
+    .org-name-card:hover{
+        transform:translateY(-4px);
+        box-shadow:0 14px 30px rgba(22,74,46,0.16);
+        border-top-color: var(--dark-green);
+    }
+    .org-name-icon{
+        display:flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:9999px;
+        background: rgba(47,107,63,0.1);
+        color: var(--secondary-green);
+        margin-bottom:.85rem;
+    }
+    .org-name-icon svg{ width:55%; height:55%; }
+    .org-name-text{
+        font-family: var(--font-heading, inherit);
+        font-weight:700;
+        color: var(--dark-green);
+        line-height:1.3;
+    }
+    .org-name-jabatan{
+        margin-top:.3rem;
+        color:#8A6A45;
+        font-weight:600;
+        text-transform:uppercase;
+        letter-spacing:.03em;
+        line-height:1.4;
+    }
+</style>
 @endsection

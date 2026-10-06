@@ -8,20 +8,20 @@ use Symfony\Component\HttpFoundation\Response;
 
 class AdminMiddleware
 {
-    /**
-     * @param  string  ...$roles  Role yang diizinkan, mis: 'admin', 'hr'
-     */
     public function handle(Request $request, Closure $next, string ...$roles): Response
     {
-        if (! auth()->check()) {
-            abort(403, 'Unauthorized.');
+        $user = $request->user();
+
+        if (! $user) {
+            abort(403, 'Anda belum login.');
         }
 
-        // Kalau tidak ada role spesifik disebutkan, default izinkan admin, general_officer, hr
-        $allowed = $roles ?: ['admin', 'general_officer', 'hr'];
+        if (empty($roles)) {
+            $roles = ['admin'];
+        }
 
-        if (! in_array(auth()->user()->role, $allowed, true)) {
-            abort(403, 'Unauthorized.');
+        if (! in_array($user->role, $roles, true)) {
+            abort(403, 'Anda tidak memiliki akses ke halaman ini.');
         }
 
         return $next($request);

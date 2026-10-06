@@ -6,11 +6,15 @@ use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HrDashboardController;
-use App\Http\Controllers\Admin\KaryawanController; 
+use App\Http\Controllers\Admin\KaryawanController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
 use App\Http\Controllers\Admin\PengetahuanController;
+// FIX: class ini dipakai di grup route 'go' di bawah tapi sebelumnya belum
+// di-import sama sekali — bakal error "Class not found" begitu dipanggil.
+use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
+use App\Http\Controllers\Admin\AssetController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -47,11 +51,14 @@ Route::prefix('admin')->name('admin.')->group(function () {
     });
 });
 
-// Dashboard General Officer
+// Dashboard General Officer (General Affair)
 Route::middleware(['auth', 'admin:general_officer'])
     ->prefix('go')->name('go.')
     ->group(function () {
         Route::get('dashboard', [GeneralOfficerDashboardController::class, 'index'])->name('dashboard');
+
+        // Modul Aset / Inventaris
+        Route::resource('assets', AssetController::class)->except(['show']);
     });
 
 // Dashboard HR
