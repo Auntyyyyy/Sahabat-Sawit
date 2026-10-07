@@ -39,33 +39,11 @@
         5 => 'Officer & Staf',
     ];
 
-    // Lebar kartu mengecil seiring turunnya tingkatan — ini yang bikin hierarki
-    // tetap terasa walau tidak ada foto.
-    $orgLevelCardSize = [
-        1 => 'w-64 sm:w-72',
-        2 => 'w-56 sm:w-64',
-        3 => 'w-48 sm:w-56',
-        4 => 'w-40 sm:w-48',
-        5 => 'w-36 sm:w-44',
-    ];
-
-    // Nama & jabatan ikut mengecil per level
-    $orgLevelTextSize = [
-        1 => ['nama' => 'text-lg md:text-xl', 'jabatan' => 'text-xs md:text-sm'],
-        2 => ['nama' => 'text-base md:text-lg', 'jabatan' => 'text-xs md:text-sm'],
-        3 => ['nama' => 'text-sm md:text-base', 'jabatan' => 'text-xs'],
-        4 => ['nama' => 'text-sm', 'jabatan' => 'text-[11px]'],
-        5 => ['nama' => 'text-xs md:text-sm', 'jabatan' => 'text-[11px]'],
-    ];
-
-    // Ukuran lingkaran ikon ikut mengecil per level
-    $orgLevelIconSize = [
-        1 => 'w-16 h-16',
-        2 => 'w-14 h-14',
-        3 => 'w-12 h-12',
-        4 => 'w-10 h-10',
-        5 => 'w-9 h-9',
-    ];
+    // Semua kartu dibuat seragam — ukuran persis seperti level President Director.
+    // Hierarki tetap terbaca lewat label level & urutan tampil, bukan lagi dari ukuran kartu.
+    $orgCardSize = 'w-64 sm:w-72';
+    $orgTextSize = ['nama' => 'text-lg md:text-xl', 'jabatan' => 'text-xs md:text-sm'];
+    $orgIconSize = 'w-16 h-16';
 
     $orgLevels = collect($organisasi)->groupBy('level')->sortKeys();
 @endphp
@@ -105,16 +83,16 @@
 
             <div class="flex flex-wrap justify-center gap-5 md:gap-6">
                 @foreach($anggota as $o)
-                <div class="org-name-card {{ $orgLevelCardSize[$level] ?? 'w-36 sm:w-44' }}">
-                    <div class="org-name-icon {{ $orgLevelIconSize[$level] ?? 'w-10 h-10' }}">
+                <div class="org-name-card {{ $orgCardSize }}">
+                    <div class="org-name-icon {{ $orgIconSize }}">
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
                         </svg>
                     </div>
-                    <p class="org-name-text {{ $orgLevelTextSize[$level]['nama'] ?? 'text-sm' }}">
+                    <p class="org-name-text {{ $orgTextSize['nama'] }}">
                         {{ $o['nama'] }}
                     </p>
-                    <p class="org-name-jabatan {{ $orgLevelTextSize[$level]['jabatan'] ?? 'text-[11px]' }}">
+                    <p class="org-name-jabatan {{ $orgTextSize['jabatan'] }}">
                         {{ $o['jabatan'] }}
                     </p>
                 </div>

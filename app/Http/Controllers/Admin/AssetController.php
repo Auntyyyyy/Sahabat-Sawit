@@ -110,7 +110,7 @@ class AssetController extends Controller
             'status' => 'required|string|in:' . implode(',', Asset::STATUS_OPTIONS),
             'tanggal_perolehan' => 'nullable|date',
             'nilai_perolehan' => 'nullable|numeric|min:0',
-            'foto' => 'nullable|image|max:2048',
+            'foto' => 'nullable|image|max:5120',
             'keterangan' => 'nullable|string',
         ]);
     }

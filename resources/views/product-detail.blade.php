@@ -3,16 +3,19 @@
 @section('title', $product->name . ' — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative bg-dark-green text-white overflow-hidden hero-slideshow-section hero-detail-fullscreen">
-    @if(!empty($product->hero_images))
-        <div class="hero-slideshow">
-            @foreach($product->hero_images as $index => $img)
-            <div class="hero-slide" style="background-image: url('{{ asset('storage/' . $img) }}'); animation-delay: {{ $index * 5 }}s;"></div>
-            @endforeach
-        </div>
-    @endif
 
-    <div class="absolute inset-0 bg-dark-green/70"></div>
+{{-- Hero: satu foto TETAP yang sama untuk semua produk — bukan dari data
+     produk lagi. Taruh file fotomu di public/images/hero-produk.jpg
+     (atau ganti nama filenya di baris src di bawah sesuai yang kamu pakai). --}}
+
+<section class="relative bg-dark-green text-white overflow-hidden hero-detail-fullscreen">
+
+    <div class="absolute inset-0">
+        <img src="{{ asset('images/sawittangan.jpg') }}"
+             alt=""
+             class="w-full h-full object-cover">
+    </div>
+    <div class="absolute inset-0 bg-gradient-to-t from-dark-green via-dark-green/85 to-dark-green/35"></div>
 
     <div class="relative max-w-5xl mx-auto px-6 lg:px-8 w-full">
         <nav aria-label="Breadcrumb" class="flex mb-5">

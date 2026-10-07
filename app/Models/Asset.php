@@ -46,16 +46,17 @@ class Asset extends Model
     ];
 
     /**
-     * Warna badge untuk kondisi aset — dipakai di view supaya logika warna
-     * tidak ditulis ulang di setiap blade yang menampilkan kondisi.
+     * Nama class untuk komponen .status-pill di layout GO (aktif/cuti/
+     * nonaktif) — bukan lagi class Bootstrap, karena layout GO tidak
+     * memuat Bootstrap sama sekali.
      */
     public function kondisiBadgeClass(): string
     {
         return match ($this->kondisi) {
-            'Baik' => 'admin-status-active',
-            'Rusak Ringan', 'Dalam Perbaikan' => 'dashboard-badge-unread',
-            'Rusak Berat' => 'admin-status-inactive',
-            default => 'admin-status-inactive',
+            'Baik' => 'aktif',
+            'Rusak Ringan', 'Dalam Perbaikan' => 'cuti',
+            'Rusak Berat' => 'nonaktif',
+            default => 'nonaktif',
         };
     }
 }
