@@ -774,181 +774,6 @@
     .region-map-wrap { position: sticky; top: 6rem; }
 }
 
-/* === CSR Tabs === */
-
-.csr-tab-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 8px;
-    padding: 20px 12px;
-    background: #FFFFFF;
-    border: 2px solid transparent;
-    border-radius: 14px;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    text-align: center;
-}
-
-.csr-tab-btn:hover { border-color: rgba(107, 142, 35, 0.4); }
-.csr-tab-btn.active { border-color: #164A2E; background: #164A2E; }
-.csr-tab-icon { font-size: 28px; }
-
-.csr-tab-title {
-    font-family: var(--font-heading, inherit);
-    font-weight: 600;
-    font-size: 13px;
-    color: #164A2E;
-}
-
-.csr-tab-btn.active .csr-tab-title { color: #F5F1E8; }
-
-/* === Carousel Wrap (panah kiri-kanan sejajar card) === */
-
-.csr-carousel-wrap {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-    margin-top: 32px;
-}
-
-.csr-carousel-content { flex: 1; min-width: 0; }
-
-.csr-nav-arrow {
-    flex-shrink: 0;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    background: #FFFFFF;
-    border: 1px solid rgba(22, 74, 46, 0.15);
-    color: #164A2E;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    position: sticky;
-    top: 100px;
-}
-
-.csr-nav-arrow:hover {
-    background: #164A2E;
-    color: #F5F1E8;
-    border-color: #164A2E;
-    transform: scale(1.05);
-}
-
-.csr-nav-arrow svg { width: 20px; height: 20px; }
-
-/* === CSR Panel & Description === */
-
-.csr-panel { display: none; }
-.csr-panel.active { display: block; }
-.csr-panel-desc { max-width: 640px; margin: 0 auto 32px; text-align: center; }
-
-/* === CSR Activity Card === */
-
-.csr-timeline-card {
-    background: #FFFFFF;
-    border-radius: 14px;
-    overflow: hidden;
-    box-shadow: 0 4px 14px rgba(22, 74, 46, 0.08);
-    width: 100%;
-    max-width: 100%;
-}
-
-.csr-timeline-img {
-    display: block;
-    width: 100%;
-    height: 200px;
-    object-fit: cover;
-    background-color: #164A2E;
-    color: #F5F1E8;
-    font-size: 13px;
-    text-align: center;
-}
-
-.csr-timeline-body { padding: 20px; }
-
-.csr-timeline-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 14px;
-    margin-bottom: 10px;
-}
-
-.csr-meta-date,
-.csr-meta-location {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 12px;
-    color: #8A6A45;
-    font-weight: 600;
-}
-
-.csr-meta-date svg,
-.csr-meta-location svg { width: 14px; height: 14px; flex-shrink: 0; }
-
-.csr-timeline-title {
-    font-family: var(--font-heading, inherit);
-    font-weight: 700;
-    font-size: 16px;
-    color: #164A2E;
-    margin-bottom: 6px;
-}
-
-.csr-timeline-story { font-size: 14px; color: #6B7280; line-height: 1.6; }
-
-.csr-gallery {
-    display: grid;
-    gap: 24px;
-    max-width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    justify-content: center;
-}
-
-.csr-gallery-1 { grid-template-columns: minmax(280px, 420px); justify-content: center; }
-.csr-gallery-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); justify-content: stretch; }
-.csr-gallery-3 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); justify-content: center; }
-.csr-gallery-4,
-.csr-gallery-5,
-.csr-gallery-6 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); justify-content: center; }
-
-@media (max-width: 768px) {
-    .csr-carousel-wrap { gap: 8px; }
-    .csr-nav-arrow { width: 36px; height: 36px; position: static; }
-    .csr-gallery,
-    .csr-gallery-1,
-    .csr-gallery-2,
-    .csr-gallery-3,
-    .csr-gallery-4,
-    .csr-gallery-5,
-    .csr-gallery-6 { grid-template-columns: 1fr; }
-}
-
-.csr-dots {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    margin-top: 28px;
-}
-
-.csr-dot {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: #D9D2C0;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    transition: all 0.3s ease;
-}
-
-.csr-dot:hover { background: #A8C9A1; }
-.csr-dot.active { width: 28px; border-radius: 999px; background: #1F5F3B; }
-
 /* =====================================================
    CONTACT
    ===================================================== */
@@ -3009,4 +2834,393 @@ body { background-color: var(--sw-cream); }
     font-size: 0.75rem;
     color: var(--muted, #6b7280);
     text-align: center;
+}
+
+/* === CSR Tabs === */
+
+.csr-tab-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 20px 12px;
+    background: #FFFFFF;
+    border: 2px solid transparent;
+    border-radius: 14px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: center;
+}
+
+.csr-tab-btn:hover { border-color: rgba(107, 142, 35, 0.4); }
+.csr-tab-btn.active { border-color: #164A2E; background: #164A2E; }
+.csr-tab-icon { font-size: 28px; }
+
+.csr-tab-title {
+    font-family: var(--font-heading, inherit);
+    font-weight: 600;
+    font-size: 13px;
+    color: #164A2E;
+}
+
+.csr-tab-btn.active .csr-tab-title { color: #F5F1E8; }
+
+/* === Carousel Wrap (panah kiri-kanan sejajar card) === */
+
+.csr-carousel-wrap {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 32px;
+}
+
+.csr-carousel-content { flex: 1; min-width: 0; }
+
+.csr-nav-arrow {
+    flex-shrink: 0;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    background: #FFFFFF;
+    border: 1px solid rgba(22, 74, 46, 0.15);
+    color: #164A2E;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: sticky;
+    top: 100px;
+}
+
+.csr-nav-arrow:hover {
+    background: #164A2E;
+    color: #F5F1E8;
+    border-color: #164A2E;
+    transform: scale(1.05);
+}
+
+.csr-nav-arrow svg { width: 20px; height: 20px; }
+
+/* === CSR Panel & Description === */
+
+.csr-panel { display: none; }
+.csr-panel.active { display: block; }
+.csr-panel-desc { max-width: 640px; margin: 0 auto 32px; text-align: center; }
+
+/* === Responsive === */
+
+@media (max-width: 768px) {
+    .csr-carousel-wrap { gap: 8px; }
+    .csr-nav-arrow { width: 36px; height: 36px; position: static; }
+}
+
+/* === Progress Dots === */
+
+.csr-dots {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 28px;
+}
+
+.csr-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #D9D2C0;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.csr-dot:hover { background: #A8C9A1; }
+.csr-dot.active { width: 28px; border-radius: 999px; background: #1F5F3B; }
+
+
+/* =========================================================
+   Kegiatan CSR — kartu + popup "Baca selengkapnya"
+   ========================================================= */
+
+/* ---------- Grid kartu ---------- */
+.csr-act-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* 1-2 kegiatan tetap di tengah */
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.csr-act-card {
+    flex: 1 1 100%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    background: #ffffff;
+    border: 1px solid rgba(22, 74, 46, 0.1);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(22, 74, 46, 0.08);
+    text-align: left;
+}
+
+@media (min-width: 640px) {
+    .csr-act-card { flex: 0 1 calc((100% - 1.5rem) / 2); }
+}
+
+@media (min-width: 1024px) {
+    .csr-act-card { flex: 0 1 calc((100% - 3rem) / 3); }
+}
+
+/* ---------- Foto ---------- */
+.csr-act-media {
+    position: relative;
+    aspect-ratio: 4 / 3;      /* semua foto sama ukurannya */
+    overflow: hidden;
+    background: #164a2e;
+    cursor: pointer;
+}
+
+.csr-act-media img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.6s ease;
+}
+
+.csr-act-card:hover .csr-act-media img {
+    transform: scale(1.05);
+}
+
+.csr-act-date {
+    position: absolute;
+    left: 0.75rem;
+    bottom: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    max-width: calc(100% - 1.5rem);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(22, 74, 46, 0.9);
+    color: #ffffff;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.csr-act-date svg {
+    width: 13px;
+    height: 13px;
+    flex-shrink: 0;
+}
+
+.csr-act-date span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* ---------- Isi kartu ---------- */
+.csr-act-body {
+    display: flex;
+    flex-direction: column;
+    flex: 1;                  /* kartu setinggi baris, tombol selalu di bawah */
+    padding: 1.1rem 1.25rem 1.25rem;
+}
+
+.csr-act-location {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-width: 0;
+    font-size: 0.78rem;
+    color: #1f5f3b;
+}
+
+.csr-act-location svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.csr-act-location span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;      /* lokasi panjang tidak mendorong judul turun */
+}
+
+.csr-act-title {
+    margin: 0.55rem 0 0.5rem;
+    font-size: 1.05rem;
+    line-height: 1.35;
+    color: #164a2e;
+    min-height: 2.7em;        /* judul 1-2 baris tetap sejajar antar kartu */
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.csr-act-story {
+    margin: 0 0 1rem;
+    font-size: 0.875rem;
+    line-height: 1.65;
+    color: #5b6b61;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;    /* cerita dipotong 4 baris */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.csr-act-more {
+    margin-top: auto;
+    align-self: flex-start;
+    padding: 0;
+    background: none;
+    border: 0;
+    border-bottom: 1.5px solid currentColor;
+    color: #1f5f3b;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.4;
+    cursor: pointer;
+}
+
+.csr-act-more:hover { color: #164a2e; }
+
+.csr-act-more:focus-visible,
+.csr-modal-close:focus-visible {
+    outline: 2px solid #1f5f3b;
+    outline-offset: 3px;
+}
+
+/* ---------- Popup cerita lengkap ---------- */
+.csr-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.csr-modal.is-open {
+    opacity: 1;
+    visibility: visible;
+}
+
+.csr-modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 30, 20, 0.72);
+}
+
+.csr-modal-dialog {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: min(720px, 100%);
+    max-height: 90vh;
+    overflow: hidden;
+    background: #ffffff;
+    border-radius: 18px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    transform: translateY(12px);
+    transition: transform 0.25s ease;
+}
+
+.csr-modal.is-open .csr-modal-dialog {
+    transform: translateY(0);
+}
+
+.csr-modal-close {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 2;
+    width: 38px;
+    height: 38px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.95);
+    color: #164a2e;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.csr-modal-close svg {
+    width: 18px;
+    height: 18px;
+}
+
+.csr-modal-img {
+    flex-shrink: 0;
+    width: 100%;
+    max-height: 40vh;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    background: #164a2e;
+}
+
+.csr-modal-body {
+    overflow-y: auto;      /* hanya bagian teks yang scroll */
+    padding: 1.5rem;
+    text-align: left;
+}
+
+.csr-modal-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    font-size: 0.8rem;
+    color: #1f5f3b;
+}
+
+.csr-modal-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.csr-modal-meta svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+}
+
+.csr-modal-title {
+    margin: 0.75rem 0 0.9rem;
+    font-size: 1.35rem;
+    line-height: 1.3;
+    color: #164a2e;
+}
+
+.csr-modal-story {
+    margin: 0;
+    max-width: 65ch;
+    font-size: 0.95rem;
+    line-height: 1.75;
+    color: #3d4a42;
+    white-space: pre-line;  /* paragraf/enter dari admin tetap terbaca */
+}
+
+/* Kunci scroll halaman saat popup terbuka */
+body.csr-modal-open { overflow: hidden; }
+
+@media (prefers-reduced-motion: reduce) {
+    .csr-act-media img,
+    .csr-modal,
+    .csr-modal-dialog { transition: none; }
 }

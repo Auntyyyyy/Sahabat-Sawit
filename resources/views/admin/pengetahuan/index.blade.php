@@ -12,9 +12,15 @@
                 <h2 class="admin-card-title">Kelola Pengetahuan</h2>
                 <p class="admin-card-desc">Fakta & edukasi seputar kelapa sawit yang tampil di menu Media.</p>
             </div>
-            <a href="{{ route('admin.pengetahuan.create') }}" class="page-action-btn page-action-btn--primary">
-                <i class="bi bi-plus-circle"></i> Tambah Pengetahuan
-            </a>
+            <div class="d-flex gap-2 flex-wrap">
+                {{-- BARU: tombol ke halaman kategori --}}
+                <a href="{{ route('admin.pengetahuan-kategori.index') }}" class="page-action-btn">
+                    <i class="bi bi-tags"></i> Kelola Kategori
+                </a>
+                <a href="{{ route('admin.pengetahuan.create') }}" class="page-action-btn page-action-btn--primary">
+                    <i class="bi bi-plus-circle"></i> Tambah Pengetahuan
+                </a>
+            </div>
         </div>
 
         @if(session('success'))
@@ -27,6 +33,8 @@
                     <tr>
                         <th style="width: 90px;">Gambar</th>
                         <th>Judul</th>
+                        {{-- BARU: kolom kategori --}}
+                        <th style="width: 170px;">Kategori</th>
                         <th class="text-end" style="width: 140px;">Aksi</th>
                     </tr>
                 </thead>
@@ -42,6 +50,7 @@
                                 <span class="fw-semibold">{{ $item->judul }}</span>
                                 <div class="text-muted small">{{ Str::limit($item->ringkasan, 80) }}</div>
                             </td>
+                            <td>{{ $item->kategori?->nama ?? '—' }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
                                     <a href="{{ route('admin.pengetahuan.edit', $item) }}" class="page-action-btn">
@@ -60,7 +69,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="3">
+                            <td colspan="4">
                                 <div class="text-center py-5">
                                     <i class="bi bi-inbox fs-1 text-muted"></i>
                                     <p class="text-muted mt-2 mb-0">Belum ada konten pengetahuan ditambahkan.</p>

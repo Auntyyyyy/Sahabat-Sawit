@@ -27,8 +27,7 @@
             </div>
         @endif
 
-        <form action="{{ route('admin.csr-categories.activities.update', $activity) }}" method="POST" enctype="multipart/form-data" class="p-3">
-            @csrf
+            <form action="{{ route('admin.activities.update', $activity) }}" method="POST" enctype="multipart/form-data" class="p-3">            @csrf
             @method('PUT')
 
             <div class="mb-3">

@@ -4,6 +4,9 @@
 
 @section('content')
 
+{{-- BARU: CSS kartu kegiatan + popup (file ada di public/css/csr-activities.css) --}}
+<link rel="stylesheet" href="{{ asset('css/csr-activities.css') }}">
+
 @php
     // GANTI ARRAY DI BAWAH INI dengan foto-foto asli kamu nanti.
     // Sekarang masih pakai 'herotentang.png' berulang sebagai placeholder.
@@ -179,28 +182,42 @@
                     </div>
 
                     @if($category->activities->isNotEmpty())
-                    <div class="csr-gallery csr-gallery-{{ $category->activities->count() }}">
+                    {{-- BARU: grid kartu kegiatan (menggantikan csr-gallery + csr-timeline-card) --}}
+                    <div class="csr-act-grid">
                         @foreach($category->activities as $activity)
-                        <div class="csr-timeline-card">
-                            <img src="{{ $activity->image ? asset('storage/' . $activity->image) : 'https://placehold.co/500x300/164A2E/F5F1E8?text=Foto+Kegiatan' }}"
-                                 alt="{{ $activity->title }}"
-                                 class="csr-timeline-img"
-                                 onerror="this.onerror=null;this.src='https://placehold.co/500x300/164A2E/F5F1E8?text=Foto+Kegiatan'">
-                            <div class="csr-timeline-body">
-                                <div class="csr-timeline-meta">
-                                    <span class="csr-meta-date">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                        {{ $activity->date }}
-                                    </span>
-                                    <span class="csr-meta-location">
-                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                        {{ $activity->location }}
-                                    </span>
+                        @php
+                            $imageUrl = $activity->image
+                                ? asset('storage/' . $activity->image)
+                                : 'https://placehold.co/800x600/164A2E/F5F1E8?text=Foto+Kegiatan';
+                        @endphp
+                        <article class="csr-act-card"
+                                 data-title="{{ $activity->title }}"
+                                 data-date="{{ $activity->date }}"
+                                 data-location="{{ $activity->location }}"
+                                 data-story="{{ $activity->story }}"
+                                 data-image="{{ $imageUrl }}">
+
+                            <div class="csr-act-media" data-csr-open>
+                                <img src="{{ $imageUrl }}"
+                                     alt="{{ $activity->title }}"
+                                     loading="lazy"
+                                     onerror="this.onerror=null;this.src='https://placehold.co/800x600/164A2E/F5F1E8?text=Foto+Kegiatan'">
+                                <div class="csr-act-date">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                                    <span>{{ $activity->date }}</span>
                                 </div>
-                                <h4 class="csr-timeline-title">{{ $activity->title }}</h4>
-                                <p class="csr-timeline-story">{{ $activity->story }}</p>
                             </div>
-                        </div>
+
+                            <div class="csr-act-body">
+                                <div class="csr-act-location">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                                    <span>{{ $activity->location }}</span>
+                                </div>
+                                <h4 class="csr-act-title font-heading font-bold">{{ $activity->title }}</h4>
+                                <p class="csr-act-story">{{ $activity->story }}</p>
+                                <button type="button" class="csr-act-more" data-csr-open>Baca selengkapnya</button>
+                            </div>
+                        </article>
                         @endforeach
                     </div>
                     @else
@@ -247,6 +264,32 @@
     </div>
 </section>
 
+{{-- BARU: Popup cerita lengkap kegiatan (satu popup dipakai semua kartu) --}}
+<div id="csr-modal" class="csr-modal" role="dialog" aria-modal="true" aria-labelledby="csr-modal-title" aria-hidden="true">
+    <div class="csr-modal-backdrop" data-csr-close></div>
+    <div class="csr-modal-dialog">
+        <button type="button" class="csr-modal-close" data-csr-close aria-label="Tutup">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <img id="csr-modal-img" class="csr-modal-img" src="" alt=""
+             onerror="this.onerror=null;this.src='https://placehold.co/800x450/164A2E/F5F1E8?text=Foto+Kegiatan'">
+        <div class="csr-modal-body">
+            <div class="csr-modal-meta">
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
+                    <b id="csr-modal-date" class="font-medium"></b>
+                </span>
+                <span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+                    <b id="csr-modal-location" class="font-medium"></b>
+                </span>
+            </div>
+            <h3 id="csr-modal-title" class="csr-modal-title font-heading font-bold"></h3>
+            <p id="csr-modal-story" class="csr-modal-story"></p>
+        </div>
+    </div>
+</div>
+
 <script>
 const csrTotalCategories = {{ count($csrCategories) }};
 let csrCurrentCategory = 0;
@@ -270,6 +313,56 @@ function csrNavCategory(direction) {
     if (next >= csrTotalCategories) next = 0;
     switchCsrTab(next);
 }
+
+// BARU: popup cerita lengkap kegiatan
+(function () {
+    const modal = document.getElementById('csr-modal');
+    if (!modal) return;
+
+    const imgEl      = document.getElementById('csr-modal-img');
+    const titleEl    = document.getElementById('csr-modal-title');
+    const dateEl     = document.getElementById('csr-modal-date');
+    const locationEl = document.getElementById('csr-modal-location');
+    const storyEl    = document.getElementById('csr-modal-story');
+    const closeBtn   = modal.querySelector('.csr-modal-close');
+    let lastFocused  = null;
+
+    function openModal(card) {
+        imgEl.src = card.dataset.image;
+        imgEl.alt = card.dataset.title;
+        titleEl.textContent = card.dataset.title;
+        dateEl.textContent = card.dataset.date;
+        locationEl.textContent = card.dataset.location;
+        storyEl.textContent = card.dataset.story;
+
+        lastFocused = document.activeElement;
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('csr-modal-open');
+        closeBtn.focus();
+    }
+
+    function closeModal() {
+        modal.classList.remove('is-open');
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('csr-modal-open');
+        if (lastFocused) lastFocused.focus();
+    }
+
+    document.addEventListener('click', function (e) {
+        const opener = e.target.closest('[data-csr-open]');
+        if (opener) {
+            const card = opener.closest('.csr-act-card');
+            if (card) openModal(card);
+            return;
+        }
+        if (e.target.closest('[data-csr-close]')) closeModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
+    });
+})();
 
 // Animasi angka counter saat section masuk viewport
 document.addEventListener('DOMContentLoaded', function () {

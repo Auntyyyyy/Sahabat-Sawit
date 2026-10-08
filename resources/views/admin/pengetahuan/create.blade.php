@@ -33,7 +33,20 @@
             <div class="mb-3">
                 <label for="judul" class="form-label fw-semibold">Judul</label>
                 <input type="text" name="judul" id="judul" class="form-control"
-                       value="{{ old('judul') }}" placeholder="Contoh: Tahukah Anda, 1 Ton TBS Bisa Hasilkan Berapa Liter CPO?" required>
+                       value="{{ old('judul') }}" placeholder="Contoh: 1 Ton TBS Bisa Hasilkan Berapa Liter CPO?" required>
+            </div>
+
+            {{-- BARU: pilihan kategori --}}
+            <div class="mb-3">
+                <label for="kategori_id" class="form-label fw-semibold">Kategori</label>
+                <select name="kategori_id" id="kategori_id" class="form-select" style="max-width: 320px;" required>
+                    <option value="">— Pilih kategori —</option>
+                    @foreach ($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}" {{ old('kategori_id') == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama }}
+                        </option>
+                    @endforeach
+                </select>
             </div>
 
             <div class="mb-3">

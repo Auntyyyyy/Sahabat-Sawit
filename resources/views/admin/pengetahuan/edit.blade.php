@@ -37,6 +37,20 @@
                        value="{{ old('judul', $pengetahuan->judul) }}" required>
             </div>
 
+            {{-- BARU: pilihan kategori --}}
+            <div class="mb-3">
+                <label for="kategori_id" class="form-label fw-semibold">Kategori</label>
+                <select name="kategori_id" id="kategori_id" class="form-select" style="max-width: 320px;" required>
+                    <option value="">— Pilih kategori —</option>
+                    @foreach ($kategoris as $kategori)
+                        <option value="{{ $kategori->id }}"
+                            {{ old('kategori_id', $pengetahuan->kategori_id) == $kategori->id ? 'selected' : '' }}>
+                            {{ $kategori->nama }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="mb-3">
                 <label class="form-label fw-semibold">Gambar Saat Ini</label>
                 @if($pengetahuan->gambar)

@@ -15,6 +15,7 @@ use App\Http\Controllers\Admin\PengetahuanController;
 // di-import sama sekali — bakal error "Class not found" begitu dipanggil.
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
 use App\Http\Controllers\Admin\AssetController;
+use App\Http\Controllers\Admin\PengetahuanKategoriController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -34,7 +35,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('logout');
 
     // Dashboard admin: HANYA role admin
-        Route::middleware(['auth', 'admin:admin'])->group(function () {
+    Route::middleware(['auth', 'admin:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('products', ProductController::class)->except(['show']);
         Route::resource('berita', BeritaController::class)
@@ -48,6 +49,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
             ->except(['show', 'index'])
             ->shallow();
         Route::resource('pengetahuan', PengetahuanController::class)->except(['show']);
+        Route::resource('pengetahuan-kategori', PengetahuanKategoriController::class)
+            ->except(['show', 'create'])
+            ->parameters(['pengetahuan-kategori' => 'kategori']);
     });
 });
 

@@ -108,11 +108,9 @@
                             <td>{{ $activity->location }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
-                                    <a href="{{ route('admin.csr-categories.activities.edit', $activity) }}" class="page-action-btn">
-                                        <i class="bi bi-pencil-square"></i> Edit
+<a href="{{ route('admin.activities.edit', $activity) }}" class="page-action-btn">                                        <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <form action="{{ route('admin.csr-categories.activities.destroy', $activity) }}" method="POST"
-                                          onsubmit="return confirm('Hapus kegiatan ini?');">
+<form action="{{ route('admin.activities.destroy', $activity) }}" method="POST"                                          onsubmit="return confirm('Hapus kegiatan ini?');">
                                         @csrf
                                         @method('DELETE')
                                         <button type="submit" class="page-action-btn text-danger">

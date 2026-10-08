@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Pengetahuan;
+use App\Models\PengetahuanKategori;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,13 +15,14 @@ class PengetahuanController extends Controller
 {
     public function index(): View
     {
-        $pengetahuans = Pengetahuan::orderBy('order')->paginate(10);
+        $pengetahuans = Pengetahuan::with('kategori')->orderBy('order')->paginate(10);
         return view('admin.pengetahuan.index', compact('pengetahuans'));
     }
 
     public function create(): View
     {
-        return view('admin.pengetahuan.create');
+        $kategoris = PengetahuanKategori::orderBy('order')->get();
+        return view('admin.pengetahuan.create', compact('kategoris'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -40,7 +42,8 @@ class PengetahuanController extends Controller
 
     public function edit(Pengetahuan $pengetahuan): View
     {
-        return view('admin.pengetahuan.edit', compact('pengetahuan'));
+        $kategoris = PengetahuanKategori::orderBy('order')->get();
+        return view('admin.pengetahuan.edit', compact('pengetahuan', 'kategoris'));
     }
 
     public function update(Request $request, Pengetahuan $pengetahuan): RedirectResponse
@@ -78,6 +81,7 @@ class PengetahuanController extends Controller
     {
         return $request->validate([
             'judul' => ['required', 'string', 'max:255'],
+            'kategori_id' => ['required', 'exists:pengetahuan_kategori,id'],
             'ringkasan' => ['required', 'string'],
             'gambar' => ['nullable', 'image', 'max:5000'],
             'order' => ['nullable', 'integer'],

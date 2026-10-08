@@ -32,39 +32,38 @@ class CsrActivityController extends Controller
             ->with('success', 'Kegiatan berhasil ditambahkan.');
     }
 
-    // Shallow route: tidak butuh {csrCategory} di URL edit/update/destroy
-    public function edit(CsrActivity $csrActivity): View
+    public function edit(CsrActivity $activity): View
     {
-        return view('admin.csr-activities.edit', ['activity' => $csrActivity]);
+        return view('admin.csr-activities.edit', ['activity' => $activity]);
     }
 
-    public function update(Request $request, CsrActivity $csrActivity): RedirectResponse
+    public function update(Request $request, CsrActivity $activity): RedirectResponse
     {
         $data = $this->validateData($request, isCreate: false);
 
         if ($request->hasFile('image')) {
-            if ($csrActivity->image) {
-                Storage::disk('public')->delete($csrActivity->image);
+            if ($activity->image) {
+                Storage::disk('public')->delete($activity->image);
             }
             $data['image'] = $request->file('image')->store('csr', 'public');
         }
 
-        $csrActivity->update($data);
+        $activity->update($data);
 
         return redirect()
-            ->route('admin.csr-categories.edit', $csrActivity->csr_category_id)
+            ->route('admin.csr-categories.edit', $activity->csr_category_id)
             ->with('success', 'Kegiatan berhasil diperbarui.');
     }
 
-    public function destroy(CsrActivity $csrActivity): RedirectResponse
+    public function destroy(CsrActivity $activity): RedirectResponse
     {
-        $categoryId = $csrActivity->csr_category_id;
+        $categoryId = $activity->csr_category_id;
 
-        if ($csrActivity->image) {
-            Storage::disk('public')->delete($csrActivity->image);
+        if ($activity->image) {
+            Storage::disk('public')->delete($activity->image);
         }
 
-        $csrActivity->delete();
+        $activity->delete();
 
         return redirect()
             ->route('admin.csr-categories.edit', $categoryId)
