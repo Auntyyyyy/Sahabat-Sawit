@@ -43,8 +43,9 @@
             </div>
         </nav>
 
+        {{-- DIUBAH: label mengikuti kategori artikel (sebelumnya tertulis tetap "Tahukah Anda?") --}}
         <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">
-            <i class="bi bi-lightbulb"></i> Tahukah Anda?
+            <i class="bi bi-lightbulb"></i> {{ $pengetahuan->kategoriData?->nama ?? 'Pengetahuan' }}
         </span>
         <h1 class="mt-2 font-heading font-bold text-3xl md:text-4xl">{{ $pengetahuan->judul }}</h1>
     </div>
@@ -77,4 +78,52 @@
 
     </div>
 </section>
+
+{{-- BARU: Pengetahuan Lainnya (di bawah isi artikel) --}}
+@if($pengetahuanLain->isNotEmpty())
+<section class="py-14 md:py-16 bg-cream">
+    <div class="max-w-6xl mx-auto px-6 lg:px-8">
+
+        <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+            <div>
+                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Media</span>
+                <h2 class="mt-2 font-heading font-bold text-2xl md:text-3xl text-dark-green">Pengetahuan Lainnya</h2>
+            </div>
+            <a href="{{ route('media.pengetahuan') }}"
+               class="shrink-0 inline-flex items-center gap-2 font-heading font-semibold text-dark-green hover:text-primary-green transition-colors group">
+                Lihat Semua Pengetahuan
+                <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+                </svg>
+            </a>
+        </div>
+
+        <div class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            @foreach($pengetahuanLain as $item)
+            <a href="{{ route('media.pengetahuan.show', $item->slug) }}"
+               class="group block bg-white rounded-brand overflow-hidden border border-dark-green/10 shadow-sm hover:shadow-xl transition-shadow duration-300">
+                <div class="aspect-[4/3] overflow-hidden bg-cream">
+                    <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x450/2F6B3F/F5F1E8?text=' . urlencode($item->judul) }}"
+                         alt="{{ $item->judul }}"
+                         class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null;this.src='https://placehold.co/600x450/2F6B3F/F5F1E8?text={{ urlencode($item->judul) }}'">
+                </div>
+                <div class="p-5">
+                    <span class="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
+                        <i class="bi bi-lightbulb"></i> {{ $item->kategoriData?->nama ?? 'Pengetahuan' }}
+                    </span>
+                    <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
+                        {{ $item->judul }}
+                    </h3>
+                    <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-3">
+                        {{ $item->ringkasan }}
+                    </p>
+                </div>
+            </a>
+            @endforeach
+        </div>
+
+    </div>
+</section>
+@endif
 @endsection

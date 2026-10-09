@@ -61,8 +61,9 @@
                              onerror="this.onerror=null;this.src='https://placehold.co/600x450/2F6B3F/F5F1E8?text={{ urlencode($item->judul) }}'">
                     </div>
                     <div class="p-5">
+                        {{-- BARU: label mengikuti kategori artikel (sebelumnya tertulis tetap "Tahukah Anda?") --}}
                         <span class="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
-                            <i class="bi bi-lightbulb"></i> Tahukah Anda?
+                            <i class="bi bi-lightbulb"></i> {{ $item->kategoriData?->nama ?? 'Pengetahuan' }}
                         </span>
                         <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors">
                             {{ $item->judul }}

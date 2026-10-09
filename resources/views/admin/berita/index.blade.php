@@ -51,6 +51,8 @@
                         <th style="width: 90px;">Gambar</th>
                         <th>Judul</th>
                         <th style="width: 170px;">Tanggal</th>
+                        {{-- BARU: kolom jumlah dilihat --}}
+                        <th style="width: 110px;">Dilihat</th>
                         <th class="text-end" style="width: 190px;">Aksi</th>
                     </tr>
                 </thead>
@@ -71,6 +73,11 @@
                         <td>
                             <span class="text-muted small">
                                 <i class="bi bi-calendar3 me-1"></i>{{ $item->tanggal->translatedFormat('d F Y') }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="text-muted small">
+                                <i class="bi bi-eye me-1"></i>{{ number_format($item->views ?? 0, 0, ',', '.') }}x
                             </span>
                         </td>
                         <td>

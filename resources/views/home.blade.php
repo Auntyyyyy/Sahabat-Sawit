@@ -160,10 +160,14 @@
                              onerror="this.onerror=null;this.src='https://placehold.co/600x450/1F5F3B/F5F1E8?text={{ urlencode($item->judul) }}'">
                     </div>
                     <div class="p-5">
-                        <span class="text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
-                            {{ $item->tanggal->translatedFormat('d F Y') }}
-                        </span>
-                        <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
+                            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem .75rem;">
+                                <span class="text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
+                                    {{ $item->tanggal->translatedFormat('d F Y') }}
+                                </span>
+                                <span class="inline-flex items-center gap-1.5 text-xs text-gray-text">
+                                    <i class="bi bi-eye"></i> {{ number_format($item->views ?? 0, 0, ',', '.') }}x dilihat
+                                </span>
+                            </div>                        <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
                             {{ $item->judul }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-2">

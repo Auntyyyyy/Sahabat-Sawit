@@ -38,6 +38,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
     Route::middleware(['auth', 'admin:admin'])->group(function () {
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
         Route::resource('products', ProductController::class)->except(['show']);
+        // BARU: unggah foto dari editor isi berita (harus di atas resource 'berita')
+        Route::post('berita/upload-image', [BeritaController::class, 'uploadImage'])->name('berita.upload-image');
         Route::resource('berita', BeritaController::class)
             ->except(['show'])
             ->parameters(['berita' => 'berita']);

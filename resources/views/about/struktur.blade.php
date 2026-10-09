@@ -4,15 +4,16 @@
 
 @section('content')
 
-{{-- Header band gelap: halaman ini tidak punya foto hero seperti Profil
-     Perusahaan, jadi dibuat band solid supaya navbar (transparan di atas
-     hero gelap) tetap terbaca begitu halaman dibuka, sekaligus jadi rumah
-     untuk breadcrumb, judul, dan subnav. --}}
-<section class="relative bg-dark-green text-white pt-32 pb-10 md:pt-36 md:pb-14 overflow-hidden">
-    <div class="absolute inset-0 opacity-[0.4]" style="background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 22px 22px;"></div>
+{{-- Hero: disamakan dengan hero Profil Perusahaan (foto latar penuh + overlay gradasi
+     + badge + subnav). Yang berbeda hanya judul besarnya dan breadcrumb-nya. --}}
+<section class="relative min-h-screen flex items-center bg-dark-green text-white bg-cover bg-center bg-no-repeat hero-section" style="background-image: url('{{ asset('images/herotentang.png') }}');">
+    <!-- Overlay Gradient -->
+    <div class="absolute inset-0 hero-overlay"></div>
 
-    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 text-center">
-        <div class="flex items-center justify-center gap-2 text-sm text-white/60 mb-4">
+    <div class="relative w-full max-w-4xl mx-auto px-6 lg:px-8 text-center" style="padding-top:7rem;padding-bottom:6rem;">
+
+        <!-- Breadcrumb -->
+        <div class="hero-fade hero-delay-1 flex items-center justify-center gap-2 text-sm text-white/60">
             <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
             <span>/</span>
             <a href="{{ route('about') }}" class="hover:text-white transition-colors">Tentang Kami</a>
@@ -20,10 +21,27 @@
             <span class="text-white/90">Profil Manajemen</span>
         </div>
 
-        <span class="block font-heading font-semibold text-light-green uppercase text-sm tracking-wide mb-2">Tentang Kami</span>
-        <h1 class="font-heading font-bold text-2xl md:text-4xl mb-8">Profil Manajemen</h1>
+        <!-- Label + Judul -->
+        <span class="hero-fade hero-delay-2 block mt-6 font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
 
-        @include('about._subnav')
+        <h1 class="hero-fade hero-delay-3 mt-4 font-heading font-bold text-3xl md:text-5xl" style="line-height:1.2;text-wrap:balance;">
+            Profil Manajemen
+        </h1>
+
+        <p class="hero-fade hero-delay-4 mt-6 text-white/75 max-w-2xl mx-auto leading-relaxed" style="text-wrap:balance;">
+Mengenal Jajaran Manajemen yang Menjadi Penggerak Perusahaan        </p>
+
+        <!-- Badge Statistik -->
+        <div class="hero-fade hero-delay-5 flex flex-wrap justify-center gap-3 mt-8">
+            <span class="hero-badge">Beroperasi sejak 2023</span>
+            <span class="hero-badge">Kabupaten Rokan Hilir</span>
+            <span class="hero-badge">Standar ISPO & RSPO</span>
+        </div>
+
+        <!-- Sub-navigasi "Tentang Kami" -->
+        <div class="hero-fade hero-delay-6 mt-10">
+            @include('about._subnav')
+        </div>
     </div>
 </section>
 

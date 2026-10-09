@@ -7,18 +7,27 @@
     <!-- Overlay Gradient -->
     <div class="absolute inset-0 hero-overlay"></div>
 
-    <div class="relative w-full max-w-5xl mx-auto px-6 lg:px-8 text-center">
+    {{-- DIRAPIKAN: padding atas/bawah supaya isi tidak menempel navbar dan tepi bawah,
+         lebar isi dipersempit sedikit supaya baris teks lebih seimbang --}}
+    <div class="relative w-full max-w-4xl mx-auto px-6 lg:px-8 text-center" style="padding-top:7rem;padding-bottom:6rem;">
 
         <!-- Breadcrumb -->
-        <div class="hero-fade hero-delay-1 flex items-center justify-center gap-2 text-sm text-white/60 mb-4">
+        <div class="hero-fade hero-delay-1 flex items-center justify-center gap-2 text-sm text-white/60">
             <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
             <span>/</span>
             <span class="text-white/90">Tentang Kami</span>
         </div>
 
-        <span class="hero-fade hero-delay-2 block font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
-        <h1 class="hero-fade hero-delay-3 mt-3 font-heading font-bold text-3xl md:text-5xl">Mengenal PT. Sahabat Sawit Rokan Sejahtera</h1>
-        <p class="hero-fade hero-delay-4 mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
+        <!-- Label + Judul -->
+        <span class="hero-fade hero-delay-2 block mt-6 font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
+
+        {{-- line-height 1.2 + text-wrap:balance: judul dua baris jadi seimbang
+             ("Mengenal PT. Sahabat Sawit" / "Rokan Sejahtera"), tidak ada kata yang sendirian --}}
+        <h1 class="hero-fade hero-delay-3 mt-4 font-heading font-bold text-3xl md:text-5xl" style="line-height:1.2;text-wrap:balance;">
+            Mengenal PT. Sahabat Sawit Rokan Sejahtera
+        </h1>
+
+        <p class="hero-fade hero-delay-4 mt-6 text-white/75 max-w-2xl mx-auto leading-relaxed" style="text-wrap:balance;">
             Perusahaan perkebunan kelapa sawit yang tumbuh dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau.
         </p>
 
@@ -29,8 +38,8 @@
             <span class="hero-badge">Standar ISPO & RSPO</span>
         </div>
 
-        <!-- Sub-navigasi "Tentang Kami" -->
-        <div class="hero-fade hero-delay-6 mt-8">
+        <!-- Sub-navigasi "Tentang Kami" (diberi jarak lebih lega dari badge di atasnya) -->
+        <div class="hero-fade hero-delay-6 mt-10">
             @include('about._subnav')
         </div>
     </div>

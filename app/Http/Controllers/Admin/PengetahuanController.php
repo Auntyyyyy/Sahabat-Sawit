@@ -15,7 +15,7 @@ class PengetahuanController extends Controller
 {
     public function index(): View
     {
-        $pengetahuans = Pengetahuan::with('kategori')->orderBy('order')->paginate(10);
+        $pengetahuans = Pengetahuan::with('kategoriData')->orderBy('order')->paginate(10);
         return view('admin.pengetahuan.index', compact('pengetahuans'));
     }
 

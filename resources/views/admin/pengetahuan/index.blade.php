@@ -50,7 +50,7 @@
                                 <span class="fw-semibold">{{ $item->judul }}</span>
                                 <div class="text-muted small">{{ Str::limit($item->ringkasan, 80) }}</div>
                             </td>
-                            <td>{{ $item->kategori?->nama ?? '—' }}</td>
+                            <td>{{ $item->kategoriData?->nama ?? '—' }}</td>
                             <td class="text-end">
                                 <div class="d-flex gap-2 justify-content-end">
                                     <a href="{{ route('admin.pengetahuan.edit', $item) }}" class="page-action-btn">

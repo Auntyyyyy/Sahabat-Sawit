@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Berita;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -74,33 +75,9 @@ class HomeController extends Controller
             ],
         ];
 
-        $news = [
-            [
-                'title' => 'PT Sahabat Sawit Perkuat Komitmen Keberlanjutan',
-                'excerpt' => 'Perusahaan terus memperkuat praktik perkebunan yang ramah lingkungan di Rokan Hilir.',
-                'date' => '15 Agustus 2026',
-                'category' => 'Keberlanjutan',
-                'slug' => 'komitmen-keberlanjutan',
-            ],
-            [
-                'title' => 'Program Pemberdayaan Masyarakat Sekitar Perkebunan',
-                'excerpt' => 'Kolaborasi bersama masyarakat lokal untuk pengembangan ekonomi wilayah.',
-                'date' => '02 Agustus 2026',
-                'category' => 'Kemitraan',
-                'slug' => 'pemberdayaan-masyarakat',
-            ],
-            [
-                'title' => 'Peningkatan Produktivitas Panen Tahun Ini',
-                'excerpt' => 'Hasil panen menunjukkan peningkatan berkat pengelolaan lahan yang lebih efisien.',
-                'date' => '20 Juli 2026',
-                'category' => 'Operasional',
-                'slug' => 'peningkatan-produktivitas',
-            ],
-        ];
+        // Berita terbaru dari database (3 teratas), dipakai bagian "Berita & Galeri Kegiatan"
+        $latestBerita = Berita::orderByDesc('tanggal')->take(3)->get();
 
-        return view('home', compact('stats', 'advantages', 'missions', 'products', 'news'));
+        return view('home', compact('stats', 'advantages', 'missions', 'products', 'latestBerita'));
     }
 }
-
-
-

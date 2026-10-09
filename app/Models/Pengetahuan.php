@@ -16,7 +16,7 @@ class Pengetahuan extends Model
         return 'slug';
     }
 
-    public function kategori(): BelongsTo
+    public function kategoriData(): BelongsTo
     {
         return $this->belongsTo(PengetahuanKategori::class, 'kategori_id');
     }
