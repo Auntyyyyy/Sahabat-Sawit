@@ -23,8 +23,10 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (\Symfony\Component\HttpKernel\Exception\HttpException $e, $request) {
+            if ($e->getStatusCode() === 419 && $request->routeIs('admin.logout')) {
+                return redirect()->route('home');
+            }
         });
     }
 }

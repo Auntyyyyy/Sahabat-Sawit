@@ -96,13 +96,17 @@ class AdminAuthController extends Controller
         return $this->redirectByRole($user);
     }
 
+    /**
+     * Logout untuk semua role (admin, hr, general_officer).
+     * Setelah keluar, pengunjung diarahkan ke halaman Beranda website.
+     */
     public function logout(Request $request): RedirectResponse
     {
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
-        return redirect()->route('admin.login');
+        return redirect()->route('home');
     }
 
     /**

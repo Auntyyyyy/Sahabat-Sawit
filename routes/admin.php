@@ -30,9 +30,10 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('register', [AdminAuthController::class, 'register'])->name('register.store');
     });
 
-    Route::post('logout', [AdminAuthController::class, 'logout'])
-        ->middleware(['auth', 'admin']) // semua role login boleh logout
-        ->name('logout');
+    // Logout sengaja TANPA middleware 'auth' dan 'admin': semua role (admin, hr, general_officer)
+    // harus selalu bisa keluar, termasuk kalau sesinya sudah habis. Sebelumnya middleware 'admin'
+    // tanpa parameter hanya meloloskan role 'admin', sehingga role lain mendapat 403.
+    Route::post('logout', [AdminAuthController::class, 'logout'])->name('logout');
 
     // Dashboard admin: HANYA role admin
     Route::middleware(['auth', 'admin:admin'])->group(function () {
