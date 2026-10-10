@@ -50,6 +50,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('csr-categories.activities', CsrActivityController::class)
             ->except(['show', 'index'])
             ->shallow();
+        // BARU: unggah foto dari editor penjelasan pengetahuan (harus di atas resource 'pengetahuan')
+        Route::post('pengetahuan/upload-image', [PengetahuanController::class, 'uploadImage'])->name('pengetahuan.upload-image');
         Route::resource('pengetahuan', PengetahuanController::class)->except(['show']);
         Route::resource('pengetahuan-kategori', PengetahuanKategoriController::class)
             ->except(['show', 'create'])

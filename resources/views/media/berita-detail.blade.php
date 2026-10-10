@@ -4,7 +4,22 @@
 
 @section('content')
 <section class="relative bg-dark-green text-white overflow-hidden hero-detail-fullscreen">
-    <div class="absolute inset-0 bg-dark-green/70"></div>
+
+    {{-- BARU: background hero mengikuti foto utama berita ini, jadi tiap berita
+         punya tampilan hero sendiri. Lapisan hijau gelap di atasnya menjaga teks
+         tetap terbaca. Kalau berita tidak punya foto, tampil polos seperti sebelumnya. --}}
+    @if($berita->gambar)
+        <div class="absolute inset-0">
+            <img src="{{ asset('storage/' . $berita->gambar) }}"
+                 alt=""
+                 class="w-full h-full object-cover"
+                 onerror="this.style.display='none'">
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-dark-green/85 via-dark-green/70 to-dark-green/90"></div>
+    @else
+        <div class="absolute inset-0 pointer-events-none opacity-[0.4]" style="background-image: radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px); background-size: 22px 22px;"></div>
+        <div class="absolute inset-0 bg-dark-green/70"></div>
+    @endif
 
     <div class="relative max-w-4xl mx-auto px-6 lg:px-8 w-full">
         <nav aria-label="Breadcrumb" class="flex mb-5">

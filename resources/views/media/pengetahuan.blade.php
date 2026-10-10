@@ -69,7 +69,7 @@
                             {{ $item->judul }}
                         </h3>
                         <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-3">
-                            {{ $item->ringkasan }}
+                            {{ $item->ringkasan_teks }}
                         </p>
                     </div>
                 </a>

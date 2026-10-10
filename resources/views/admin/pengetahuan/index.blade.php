@@ -48,7 +48,7 @@
                             </td>
                             <td>
                                 <span class="fw-semibold">{{ $item->judul }}</span>
-                                <div class="text-muted small">{{ Str::limit($item->ringkasan, 80) }}</div>
+                                <div class="text-muted small">{{ Str::limit($item->ringkasan_teks, 80) }}</div>
                             </td>
                             <td>{{ $item->kategoriData?->nama ?? '—' }}</td>
                             <td class="text-end">
@@ -83,8 +83,7 @@
 
         @if($pengetahuans->hasPages())
             <div class="p-3">
-                {{ $pengetahuans->links() }}
-            </div>
+            {{ $pengetahuans->links('pagination::bootstrap-5') }}            </div>
         @endif
 
     </div>

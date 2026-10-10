@@ -61,10 +61,9 @@
              onerror="this.onerror=null;this.src='https://placehold.co/900x550/2F6B3F/F5F1E8?text={{ urlencode($pengetahuan->judul) }}'">
         @endif
 
-        <div class="mt-8">
-            <p class="text-gray-text leading-relaxed text-justify text-base md:text-lg">
-                {{ $pengetahuan->ringkasan }}
-            </p>
+        {{-- DIUBAH: penjelasan dari editor (sudah dibersihkan saat disimpan), gayanya memakai .berita-isi --}}
+        <div class="berita-isi mt-8">
+            {!! $pengetahuan->ringkasan_html !!}
         </div>
 
         <div class="mt-12 pt-8 border-t border-gray-100">
@@ -116,7 +115,7 @@
                         {{ $item->judul }}
                     </h3>
                     <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-3">
-                        {{ $item->ringkasan }}
+                        {{ $item->ringkasan_teks }}
                     </p>
                 </div>
             </a>
