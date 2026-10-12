@@ -41,17 +41,18 @@
             </div>
         </div>
 
+        {{-- DIUBAH: sebelumnya "Halaman Statis Terisi" --}}
         <div class="col-xl-3 col-md-6">
             <div class="card stat-card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-1">Halaman Statis Terisi</div>
-                            <h2 class="fw-bold mb-0">{{ $stats['total_pages'] ?? 0 }}</h2>
-                            <small class="text-muted">halaman aktif</small>
+                            <div class="text-muted small mb-1">Total Menu CSR</div>
+                            <h2 class="fw-bold mb-0">{{ $stats['total_csr_menu'] ?? 0 }}</h2>
+                            <small class="text-muted">kategori CSR</small>
                         </div>
                         <div class="stat-icon stat-icon--dark">
-                            <i class="bi bi-file-earmark-text"></i>
+                            <i class="bi bi-heart"></i>
                         </div>
                     </div>
                 </div>
@@ -75,21 +76,18 @@
             </div>
         </div>
 
+        {{-- DIUBAH: sebelumnya "Pesan Masuk" --}}
         <div class="col-xl-3 col-md-6">
             <div class="card stat-card border-0 shadow-sm h-100">
                 <div class="card-body">
                     <div class="d-flex justify-content-between align-items-start">
                         <div>
-                            <div class="text-muted small mb-1">Pesan Masuk</div>
-                            <h2 class="fw-bold mb-0">{{ $stats['total_messages'] ?? 0 }}</h2>
-                            @if(($stats['unread_messages'] ?? 0) > 0)
-                                <span class="badge dashboard-badge-unread">{{ $stats['unread_messages'] }} belum dibaca</span>
-                            @else
-                                <small class="text-muted">semua sudah dibaca</small>
-                            @endif
+                            <div class="text-muted small mb-1">Total Kegiatan CSR</div>
+                            <h2 class="fw-bold mb-0">{{ $stats['total_csr_kegiatan'] ?? 0 }}</h2>
+                            <small class="text-muted">kegiatan tercatat</small>
                         </div>
                         <div class="stat-icon stat-icon--brown">
-                            <i class="bi bi-envelope"></i>
+                            <i class="bi bi-images"></i>
                         </div>
                     </div>
                 </div>
@@ -112,8 +110,9 @@
                 <a href="{{ Route::has('admin.pages.index') ? route('admin.pages.index') : '#' }}" class="quick-action-btn">
                     <i class="bi bi-file-earmark-richtext"></i> Kelola Halaman
                 </a>
-                <a href="{{ Route::has('admin.messages.index') ? route('admin.messages.index') : '#' }}" class="quick-action-btn">
-                    <i class="bi bi-envelope-open"></i> Lihat Pesan
+                {{-- DIUBAH: sebelumnya "Lihat Pesan" --}}
+                <a href="{{ Route::has('admin.csr-categories.index') ? route('admin.csr-categories.index') : '#' }}" class="quick-action-btn">
+                    <i class="bi bi-heart"></i> Kelola CSR
                 </a>
             </div>
         </div>

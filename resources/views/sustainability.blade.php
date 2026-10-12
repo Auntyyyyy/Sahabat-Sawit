@@ -154,10 +154,10 @@
 
         <!-- Kartu Kategori CSR -->
         <div class="mt-12 bg-white rounded-brand border border-dark-green/10 shadow-sm p-3 md:p-4">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3" id="csr-tabs">
+            <div class="flex flex-wrap justify-center gap-3" id="csr-tabs">
                 @foreach($csrCategories as $index => $category)
                 <button type="button"
-                        class="csr-tab-btn {{ $index === 0 ? 'active' : '' }}"
+                        class="csr-tab-btn {{ $index === 0 ? 'active' : '' }} flex-none w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] lg:flex-1 lg:w-auto lg:min-w-[130px]"
                         data-target="csr-panel-{{ $index }}"
                         onclick="switchCsrTab({{ $index }})">
                     <span class="csr-tab-icon">{{ $category->icon }}</span>
@@ -166,7 +166,7 @@
                 @endforeach
             </div>
         </div>
-
+        
         <!-- Deskripsi & Galeri Kegiatan per Kategori, dengan navigasi kategori di sisi kiri-kanan -->
         <div class="csr-carousel-wrap">
             <button type="button" class="csr-nav-arrow csr-nav-prev" onclick="csrNavCategory(-1)" aria-label="Program CSR Sebelumnya">

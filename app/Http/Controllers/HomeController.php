@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Berita;
+use App\Models\Pengetahuan;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -78,6 +79,9 @@ class HomeController extends Controller
         // Berita terbaru dari database (3 teratas), dipakai bagian "Berita & Galeri Kegiatan"
         $latestBerita = Berita::orderByDesc('tanggal')->take(3)->get();
 
-        return view('home', compact('stats', 'advantages', 'missions', 'products', 'latestBerita'));
+        // Pengetahuan (3 teratas menurut kolom "order" dari admin), dipakai bagian "SahabatPedia"
+        $latestPengetahuan = Pengetahuan::orderBy('order')->orderBy('id')->take(3)->get();
+
+        return view('home', compact('stats', 'advantages', 'missions', 'products', 'latestBerita', 'latestPengetahuan'));
     }
 }
