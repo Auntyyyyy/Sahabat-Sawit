@@ -57,7 +57,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('pengetahuan-kategori', PengetahuanKategoriController::class)
             ->except(['show', 'create'])
             ->parameters(['pengetahuan-kategori' => 'kategori']);
-    });
+        Route::get('/hr/kehadiran', [App\Http\Controllers\Admin\KehadiranController::class, 'dashboard'])
+            ->name('hr.kehadiran.dashboard');
+            });
 });
 
 // Dashboard General Officer (General Affair)
