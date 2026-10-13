@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\HrDashboardController;
 use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\KehadiranController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
@@ -57,9 +58,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('pengetahuan-kategori', PengetahuanKategoriController::class)
             ->except(['show', 'create'])
             ->parameters(['pengetahuan-kategori' => 'kategori']);
-        Route::get('/hr/kehadiran', [App\Http\Controllers\Admin\KehadiranController::class, 'dashboard'])
-            ->name('hr.kehadiran.dashboard');
-            });
+    });
 });
 
 // Dashboard General Officer (General Affair)
@@ -78,4 +77,7 @@ Route::middleware(['auth', 'admin:hr'])
     ->group(function () {
         Route::get('dashboard', [HrDashboardController::class, 'index'])->name('dashboard');
         Route::resource('karyawan', KaryawanController::class);
+
+        // Dashboard Kehadiran → URL /hr/kehadiran, nama route hr.kehadiran.dashboard
+        Route::get('kehadiran', [KehadiranController::class, 'dashboard'])->name('kehadiran.dashboard');
     });
