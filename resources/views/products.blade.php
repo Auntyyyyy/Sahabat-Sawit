@@ -3,82 +3,401 @@
 @section('title', 'Produk — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative bg-dark-green text-white hero-product-slider">
-    <div class="hero-slider-track" id="heroProductSlides">
+
+{{-- =====================================================================
+     HERO PRODUK
+     CSS-nya mandiri di bawah (awalan "prodhero-"), tidak memakai class
+     hero-product-slider / hero-slide-* yang lama di style.css.
+     ===================================================================== --}}
+<style>
+    .prodhero{
+        --prodhero-dur: 6500ms;
+        position: relative;
+        overflow: hidden;
+        isolation: isolate;
+        min-height: clamp(620px, 86vh, 800px);
+        background: var(--dark-green, #123524);
+        color: #fff;
+    }
+
+    /* ---------- Slide (crossfade) ---------- */
+    .prodhero-slides{ position:absolute; inset:0; }
+    .prodhero-slide{
+        position:absolute; inset:0;
+        opacity:0; visibility:hidden; z-index:0;
+        transition: opacity .9s ease, visibility 0s linear .9s;
+    }
+    .prodhero-slide.is-active{
+        opacity:1; visibility:visible; z-index:1;
+        transition: opacity .9s ease, visibility 0s;
+    }
+
+    /* Zoom pelan pada foto slide aktif; direset setelah slide selesai memudar */
+    .prodhero-img{
+        position:absolute; inset:0; width:100%; height:100%;
+        object-fit:cover;
+        transform: scale(1);
+        transition: transform 0s linear .9s;
+    }
+    .prodhero-slide.is-active .prodhero-img{
+        transform: scale(1.07);
+        transition: transform 9s ease-out;
+    }
+
+    /* Gradasi: gelap di kiri (teks), bawah (kontrol), dan atas (navbar/breadcrumb) */
+    .prodhero-shade{
+        position:absolute; inset:0;
+        background:
+            linear-gradient(90deg,  rgb(var(--dark-green-rgb, 18 53 36) / .92) 0%, rgb(var(--dark-green-rgb, 18 53 36) / .74) 42%, rgb(var(--dark-green-rgb, 18 53 36) / .28) 80%),
+            linear-gradient(0deg,   rgb(var(--dark-green-rgb, 18 53 36) / .85) 0%, rgb(var(--dark-green-rgb, 18 53 36) / 0) 38%),
+            linear-gradient(180deg, rgb(var(--dark-green-rgb, 18 53 36) / .55) 0%, rgb(var(--dark-green-rgb, 18 53 36) / 0) 26%);
+    }
+    .prodhero-pattern{
+        position:absolute; inset:0; opacity:.5; pointer-events:none;
+        background-image: radial-gradient(rgba(255,255,255,.06) 1px, transparent 1px);
+        background-size: 22px 22px;
+    }
+
+    /* ---------- Isi slide ---------- */
+    .prodhero-inner{
+        position:relative; height:100%;
+        max-width:80rem; margin:0 auto;
+        padding: 0 1.5rem 7.5rem;
+        display:flex; align-items:flex-end;
+    }
+    @media (min-width:1024px){ .prodhero-inner{ padding-left:2rem; padding-right:2rem; } }
+    .prodhero-content{ max-width:38rem; }
+
+    .prodhero-eyebrow{
+        display:inline-flex; align-items:center; gap:.5rem;
+        padding:.35rem .85rem; border-radius:999px;
+        background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+        font-size:.75rem; font-weight:600; letter-spacing:.08em; text-transform:uppercase;
+        color: var(--light-green, #8DBF44);
+    }
+    .prodhero-eyebrow::before{
+        content:''; width:.4rem; height:.4rem; border-radius:50%; background:currentColor;
+    }
+    .prodhero-title{
+        margin-top:1rem;
+        font-family: var(--font-heading, inherit);
+        font-weight:700;
+        font-size: clamp(2rem, 4.8vw, 3.6rem);
+        line-height:1.1; letter-spacing:-.01em;
+    }
+    .prodhero-desc{
+        margin-top:1rem;
+        color: rgba(255,255,255,.82);
+        line-height:1.7; font-size:1rem;
+        display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden;
+    }
+    .prodhero-chips{
+        margin:1.25rem 0 0; padding:0; list-style:none;
+        display:flex; flex-wrap:wrap; gap:.5rem;
+    }
+    .prodhero-chip{
+        display:inline-flex; align-items:center; gap:.45rem;
+        padding:.4rem .8rem; border-radius:999px;
+        background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2);
+        font-size:.8rem; font-weight:500; color:rgba(255,255,255,.9);
+        backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    }
+    .prodhero-chip i{ color: var(--gold, #D4A017); }
+
+    .prodhero-actions{ margin-top:1.75rem; display:flex; flex-wrap:wrap; gap:.75rem; }
+    .prodhero-btn{
+        display:inline-flex; align-items:center; gap:.6rem;
+        padding:.85rem 1.6rem; border-radius:999px;
+        font-weight:600; font-size:.9rem; text-decoration:none;
+        transition: background .2s ease, transform .2s ease, border-color .2s ease, color .2s ease;
+    }
+    .prodhero-btn svg{ width:1rem; height:1rem; }
+    .prodhero-btn:hover{ transform: translateY(-2px); }
+    .prodhero-btn-primary{ background: var(--gold, #D4A017); color: var(--dark-green, #123524); }
+    .prodhero-btn-primary:hover{ background: var(--light-green, #8DBF44); color: var(--dark-green, #123524); }
+    .prodhero-btn-ghost{ border:1.5px solid rgba(255,255,255,.5); color:#fff; }
+    .prodhero-btn-ghost:hover{ background:rgba(255,255,255,.12); border-color:#fff; color:#fff; }
+
+    /* Teks slide aktif masuk bertahap (fade + naik) */
+    .prodhero-slide.is-active .prodhero-anim{
+        animation: prodheroUp .8s cubic-bezier(.22,1,.36,1) both;
+        animation-delay: calc(var(--i, 0) * 90ms + 200ms);
+    }
+    @keyframes prodheroUp{
+        from{ opacity:0; transform: translateY(18px); }
+        to{   opacity:1; transform: none; }
+    }
+
+    /* ---------- Breadcrumb (statis, tidak ikut bergeser) ---------- */
+    .prodhero-crumb{ position:absolute; z-index:5; top:0; left:0; right:0; padding-top:7rem; }
+    .prodhero-crumb-inner{
+        max-width:80rem; margin:0 auto; padding:0 1.5rem;
+        display:flex; align-items:center; gap:.5rem;
+        font-size:.85rem; color:rgba(255,255,255,.65);
+    }
+    @media (min-width:1024px){ .prodhero-crumb-inner{ padding-left:2rem; padding-right:2rem; } }
+    .prodhero-crumb a{ color:inherit; text-decoration:none; transition: color .2s ease; }
+    .prodhero-crumb a:hover{ color:#fff; }
+    .prodhero-crumb .is-current{ color:rgba(255,255,255,.95); }
+
+    /* ---------- Kontrol: nomor, progress, jeda, panah ---------- */
+    .prodhero-controls{ position:absolute; z-index:5; left:0; right:0; bottom:0; padding-bottom:2rem; }
+    .prodhero-controls-inner{
+        max-width:80rem; margin:0 auto; padding:0 1.5rem;
+        display:flex; align-items:center; gap:1.5rem;
+    }
+    @media (min-width:1024px){ .prodhero-controls-inner{ padding-left:2rem; padding-right:2rem; } }
+
+    .prodhero-count{
+        display:flex; align-items:baseline; gap:.4rem;
+        font-family: var(--font-heading, inherit); font-weight:700;
+    }
+    .prodhero-count b{ font-size:2rem; line-height:1; }
+    .prodhero-count span{ font-size:.9rem; opacity:.6; }
+
+    .prodhero-segs{ display:flex; gap:.5rem; flex:1; max-width:26rem; }
+    .prodhero-seg{ flex:1; padding:.6rem 0; background:none; border:0; cursor:pointer; }
+    .prodhero-seg-track{
+        display:block; height:3px; border-radius:99px;
+        background:rgba(255,255,255,.28); overflow:hidden;
+    }
+    .prodhero-seg-fill{ display:block; height:100%; width:0; background: var(--gold, #D4A017); }
+    .prodhero-seg.is-done .prodhero-seg-fill{ width:100%; }
+    .prodhero-seg.is-active .prodhero-seg-fill{
+        animation: prodheroFill var(--prodhero-dur) linear forwards;
+    }
+    @keyframes prodheroFill{ from{ width:0; } to{ width:100%; } }
+
+    /* Jeda saat di-hover atau saat tombol jeda ditekan */
+    .prodhero:hover .prodhero-seg-fill,
+    .prodhero.is-paused .prodhero-seg-fill{ animation-play-state: paused; }
+
+    .prodhero-right{ margin-left:auto; display:flex; align-items:center; gap:.6rem; }
+    .prodhero-arrow, .prodhero-toggle{
+        width:2.75rem; height:2.75rem; border-radius:50%;
+        display:flex; align-items:center; justify-content:center;
+        border:1.5px solid rgba(255,255,255,.5); background:rgba(255,255,255,.06);
+        color:#fff; cursor:pointer;
+        transition: background .2s ease, border-color .2s ease;
+    }
+    .prodhero-arrow:hover, .prodhero-toggle:hover{ background:rgba(255,255,255,.18); border-color:#fff; }
+    .prodhero-arrow svg{ width:1.1rem; height:1.1rem; }
+    .prodhero-toggle{ width:2.25rem; height:2.25rem; border-color:rgba(255,255,255,.3); }
+
+    /* ---------- Mobile ---------- */
+    @media (max-width:640px){
+        .prodhero{ min-height:640px; }
+        .prodhero-inner{ padding-bottom:6.5rem; }
+        .prodhero-desc{ -webkit-line-clamp:2; font-size:.95rem; }
+        .prodhero-chips{ display:none; }
+        .prodhero-arrow{ display:none; }
+        .prodhero-controls-inner{ gap:1rem; }
+    }
+
+    /* ---------- Hormati pengaturan "kurangi gerakan" ---------- */
+    @media (prefers-reduced-motion: reduce){
+        .prodhero-slide, .prodhero-slide.is-active{ transition:none; }
+        .prodhero-img, .prodhero-slide.is-active .prodhero-img{ transition:none; transform:none; }
+        .prodhero-slide.is-active .prodhero-anim{ animation:none; }
+        .prodhero-seg.is-active .prodhero-seg-fill{ animation:none; width:100%; }
+    }
+</style>
+
+<section id="prodHero" class="prodhero" role="region" aria-roledescription="carousel" aria-label="Produk unggulan PT Sahabat Sawit">
+
+    <h1 class="sr-only">Produk PT Sahabat Sawit Rokan Sejahtera</h1>
+
+    <nav class="prodhero-crumb" aria-label="Breadcrumb">
+        <div class="prodhero-crumb-inner">
+            <a href="{{ url('/') }}">Beranda</a>
+            <span aria-hidden="true">/</span>
+            <span class="is-current" aria-current="page">Produk</span>
+        </div>
+    </nav>
+
+    <div class="prodhero-slides">
         @forelse($products as $index => $product)
-        <div class="hero-product-slide">
+        @php
+            $heroDesc = \Illuminate\Support\Str::limit(trim(html_entity_decode(strip_tags((string) $product->description))), 220);
+            $heroChips = array_filter([
+                ['bi-tree',      'Bahan baku',    $product->raw_material],
+                ['bi-box-seam',  'Bentuk produk', $product->product_form],
+                ['bi-gear-wide-connected', 'Penggunaan', $product->usage],
+            ], fn ($c) => !empty($c[2]));
+        @endphp
+        <article class="prodhero-slide {{ $index === 0 ? 'is-active' : '' }}"
+                 role="group" aria-roledescription="slide"
+                 aria-label="{{ $index + 1 }} dari {{ $products->count() }}"
+                 @if($index !== 0) inert aria-hidden="true" @endif>
+
             <img src="{{ $product->image ? asset('storage/' . $product->image) : 'https://placehold.co/1600x900/164A2E/F5F1E8?text=' . urlencode($product->name) }}"
-                 alt="{{ $product->name }}"
-                 class="hero-slide-img"
+                 alt=""
+                 class="prodhero-img"
                  loading="{{ $index === 0 ? 'eager' : 'lazy' }}"
+                 decoding="async"
                  {{ $index === 0 ? 'fetchpriority=high' : '' }}
                  onerror="this.onerror=null;this.src='https://placehold.co/1600x900/164A2E/F5F1E8?text={{ urlencode($product->name) }}'">
-            <div class="hero-slide-overlay"></div>
-            <div class="hero-slide-inner">
-                <div class="hero-slide-content">
-                    <span class="hero-slide-eyebrow text-light-green">PT. Sahabat Sawit Rokan Sejahtera</span>
-                    <h1 class="hero-slide-title font-heading">{{ $product->name }}</h1>
-                    <p class="hero-slide-desc">{{ $product->description }}</p>
-                    <a href="{{ route('products.show', $product->slug) }}"
-                       class="hero-slide-btn bg-secondary-green hover:bg-dark-green">
-                        Baca Selengkapnya
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                        </svg>
-                    </a>
+            <div class="prodhero-shade"></div>
+
+            <div class="prodhero-inner">
+                <div class="prodhero-content">
+                    <span class="prodhero-eyebrow prodhero-anim" style="--i:0">{{ $product->category ?: 'Produk Kami' }}</span>
+
+                    <h2 class="prodhero-title prodhero-anim" style="--i:1">{{ $product->name }}</h2>
+
+                    @if($heroDesc !== '')
+                    <p class="prodhero-desc prodhero-anim" style="--i:2">{{ $heroDesc }}</p>
+                    @endif
+
+                    @if(count($heroChips))
+                    <ul class="prodhero-chips prodhero-anim" style="--i:3">
+                        @foreach($heroChips as $chip)
+                        <li class="prodhero-chip" title="{{ $chip[1] }}">
+                            <i class="bi {{ $chip[0] }}"></i> {{ $chip[2] }}
+                        </li>
+                        @endforeach
+                    </ul>
+                    @endif
+
+                    <div class="prodhero-actions prodhero-anim" style="--i:4">
+                        <a href="{{ route('products.show', $product->slug) }}" class="prodhero-btn prodhero-btn-primary">
+                            Lihat Detail Produk
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                            </svg>
+                        </a>
+                        <a href="{{ route('contact') }}" class="prodhero-btn prodhero-btn-ghost">Hubungi Kami</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </article>
         @empty
-        <div class="hero-product-slide">
-            <div class="hero-slide-overlay"></div>
-            <div class="hero-slide-inner">
-                <div class="hero-slide-content">
-                    <span class="hero-slide-eyebrow text-light-green">Produk Kami</span>
-                    <h1 class="hero-slide-title font-heading">Hasil Perkebunan Berkualitas</h1>
-                    <p class="hero-slide-desc">
+        <article class="prodhero-slide is-active" role="group" aria-roledescription="slide" aria-label="1 dari 1">
+            <div class="prodhero-pattern"></div>
+            <div class="prodhero-inner">
+                <div class="prodhero-content">
+                    <span class="prodhero-eyebrow prodhero-anim" style="--i:0">Produk Kami</span>
+                    <h2 class="prodhero-title prodhero-anim" style="--i:1">Hasil Perkebunan Berkualitas</h2>
+                    <p class="prodhero-desc prodhero-anim" style="--i:2">
                         Produk unggulan dari perkebunan kelapa sawit PT Sahabat Sawit di Rokan Hilir, Riau.
                     </p>
+                    <div class="prodhero-actions prodhero-anim" style="--i:3">
+                        <a href="{{ route('contact') }}" class="prodhero-btn prodhero-btn-primary">Hubungi Kami</a>
+                    </div>
                 </div>
             </div>
-        </div>
+        </article>
         @endforelse
     </div>
 
     @if($products->count() > 1)
-    <button type="button" class="hero-slide-arrow hero-slide-arrow-left" onclick="heroProductSlideGo(-1)" aria-label="Produk sebelumnya">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
-        </svg>
-    </button>
-    <button type="button" class="hero-slide-arrow hero-slide-arrow-right" onclick="heroProductSlideGo(1)" aria-label="Produk berikutnya">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
-        </svg>
-    </button>
+    <div class="prodhero-controls">
+        <div class="prodhero-controls-inner">
+            <div class="prodhero-count" aria-hidden="true">
+                <b id="prodheroCur">01</b><span>/ {{ sprintf('%02d', $products->count()) }}</span>
+            </div>
+
+            <div class="prodhero-segs">
+                @foreach($products as $index => $product)
+                <button type="button"
+                        class="prodhero-seg {{ $index === 0 ? 'is-active' : '' }}"
+                        aria-label="Tampilkan produk {{ $product->name }}"
+                        aria-current="{{ $index === 0 ? 'true' : 'false' }}">
+                    <span class="prodhero-seg-track"><span class="prodhero-seg-fill"></span></span>
+                </button>
+                @endforeach
+            </div>
+
+            <div class="prodhero-right">
+                <button type="button" class="prodhero-toggle" aria-label="Jeda slide otomatis" aria-pressed="false">
+                    <i class="bi bi-pause-fill"></i>
+                </button>
+                <button type="button" class="prodhero-arrow" data-prodhero="prev" aria-label="Produk sebelumnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button type="button" class="prodhero-arrow" data-prodhero="next" aria-label="Produk berikutnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
     @endif
 </section>
 
 <script>
 (function () {
-    const track = document.getElementById('heroProductSlides');
-    if (!track) return;
-    const slides = [...track.children];
-    const total = slides.length;
+    const hero = document.getElementById('prodHero');
+    if (!hero) return;
+
+    const slides = [...hero.querySelectorAll('.prodhero-slide')];
+    const segs   = [...hero.querySelectorAll('.prodhero-seg')];
+    const cur    = document.getElementById('prodheroCur');
+    const total  = slides.length;
+    if (total < 2) return;
+
     let current = 0;
 
-    function render() {
-        slides.forEach(function (slide, i) {
-            slide.style.transform = `translateX(${(i - current) * 100}%)`;
+    function go(i) {
+        i = (i + total) % total;
+        if (i === current) return;
+        current = i;
+
+        slides.forEach(function (s, idx) {
+            const on = idx === current;
+            s.classList.toggle('is-active', on);
+            s.setAttribute('aria-hidden', on ? 'false' : 'true');
+            s.inert = !on;
         });
+        segs.forEach(function (s, idx) {
+            s.classList.toggle('is-active', idx === current);
+            s.classList.toggle('is-done', idx < current);
+            s.setAttribute('aria-current', idx === current ? 'true' : 'false');
+        });
+        if (cur) cur.textContent = String(current + 1).padStart(2, '0');
     }
 
-    window.heroProductSlideGo = function (dir) {
-        current = (current + dir + total) % total;
-        render();
-    };
+    // Autoplay digerakkan oleh animasi progress: begitu bar penuh, pindah slide.
+    // Otomatis berhenti saat di-hover / dijeda, dan tidak jalan kalau pengguna
+    // memilih "kurangi gerakan" (animasi dimatikan lewat CSS).
+    hero.addEventListener('animationend', function (e) {
+        if (e.animationName === 'prodheroFill' && e.target.closest('.prodhero-seg.is-active')) {
+            go(current + 1);
+        }
+    });
 
-    render();
+    segs.forEach(function (s, i) { s.addEventListener('click', function () { go(i); }); });
+
+    hero.querySelector('[data-prodhero="prev"]').addEventListener('click', function () { go(current - 1); });
+    hero.querySelector('[data-prodhero="next"]').addEventListener('click', function () { go(current + 1); });
+
+    const toggle = hero.querySelector('.prodhero-toggle');
+    toggle.addEventListener('click', function () {
+        const paused = hero.classList.toggle('is-paused');
+        toggle.setAttribute('aria-pressed', paused ? 'true' : 'false');
+        toggle.setAttribute('aria-label', paused ? 'Putar slide otomatis' : 'Jeda slide otomatis');
+        toggle.querySelector('i').className = paused ? 'bi bi-play-fill' : 'bi bi-pause-fill';
+    });
+
+    // Swipe di layar sentuh
+    let sx = 0, sy = 0;
+    hero.addEventListener('touchstart', function (e) {
+        const t = e.changedTouches[0]; sx = t.clientX; sy = t.clientY;
+    }, { passive: true });
+    hero.addEventListener('touchend', function (e) {
+        const t = e.changedTouches[0];
+        const dx = t.clientX - sx, dy = t.clientY - sy;
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) go(current + (dx < 0 ? 1 : -1));
+    }, { passive: true });
+
+    // Keyboard (saat fokus berada di dalam hero)
+    hero.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowRight') go(current + 1);
+        if (e.key === 'ArrowLeft')  go(current - 1);
+    });
 })();
 </script>
 
@@ -164,7 +483,8 @@
     </div>
 </section>
 
-<section class="py-5 bg-white">
+{{-- Jarak section disamakan: sebelumnya py-5, sekarang py-16 seperti section lain --}}
+<section class="py-16 bg-white">
     <div class="max-w-6xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto">
             <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-wide">Jenis & Sebaran</span>
@@ -322,7 +642,8 @@
     }
 </script>
 
-<section class="py-5 bg-white">
+{{-- Jarak section disamakan: sebelumnya py-5, sekarang py-16 seperti section lain --}}
+<section class="py-16 bg-white">
     <div class="max-w-7xl mx-auto px-6 lg:px-8">
         <div class="text-center max-w-2xl mx-auto mb-14">
             <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-wide">Katalog Produk</span>
@@ -347,7 +668,8 @@
                 <div class="p-6 bg-cream product-card-body">
                     <div>
                         <h3 class="font-heading font-semibold text-lg text-dark-green">{{ $product->name }}</h3>
-                        <p class="mt-3 text-sm text-gray-text leading-relaxed text-justify product-desc">
+                        {{-- Rata kiri (sebelumnya text-justify, bikin jarak antar kata melebar di kartu sempit) --}}
+                        <p class="mt-3 text-sm text-gray-text leading-relaxed product-desc">
                             {{ $product->description }}
                         </p>
                     </div>

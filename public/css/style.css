@@ -276,6 +276,16 @@
 .footer-brand-text span:first-child { color: #1f4d2c !important; }
 .footer-brand-text span:last-child { color: #6b7280 !important; }
 
+.footer-credit {
+    margin-top: 10px;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.footer-credit span {
+    color: #175b3b;
+    font-weight: 600;
+}
 /* ============================
    PRODUCT CARD
    ============================ */

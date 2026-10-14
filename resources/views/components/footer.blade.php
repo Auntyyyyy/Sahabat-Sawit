@@ -80,5 +80,10 @@
                 <a href="#" class="footer-link">Terms & Conditions</a>
             </div>
         </div>
+
+        <div class="footer-credit">
+            Developed under the royal supervision of
+            <span>Kanjeng Ratu</span>
+        </div>
     </div>
 </footer>
