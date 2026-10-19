@@ -1,4 +1,20 @@
-<footer class="footer-ssrs">
+<style>
+    /* Watermark logo SSRS di sisi kiri footer (dekoratif, di belakang konten) */
+    .footer-wm { position: relative; overflow: hidden; isolation: isolate; }
+    .footer-wm-mark {
+        position: absolute; z-index: -1; left: -3%; bottom: -14%;
+        width: min(44vw, 34rem); aspect-ratio: 1 / 1;
+        background: url('{{ asset('images/logo (2).png') }}') no-repeat left bottom / contain;
+        filter: brightness(0) invert(1);   /* jadikan siluet putih; hapus baris ini jika ingin warna asli logo */
+        opacity: .07; pointer-events: none;
+    }
+    @media (max-width: 1023px) {
+        .footer-wm-mark { width: min(72vw, 22rem); left: -10%; bottom: -8%; }
+    }
+</style>
+
+<footer class="footer-ssrs footer-wm">
+    <span class="footer-wm-mark" aria-hidden="true"></span>
     <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
 
@@ -23,6 +39,7 @@
                     <li><a href="{{ route('about') }}" class="footer-link">Tentang Kami</a></li>
                     <li><a href="{{ route('products') }}" class="footer-link">Produk</a></li>
                     <li><a href="{{ route('sustainability') }}" class="footer-link">Keberlanjutan</a></li>
+                    <li><a href="{{ route('career') }}" class="footer-link">Karir</a></li>
                 </ul>
             </div>
 
@@ -73,17 +90,23 @@
             </div>
         </div>
 
-        <div class="footer-bottom mt-5 pt-5 flex flex-col md:flex-row items-center justify-between gap-3 text-xs">
-            <p>&copy; {{ date('Y') }} PT Sahabat Sawit Rokan Sejahtera. All Rights Reserved.</p>
-            <div class="flex gap-6">
-                <a href="#" class="footer-link">Privacy Policy</a>
-                <a href="#" class="footer-link">Terms & Conditions</a>
-            </div>
-        </div>
+            <div class="footer-bottom mt-5 pt-5 grid grid-cols-1 lg:grid-cols-3 items-center gap-4 lg:gap-6 text-center">
+                <!-- Copyright (kiri) -->
+                <p class="footer-copy lg:text-left">
+                    &copy; {{ date('Y') }} PT Sahabat Sawit Rokan Sejahtera.
+                    <span class="block">All Rights Reserved.</span>
+                </p>
 
-        <div class="footer-credit">
-            Developed under the royal supervision of
-            <span>Kanjeng Ratu</span>
-        </div>
-    </div>
+                <!-- Credit developer (tengah) -->
+                <div class="footer-credit">
+                    Developed under the royal supervision of
+                    <span class="block">Kanjeng Ratu</span>
+                </div>
+
+                <!-- Legal links (kanan) -->
+                <div class="flex justify-center lg:justify-end gap-6">
+                    <a href="#" class="footer-link">Privacy Policy</a>
+                    <a href="#" class="footer-link">Terms & Conditions</a>
+                </div>
+            </div>
 </footer>

@@ -4,252 +4,336 @@
 
 @section('content')
 
-    {{-- 1. HERO SECTION --}}
+    {{-- 1. HERO (komponen lama dibiarkan) --}}
     <x-hero :stats="$stats" />
 
+<style>
+    /* Gaya Home disamakan dengan landing page. Semua class berawalan "hm-" supaya tidak bentrok. */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
+
+    .hm {
+        --hijau: #16321f; --hijau-muda: #2f5a3a; --emas: #e3a72f; --krem: #f2f4ec;
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--hijau);
+        color: var(--krem);
+        line-height: 1.6;
+    }
+    .hm *, .hm *::before, .hm *::after { box-sizing: border-box; }
+    .hm a { color: inherit; text-decoration: none; }
+    .hm a:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
+
+    .hm-sec { padding: clamp(4rem, 10vh, 7rem) clamp(1.25rem, 5vw, 3.5rem); }
+    .hm-sec + .hm-sec { border-top: 1px solid rgba(242,244,236,.12); }
+    .hm-inner { max-width: 80rem; margin: 0 auto; }
+
+    .hm-split { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+    .hm-grid2 { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: center; }
+    @media (min-width: 900px) {
+        .hm-split { grid-template-columns: 1fr 3fr; gap: 3rem; }
+        .hm-grid2 { grid-template-columns: 1fr 1fr; }
+    }
+
+    .hm-label { font-size: .95rem; color: rgba(242,244,236,.6); }
+    .hm-title {
+        font-size: clamp(2.2rem, 6.5vw, 5rem);
+        font-weight: 800;
+        line-height: 1.02;
+        letter-spacing: -.04em;
+        max-width: 18ch;
+    }
+    .hm-text {
+        font-size: clamp(1.5rem, 3.2vw, 2.6rem);
+        font-weight: 600;
+        line-height: 1.25;
+        letter-spacing: -.02em;
+        max-width: 30em;
+    }
+    /* Kata menyala bertahap saat di-scroll (diatur JS di bawah) */
+    .hm-text.is-split .w { color: rgba(242,244,236,.25); transition: color .35s ease; }
+    .hm-text.is-split .w.on { color: var(--krem); }
+    .hm-body { margin-top: 1.5rem; max-width: 36rem; color: rgba(242,244,236,.75); }
+
+    .hm-link {
+        display: inline-flex; align-items: center; gap: .55rem;
+        margin-top: 2.5rem;
+        font-weight: 600; font-size: .95rem;
+        border-bottom: 2px solid var(--emas);
+        padding-bottom: .2rem;
+        white-space: nowrap;
+    }
+    .hm-link:hover { color: var(--emas); }
+    .hm-link svg { width: 16px; height: 16px; }
+
+    /* Keunggulan: section menempel di layar, scroll ke bawah menggeser kartu ke samping */
+    .hm-hscroll {
+        --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
+        position: relative;
+        border-top: 1px solid rgba(242,244,236,.12);
+    }
+    .hm-hscroll + .hm-sec { border-top: 1px solid rgba(242,244,236,.12); }
+    .hm-hscroll-pin {
+        position: sticky; top: 0;
+        height: 100vh;
+        overflow: hidden;
+        display: flex; flex-direction: column; justify-content: center;
+        gap: clamp(1.5rem, 4vh, 3rem);
+        padding: 7rem 0 2.5rem; /* ruang untuk navbar melayang */
+    }
+    .hm-hscroll-head { padding: 0 var(--gutter); }
+    .hm-hscroll-track {
+        display: flex; gap: 1.25rem;
+        width: max-content;
+        padding: 0 var(--gutter);
+        will-change: transform;
+    }
+    .hm-adv {
+        flex: 0 0 clamp(16rem, 24vw, 21rem);
+        aspect-ratio: 1 / 1;
+        display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
+        padding: 1.5rem;
+        border: 1px solid rgba(242,244,236,.18);
+        border-radius: .25rem;
+        transition: border-color .25s;
+    }
+    .hm-adv h3 { font-size: clamp(1.4rem, 2.2vw, 1.9rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; transition: color .25s; }
+    .hm-adv p { font-size: .95rem; color: rgba(242,244,236,.7); }
+    .hm-adv:hover { border-color: var(--emas); }
+    .hm-adv:hover h3 { color: var(--emas); }
+    /* Cadangan: tanpa pin (kurangi gerakan / kartu muat di layar) → baris biasa yang bisa digeser */
+    .hm-hscroll.is-native .hm-hscroll-pin { position: static; height: auto; overflow: visible; padding: clamp(4rem, 10vh, 7rem) 0; }
+    .hm-hscroll.is-native .hm-hscroll-track { width: auto; overflow-x: auto; }
+
+    /* Perkebunan */
+    .hm-stats { margin: 2rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .hm-stats dt { font-size: .85rem; color: rgba(242,244,236,.6); }
+    .hm-stats dd { margin: .15rem 0 0; font-size: 1.35rem; font-weight: 700; letter-spacing: -.01em; }
+    .hm-note { margin-top: 1rem; font-size: .75rem; color: rgba(242,244,236,.45); }
+    .hm-map { border-radius: .25rem; overflow: hidden; }
+    .hm-map iframe { display: block; width: 100%; height: 380px; border: 0; }
+
+    /* Berita & Pengetahuan */
+    .hm-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
+    .hm-head .hm-link { margin-top: 0; margin-bottom: .6rem; }
+    .hm-cards { margin-top: clamp(2rem, 5vh, 3.5rem); display: grid; grid-template-columns: 1fr; gap: 2.5rem 1.5rem; }
+    @media (min-width: 900px) { .hm-cards { grid-template-columns: 2fr 1fr 1fr; } }
+    .hm-card { display: block; }
+    .hm-card:only-child { grid-column: 1 / -1; }
+    .hm-card:first-child h3 { font-size: clamp(1.3rem, 2vw, 1.75rem); }
+    .hm-card-img { aspect-ratio: 3 / 2; overflow: hidden; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); }
+    .hm-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+    .hm-card:hover .hm-card-img img { transform: scale(1.04); }
+    .hm-meta { margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; font-size: .85rem; color: rgba(242,244,236,.6); }
+    .hm-card h3 { margin-top: .35rem; font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+    .hm-card p { margin-top: .5rem; font-size: .95rem; color: rgba(242,244,236,.7); }
+    .hm-clamp { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+    .hm-more { display: inline-block; margin-top: 1rem; font-size: .9rem; font-weight: 600; border-bottom: 2px solid var(--emas); padding-bottom: .15rem; }
+    .hm-card:hover .hm-more { color: var(--emas); }
+    .hm-empty { margin-top: clamp(2rem, 5vh, 3.5rem); padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; }
+</style>
+
+<div class="hm">
+
     {{-- 2. TENTANG KAMI --}}
-    <section class="pt-16 pb-10 lg:pt-20 lg:pb-14 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="relative scroll-reveal">
-                    <img src="{{ asset('images/tangki.png') }}"
-                         alt="Aktivitas perkebunan kelapa sawit PT Sahabat Sawit"
-                         class="rounded-brand shadow-xl w-full h-[420px] object-cover"
-                         onerror="this.src='https://placehold.co/700x500/1F5F3B/F5F1E8?text=PT+Sahabat+Sawit'">
-                    <div class="absolute -bottom-6 -right-6 hidden md:flex bg-gold text-white font-heading font-bold rounded-brand px-6 py-4 shadow-lg">
-                        3+ Tahun Pengalaman
-                    </div>
-                </div>
-                <div class="scroll-reveal" style="transition-delay: .12s;">
-                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Tentang Kami</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berkembang Bersama Alam dan Masyarakat</h2>
-                    <p class="mt-2 font-heading text-lg text-palm-leaf">PT. Sahabat Sawit Rokan Sejahtera</p>
-                    <p class="mt-6 text-gray-text leading-relaxed text-justify">
-                        PT Sahabat Sawit adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit, berlokasi di Kabupaten Rokan Hilir, Provinsi Riau. Kami berkomitmen mengelola perkebunan secara profesional, produktif, dan bertanggung jawab, dengan tetap menjaga kelestarian lingkungan serta memberikan manfaat nyata bagi masyarakat sekitar.
-                    </p>
-                    <p class="mt-4 text-gray-text leading-relaxed text-justify">
-                        Dengan dukungan tim yang berpengalaman dan standar operasional yang terukur, kami terus bertumbuh menjadi mitra terpercaya dalam industri kelapa sawit di Riau.
-                    </p>
-                    {{-- NOTE: route('about') dibiarkan seperti semula. Jika halaman "Tentang Kami" belum dibuat,
-                         ganti href="{{ route('about') }}" di bawah ini menjadi href="#" juga. --}}
-                    <a href="{{ route('about') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-primary-green text-white font-heading font-semibold hover:bg-dark-green transition-all duration-300">
-                        Selengkapnya
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                </div>
+    <section class="hm-sec">
+        <div class="hm-inner hm-split">
+            <p class="hm-label">Tentang Kami</p>
+            <div>
+                <p class="hm-text" data-glow>
+                    PT. Sahabat Sawit adalah perusahaan yang bergerak di bidang perkebunan dan industri kelapa sawit, berlokasi di Kabupaten Rokan Hilir, Provinsi Riau. Kami berkomitmen mengelola perkebunan secara profesional, produktif, dan bertanggung jawab, dengan tetap menjaga kelestarian lingkungan serta memberikan manfaat nyata bagi masyarakat sekitar.
+                </p>
+                <p class="hm-body">
+                    Dengan dukungan tim yang berpengalaman dan standar operasional yang terukur, kami terus bertumbuh menjadi mitra terpercaya dalam industri kelapa sawit di Riau.
+                </p>
+                <a href="{{ route('about') }}" class="hm-link">
+                    Selengkapnya
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
             </div>
         </div>
     </section>
 
-    {{-- 4. KEUNGGULAN PERUSAHAAN --}}
-    <section class="pt-10 pb-16 lg:pt-14 lg:pb-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="text-center max-w-2xl mx-auto scroll-reveal">
-                <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Keunggulan Kami</span>
-                <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Mengapa Memilih SSRS?</h2>
+    {{-- 3. KEUNGGULAN --}}
+    <section class="hm-hscroll" id="hmKeunggulan">
+        <div class="hm-hscroll-pin">
+            <div class="hm-hscroll-head">
+                <h2 class="hm-title">Mengapa Memilih SSRS?</h2>
             </div>
-
-            <div class="mt-14 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-reveal-group">
-                @php
-                    $icons = [
-                        'leaf' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6.115 5.19l.319 1.913A6 6 0 008.11 10.36L9.75 12l6-6M12 21a9 9 0 100-18 9 9 0 000 18z"/>',
-                        'cog' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.24-.438.613-.431.992a6.759 6.759 0 010 .255c-.007.378.138.75.43.99l1.005.828c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.57 6.57 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.28c-.09.543-.56.941-1.11.941h-2.594c-.55 0-1.02-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.992a6.932 6.932 0 010-.255c.007-.378-.138-.75-.43-.99l-1.004-.828a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.087.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>',
-                        'handshake' => '<path stroke-linecap="round" stroke-linejoin="round" d="M6.633 10.5c.806 0 1.533-.446 2.031-1.08a9.041 9.041 0 012.861-2.4c.723-.384 1.35-.956 1.653-1.715a4.498 4.498 0 00.322-1.672V3a.75.75 0 01.75-.75A2.25 2.25 0 0116.5 4.5c0 1.152-.26 2.243-.723 3.218-.266.558.107 1.282.725 1.282h3.126c1.026 0 1.945.694 2.054 1.715.045.422.068.85.068 1.285a11.95 11.95 0 01-2.649 7.521c-.388.482-.987.729-1.605.729H13.48c-.483 0-.964-.078-1.423-.23l-3.114-1.04a4.501 4.501 0 00-1.423-.23H5.904M14.25 9h2.25M5.904 18.75c.083.205.173.405.27.602.197.4-.078.898-.523.898h-.908c-.889 0-1.713-.518-1.972-1.368a12 12 0 01-.521-3.507c0-1.553.295-3.036.831-4.398C3.387 10.203 4.167 9.75 5 9.75h1.053c.472 0 .745.556.5.96a8.958 8.958 0 00-1.302 4.665c0 1.194.232 2.333.654 3.375z"/>',
-                        'shield' => '<path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/>',
-                        'globe' => '<path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418"/>',
-                        'chart' => '<path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/>',
-                    ];
-                @endphp
+            <div class="hm-hscroll-track" id="hmTrack">
                 @foreach($advantages as $adv)
-                <div class="group bg-cream rounded-brand p-7 hover:shadow-xl hover:-translate-y-1 transition-all duration-300 border border-transparent hover:border-gold/40 scroll-reveal">
-                    <div class="w-14 h-14 rounded-full bg-primary-green flex items-center justify-center mb-5 group-hover:bg-gold transition-colors duration-300">
-                        <svg class="w-7 h-7 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5">
-                            {!! $icons[$adv['icon']] ?? '' !!}
-                        </svg>
-                    </div>
-                    <h3 class="font-heading font-semibold text-lg text-dark-green mb-2">{{ $adv['title'] }}</h3>
-                    <p class="text-sm text-gray-text leading-relaxed">{{ $adv['desc'] }}</p>
-                </div>
+                <article class="hm-adv">
+                    <h3>{{ $adv['title'] }}</h3>
+                    <p>{{ $adv['desc'] }}</p>
+                </article>
                 @endforeach
             </div>
         </div>
     </section>
 
-    {{-- 5. PETA LOKASI --}}
-    <section class="py-16 lg:py-20 bg-dark-green text-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                <div class="scroll-reveal">
-                    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl">bertumbuh bersama dari sumber terbaik</h2>
-                    <p class="mt-4 text-white/75 leading-relaxed text-justify">
+    {{-- 4. PERKEBUNAN --}}
+    <section class="hm-sec">
+        <div class="hm-inner hm-grid2">
+            <div>
+                <h2 class="hm-title">Bertumbuh bersama dari sumber terbaik</h2>
+                <p class="hm-body">
                     Bahan baku berkualitas berasal dari kebun yang dikelola secara mandiri serta kemitraan dengan petani kelapa sawit. Bersama para mitra, PT. Sahabat Sawit Rokan Sejahtera membangun rantai pasok yang konsisten, berkelanjutan, dan memberikan manfaat bagi masyarakat sekitar.
-                    </p>
+                </p>
 
-                    <div class="mt-8 grid grid-cols-2 gap-6">
-                        <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Lokasi</p>
-                            <p class="mt-1 font-heading font-semibold">Rokan Hilir, Riau</p>
-                        </div>
-                        <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Luas Area</p>
-                            <p class="mt-1 font-heading font-semibold">11.392+ (Ha)</p>
-                        </div>
-                        <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Kemitraan</p>
-                            <p class="mt-1 font-heading font-semibold">9348,891(Ha)</p>
-                        </div>
-                        <div>
-                            <p class="text-white/50 text-xs uppercase tracking-wide">Diusahan sendiri</p>
-                            <p class="mt-1 font-heading font-semibold">2043,75(Ha)</p>
-                        </div>
-                    </div>
-                    <p class="mt-4 text-xs text-white/40">*SK : SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
+                <dl class="hm-stats">
+                    <div><dt>Lokasi</dt><dd>Rokan Hilir, Riau</dd></div>
+                    <div><dt>Luas Area</dt><dd>11.392+ (Ha)</dd></div>
+                    <div><dt>Kemitraan</dt><dd>9348,891(Ha)</dd></div>
+                    <div><dt>Diusahan sendiri</dt><dd>2043,75(Ha)</dd></div>
+                </dl>
+                <p class="hm-note">*SK : SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
 
-                    {{-- FIX: halaman Perkebunan belum ada, route('plantation') diganti href="#" --}}
-                    <a href="{{ route('plantation') }}" class="mt-8 inline-flex items-center gap-2 px-7 py-3 rounded-brand bg-gold text-dark-green font-heading font-semibold hover:bg-light-green transition-all duration-300">
-                        Lihat Detail Perkebunan
-                        <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
-                    </a>
-                </div>
+                <a href="{{ route('plantation') }}" class="hm-link">
+                    Lihat Detail Perkebunan
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
 
-                <div class="rounded-brand overflow-hidden shadow-2xl border border-white/10 scroll-reveal" style="transition-delay: .12s;">
-                    <!-- Placeholder Google Maps embed -->
-                    <iframe
-                        src="https://www.google.com/maps?q=Rokan+Hilir,+Riau&output=embed"
-                        class="w-full h-[380px]" style="border:0;" allowfullscreen="" loading="lazy"
-                        referrerpolicy="no-referrer-when-downgrade"
-                        title="Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau">
-                    </iframe>
-                </div>
+            <div class="hm-map">
+                <iframe src="https://www.google.com/maps?q=Rokan+Hilir,+Riau&output=embed"
+                        allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau"></iframe>
             </div>
         </div>
     </section>
 
-    {{-- 6. BERITA & GALERI KEGIATAN --}}
-    <section class="py-16 lg:py-20 bg-cream">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
- 
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 scroll-reveal">
-                <div>
-                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Media</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Berita & Galeri Kegiatan</h2>
-                    <p class="mt-3 text-gray-text leading-relaxed max-w-xl">
-                        Dokumentasi terbaru seputar aktivitas PT. Sahabat Sawit Rokan Sejahtera.
-                    </p>
-                </div>
- 
-                <a href="{{ route('media.berita') }}"
-                   class="shrink-0 inline-flex items-center gap-2 font-heading font-semibold text-dark-green hover:text-primary-green transition-colors group">
+    {{-- 5. BERITA & GALERI KEGIATAN --}}
+    <section class="hm-sec">
+        <div class="hm-inner">
+            <div class="hm-head">
+                <h2 class="hm-title">Berita & Galeri Kegiatan</h2>
+                <a href="{{ route('media.berita') }}" class="hm-link">
                     Lihat Semua Berita
-                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
             </div>
- 
+
             @if(isset($latestBerita) && $latestBerita->isNotEmpty())
-            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-reveal-group">
+            <div class="hm-cards">
                 @foreach($latestBerita as $item)
-                <a href="{{ route('media.berita.show', $item->slug) }}"
-                   class="group block bg-white rounded-brand overflow-hidden shadow-sm hover:shadow-xl transition-shadow duration-300 scroll-reveal">
-                    <div class="aspect-[4/3] overflow-hidden bg-cream">
-                        <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x450/1F5F3B/F5F1E8?text=' . urlencode($item->judul) }}"
-                             alt="{{ $item->judul }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                             onerror="this.onerror=null;this.src='https://placehold.co/600x450/1F5F3B/F5F1E8?text={{ urlencode($item->judul) }}'">
+                <a href="{{ route('media.berita.show', $item->slug) }}" class="hm-card">
+                    <div class="hm-card-img">
+                        <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x400/1F5F3B/F5F1E8?text=' . urlencode($item->judul) }}"
+                             alt="{{ $item->judul }}" loading="lazy"
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/1F5F3B/F5F1E8?text={{ urlencode($item->judul) }}'">
                     </div>
-                    <div class="p-5">
-                            <div style="display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.25rem .75rem;">
-                                <span class="text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
-                                    {{ $item->tanggal->translatedFormat('d F Y') }}
-                                </span>
-                                <span class="inline-flex items-center gap-1.5 text-xs text-gray-text">
-                                    <i class="bi bi-eye"></i> {{ number_format($item->views ?? 0, 0, ',', '.') }}x dilihat
-                                </span>
-                            </div>                        <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
-                            {{ $item->judul }}
-                        </h3>
-                        <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-2">
-                            {{ $item->deskripsi_singkat }}
-                        </p>
-                        <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-dark-green group-hover:gap-2.5 transition-all">
-                            Baca Selengkapnya
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </span>
+                    <div class="hm-meta">
+                        <span>{{ $item->tanggal->translatedFormat('d F Y') }}</span>
+                        <span>{{ number_format($item->views ?? 0, 0, ',', '.') }}x dilihat</span>
                     </div>
+                    <h3 class="hm-clamp">{{ $item->judul }}</h3>
+                    <span class="hm-more">Baca selengkapnya</span>
                 </a>
                 @endforeach
             </div>
             @else
-            <div class="mt-12 text-center py-10 bg-white rounded-brand">
-                <p class="text-gray-text">Belum ada berita yang dipublikasikan.</p>
-            </div>
+            <p class="hm-empty">Belum ada berita yang dipublikasikan.</p>
             @endif
         </div>
     </section>
 
-
-    {{-- 7. PENGETAHUAN (SahabatPedia) --}}
-    <section class="py-16 lg:py-20 bg-white">
-        <div class="max-w-7xl mx-auto px-6 lg:px-8">
-
-            <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6 scroll-reveal">
-                <div>
-                    <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Pengetahuan</span>
-                    <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">SahabatPedia</h2>
-                    <p class="mt-3 text-gray-text leading-relaxed max-w-xl">
-                        Fakta menarik dan wawasan singkat seputar kelapa sawit.
-                    </p>
-                </div>
-
-                <a href="{{ route('media.pengetahuan') }}"
-                   class="shrink-0 inline-flex items-center gap-2 font-heading font-semibold text-dark-green hover:text-primary-green transition-colors group">
+    {{-- 6. PENGETAHUAN (SahabatPedia) --}}
+    <section class="hm-sec">
+        <div class="hm-inner">
+            <div class="hm-head">
+                <h2 class="hm-title">SahabatPedia</h2>
+                <a href="{{ route('media.pengetahuan') }}" class="hm-link">
                     Lihat Semua Pengetahuan
-                    <svg class="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
-                    </svg>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
                 </a>
             </div>
 
             @if(isset($latestPengetahuan) && $latestPengetahuan->isNotEmpty())
-            <div class="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 scroll-reveal-group">
+            <div class="hm-cards">
                 @foreach($latestPengetahuan as $item)
-                <a href="{{ route('media.pengetahuan.show', $item->slug) }}"
-                   class="group block bg-white rounded-brand overflow-hidden border border-dark-green/10 shadow-sm hover:shadow-xl transition-shadow duration-300 scroll-reveal">
-                    <div class="aspect-[4/3] overflow-hidden bg-cream">
-                        <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x450/2F6B3F/F5F1E8?text=' . urlencode($item->judul) }}"
-                             alt="{{ $item->judul }}"
-                             class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                             onerror="this.onerror=null;this.src='https://placehold.co/600x450/2F6B3F/F5F1E8?text={{ urlencode($item->judul) }}'">
+                <a href="{{ route('media.pengetahuan.show', $item->slug) }}" class="hm-card">
+                    <div class="hm-card-img">
+                        <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x400/2F6B3F/F5F1E8?text=' . urlencode($item->judul) }}"
+                             alt="{{ $item->judul }}" loading="lazy"
+                             onerror="this.onerror=null;this.src='https://placehold.co/600x400/2F6B3F/F5F1E8?text={{ urlencode($item->judul) }}'">
                     </div>
-                    <div class="p-5">
-                        <span class="inline-flex items-center gap-1.5 text-xs font-heading font-semibold text-primary-green uppercase tracking-wide">
-                            <i class="bi bi-lightbulb"></i> Tahukah Anda?
-                        </span>
-                        <h3 class="mt-2 font-heading font-bold text-dark-green leading-snug group-hover:text-primary-green transition-colors line-clamp-2">
-                            {{ $item->judul }}
-                        </h3>
-                        <p class="mt-2 text-sm text-gray-text leading-relaxed line-clamp-2">
-{{ Str::limit(trim(html_entity_decode(strip_tags($item->ringkasan))), 160) }}                        </p>
-                        <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-heading font-semibold text-dark-green group-hover:gap-2.5 transition-all">
-                            Baca Selengkapnya
-                            <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                            </svg>
-                        </span>
-                    </div>
+                    <div class="hm-meta"><span>Tahukah Anda?</span></div>
+                    <h3 class="hm-clamp">{{ $item->judul }}</h3>
+                    <span class="hm-more">Baca selengkapnya</span>
                 </a>
                 @endforeach
             </div>
             @else
-            <div class="mt-12 text-center py-10 bg-cream rounded-brand">
-                <p class="text-gray-text">Belum ada konten pengetahuan yang dipublikasikan.</p>
-            </div>
+            <p class="hm-empty">Belum ada konten pengetahuan yang dipublikasikan.</p>
             @endif
-
         </div>
     </section>
+
+</div>
+
+<script>
+    // Paragraf Tentang Kami: kata menyala bertahap saat di-scroll (dilewati bila "kurangi gerakan").
+    (function () {
+        const el = document.querySelector('[data-glow]');
+        if (!el || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+        const words = el.textContent.trim().split(/\s+/);
+        el.textContent = '';
+        words.forEach(function (word) {
+            const span = document.createElement('span');
+            span.className = 'w';
+            span.textContent = word;
+            el.appendChild(span);
+            el.appendChild(document.createTextNode(' '));
+        });
+        el.classList.add('is-split');
+        const spans = el.querySelectorAll('.w');
+
+        function update() {
+            const vh = window.innerHeight;
+            const r = el.getBoundingClientRect();
+            const progress = Math.min(1, Math.max(0, (vh * 0.8 - r.top) / (vh * 0.45 + r.height)));
+            const lit = Math.round(progress * spans.length);
+            spans.forEach(function (s, i) { s.classList.toggle('on', i < lit); });
+        }
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', update);
+        update();
+    })();
+</script>
+
+<script>
+    // Keunggulan: selama section menempel di layar, scroll ke bawah menggeser kartu ke kiri.
+    (function () {
+        const sec = document.getElementById('hmKeunggulan');
+        const track = document.getElementById('hmTrack');
+        if (!sec || !track) return;
+        const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let dist = 0;
+
+        function update() {
+            if (sec.classList.contains('is-native')) return;
+            const range = sec.offsetHeight - window.innerHeight;
+            const p = range > 0 ? Math.min(1, Math.max(0, -sec.getBoundingClientRect().top / range)) : 0;
+            track.style.transform = 'translate3d(' + (-dist * p) + 'px,0,0)';
+        }
+
+        function layout() {
+            sec.classList.remove('is-native');
+            track.style.transform = '';
+            sec.style.height = '';
+            dist = Math.max(0, track.scrollWidth - window.innerWidth);
+            if (reduce.matches || dist < 8) {
+                sec.classList.add('is-native');
+                return;
+            }
+            sec.style.height = (window.innerHeight + dist) + 'px';
+            update();
+        }
+
+        window.addEventListener('scroll', update, { passive: true });
+        window.addEventListener('resize', layout);
+        window.addEventListener('load', layout);
+        layout();
+    })();
+</script>
+
 @endsection

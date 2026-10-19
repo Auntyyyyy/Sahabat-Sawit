@@ -3,151 +3,125 @@
 @section('title', 'Sertifikasi & Penghargaan — PT Sahabat Sawit')
 
 @section('content')
+@include('about._style')
 
-{{-- Hero: disamakan dengan hero Profil Perusahaan (foto latar penuh + overlay gradasi
-     + badge + subnav). Yang berbeda hanya judul besarnya dan breadcrumb-nya. --}}
-<section class="relative min-h-screen flex items-center bg-dark-green text-white bg-cover bg-center bg-no-repeat hero-section" style="background-image: url('{{ asset('images/herotentang.png') }}');">
-    <!-- Overlay Gradient -->
-    <div class="absolute inset-0 hero-overlay"></div>
+<style>
+    /* Sertifikat */
+    .ab-certs { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; display: grid; grid-template-columns: 1fr; gap: 2.5rem 1.5rem; }
+    @media (min-width: 640px)  { .ab-certs { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .ab-certs { grid-template-columns: repeat(4, 1fr); } }
+    .ab-cert-img { position: relative; display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1 / 1; padding: 1.5rem; border: 0; border-radius: .25rem; background: var(--krem); cursor: zoom-in; overflow: hidden; }
+    .ab-cert-img img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; transition: transform .5s ease; }
+    .ab-cert-img:hover img { transform: scale(1.04); }
+    .ab-cert-year { position: absolute; top: .75rem; right: .75rem; padding: .15rem .7rem; border-radius: 99px; background: var(--hijau); color: var(--krem); font-size: .75rem; font-weight: 600; }
+    .ab-cert-name { margin-top: 1rem; font-size: 1.15rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.25; }
+    .ab-cert-desc { margin-top: .25rem; font-size: .9rem; color: rgba(242,244,236,.65); }
 
-    <div class="relative w-full max-w-4xl mx-auto px-6 lg:px-8 text-center" style="padding-top:7rem;padding-bottom:6rem;">
+    /* Penghargaan */
+    .ab-awards { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; }
+    .ab-award { display: grid; grid-template-columns: 1fr; gap: .4rem 2rem; padding: 1.5rem 0; border-top: 1px solid rgba(242,244,236,.15); }
+    .ab-award:last-child { border-bottom: 1px solid rgba(242,244,236,.15); }
+    .ab-award-year { font-size: .9rem; font-weight: 600; color: var(--emas); }
+    .ab-award h3 { font-size: clamp(1.2rem, 2.2vw, 1.8rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+    .ab-award-desc { color: rgba(242,244,236,.7); max-width: 32rem; }
+    @media (min-width: 900px) { .ab-award { grid-template-columns: 7rem 1fr 1fr; align-items: baseline; } }
 
-        <!-- Breadcrumb -->
-        <div class="hero-fade hero-delay-1 flex items-center justify-center gap-2 text-sm text-white/60">
-            <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
-            <span>/</span>
-            <a href="{{ route('about') }}" class="hover:text-white transition-colors">Tentang Kami</a>
-            <span>/</span>
-            <span class="text-white/90">Sertifikasi & Penghargaan</span>
-        </div>
+    /* Lightbox */
+    .ab-lightbox { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 2rem; background: rgba(5,8,5,.92); }
+    .ab-lightbox[hidden] { display: none; }
+    .ab-lightbox img { max-width: min(92vw, 60rem); max-height: 88vh; object-fit: contain; border-radius: .25rem; background: var(--krem); }
+    .ab-lightbox-close { position: absolute; top: 1rem; right: 1.25rem; width: 44px; height: 44px; border: 1px solid rgba(242,244,236,.4); border-radius: 50%; background: transparent; color: var(--krem); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+    .ab-lightbox-close:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+</style>
 
-        <!-- Label + Judul -->
-        <span class="hero-fade hero-delay-2 block mt-6 font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Tentang Kami</span>
+<div class="ab">
 
-        <h1 class="hero-fade hero-delay-3 mt-4 font-heading font-bold text-3xl md:text-5xl" style="line-height:1.2;text-wrap:balance;">
-            Sertifikasi & Penghargaan
-        </h1>
+    @include('about._hero', [
+        'title' => 'Sertifikasi & Penghargaan',
+        'lead'  => 'Bentuk pengakuan atas komitmen perusahaan dalam menerapkan standar, menjaga kualitas, dan menjalankan praktik usaha yang bertanggung jawab.',
+        'crumb' => 'Sertifikasi & Penghargaan',
+    ])
 
-        <p class="hero-fade hero-delay-4 mt-6 text-white/75 max-w-2xl mx-auto leading-relaxed" style="text-wrap:balance;">
-Bentuk pengakuan atas komitmen perusahaan dalam menerapkan standar, menjaga kualitas, dan menjalankan praktik usaha yang bertanggung jawab.
-        <!-- Badge Statistik -->
-        <div class="hero-fade hero-delay-5 flex flex-wrap justify-center gap-3 mt-8">
-            <span class="hero-badge">Beroperasi sejak 2023</span>
-            <span class="hero-badge">Kabupaten Rokan Hilir</span>
-            <span class="hero-badge">Standar ISPO & RSPO</span>
-        </div>
+    {{-- SERTIFIKASI --}}
+    <section class="ab-sec">
+        <p class="ab-label">Legalitas</p>
+        <h2 class="ab-h2">Sertifikasi</h2>
+        <p class="ab-p">
+            Komitmen kami terhadap standar mutu, keamanan, dan keberlanjutan dibuktikan melalui sertifikasi resmi berikut.
+        </p>
 
-        <!-- Sub-navigasi "Tentang Kami" -->
-        <div class="hero-fade hero-delay-6 mt-10">
-            @include('about._subnav')
-        </div>
-    </div>
-</section>
-
-<section class="pt-14 pb-16 lg:pt-16 lg:pb-20 bg-cream">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Legalitas</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Sertifikasi</h2>
-            <p class="mt-4 text-gray-text leading-relaxed">
-                Komitmen kami terhadap standar mutu, keamanan, dan keberlanjutan dibuktikan melalui sertifikasi resmi berikut.
-            </p>
-        </div>
-
-        {{-- Kartu sertifikat: logo ditampilkan utuh (object-contain, bukan
-             cover) supaya tidak terpotong seperti sebelumnya, dengan padding
-             di sekitarnya + judul dan deskripsi singkat di bawahnya --}}
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-7">
+        <ul class="ab-certs">
             @foreach($sertifikasi as $item)
-            <div class="group bg-white rounded-brand border border-dark-green/10 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 overflow-hidden">
-
-                <div class="relative aspect-square bg-cream flex items-center justify-center p-6 md:p-7 overflow-hidden">
-                    <img src="{{ asset('images/' . $item['photo']) }}"
-                        alt="{{ $item['nama'] }}"
-                        class="max-w-full max-h-full object-contain cursor-zoom-in transition-transform duration-500 group-hover:scale-105"
-                        onclick="openCertLightbox(this.src)"
-                        onerror="this.src='https://placehold.co/600x600/F5F1E8/1F5F3B?text={{ urlencode($item['nama']) }}'">
-
+            <li>
+                <button type="button" class="ab-cert-img"
+                        data-cert="{{ asset('images/' . $item['photo']) }}" data-alt="{{ $item['nama'] }}"
+                        aria-label="Perbesar {{ $item['nama'] }}">
+                    <img src="{{ asset('images/' . $item['photo']) }}" alt="{{ $item['nama'] }}" loading="lazy" onerror="this.style.display='none'">
                     @if(!empty($item['tahun']))
-                    <span class="absolute top-3 right-3 inline-flex items-center px-3 py-1 rounded-full bg-secondary-green text-white text-xs font-heading font-bold shadow-md">
-                        {{ $item['tahun'] }}
-                    </span>
+                        <span class="ab-cert-year">{{ $item['tahun'] }}</span>
                     @endif
-                </div>
-
-                <div class="px-4 py-4 border-t border-dark-green/5">
-                    <p class="font-heading font-bold text-dark-green text-base leading-snug">{{ $item['nama'] }}</p>
-                    @if(!empty($item['deskripsi']))
-                    <p class="mt-1 text-sm text-gray-text leading-snug">{{ $item['deskripsi'] }}</p>
-                    @endif
-                </div>
-            </div>
+                </button>
+                <p class="ab-cert-name">{{ $item['nama'] }}</p>
+                @if(!empty($item['deskripsi']))
+                    <p class="ab-cert-desc">{{ $item['deskripsi'] }}</p>
+                @endif
+            </li>
             @endforeach
-        </div>
+        </ul>
+    </section>
 
-        <!-- Lightbox modal -->
-        <div id="certLightbox" class="cert-lightbox" onclick="closeCertLightbox()">
-            <span class="cert-lightbox-close" onclick="closeCertLightbox()">&times;</span>
-            <img id="certLightboxImg" src="" alt="Sertifikat diperbesar">
-        </div>
-    </div>
-</section>
+    {{-- PENGHARGAAN --}}
+    <section class="ab-sec">
+        <p class="ab-label">Apresiasi</p>
+        <h2 class="ab-h2">Penghargaan</h2>
+        <p class="ab-p">
+            Berbagai apresiasi yang kami terima atas kinerja, kualitas layanan, dan kontribusi perusahaan.
+        </p>
 
-{{-- ============================= --}}
-{{-- PENGHARGAAN --}}
-{{-- ============================= --}}
-<section class="pt-8 pb-16 lg:pt-10 lg:pb-20 bg-cream">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Apresiasi</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">Penghargaan</h2>
-            <p class="mt-4 text-gray-text leading-relaxed">
-                Berbagai apresiasi yang kami terima atas kinerja, kualitas layanan, dan kontribusi perusahaan.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 md:gap-6">
+        <ul class="ab-awards">
             @foreach($penghargaan as $item)
-            <div class="flex items-start gap-4 bg-white rounded-brand border border-dark-green/10 shadow-sm hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 p-5 md:p-6">
-                <div class="shrink-0 w-14 h-14 rounded-full bg-gold/15 text-gold flex items-center justify-center text-2xl">
-                    <i class="bi bi-award-fill"></i>
-                </div>
-                <div>
-                    @if(!empty($item['tahun']))
-                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-gold/15 text-gold text-xs font-heading font-bold mb-1.5">
-                        {{ $item['tahun'] }}
-                    </span>
-                    @endif
-                    <p class="font-heading font-bold text-dark-green text-base leading-snug">{{ $item['nama'] }}</p>
-                    @if(!empty($item['deskripsi']))
-                    <p class="mt-1 text-sm text-gray-text leading-snug">{{ $item['deskripsi'] }}</p>
-                    @endif
-                </div>
-            </div>
+            <li class="ab-award">
+                <p class="ab-award-year">{{ $item['tahun'] ?? '' }}</p>
+                <h3>{{ $item['nama'] }}</h3>
+                <p class="ab-award-desc">{{ $item['deskripsi'] ?? '' }}</p>
+            </li>
             @endforeach
-        </div>
+        </ul>
+    </section>
+
+    {{-- Lightbox: klik sertifikat untuk memperbesar; tutup dengan tombol, klik latar, atau Escape --}}
+    <div class="ab-lightbox" id="abLightbox" role="dialog" aria-modal="true" aria-label="Sertifikat diperbesar" hidden>
+        <button type="button" class="ab-lightbox-close" id="abLightboxClose" aria-label="Tutup">&times;</button>
+        <img id="abLightboxImg" src="" alt="">
     </div>
-</section>
-@endsection
 
-@push('scripts')
+</div>
+
 <script>
-    function openCertLightbox(src) {
-        const lightbox = document.getElementById('certLightbox');
-        const img = document.getElementById('certLightboxImg');
-        img.src = src;
-        lightbox.classList.add('active');
-        document.body.style.overflow = 'hidden'; // cegah scroll di belakang
-    }
+    (function () {
+        const box = document.getElementById('abLightbox');
+        const img = document.getElementById('abLightboxImg');
+        const closeBtn = document.getElementById('abLightboxClose');
+        let trigger = null;
 
-    function closeCertLightbox() {
-        document.getElementById('certLightbox').classList.remove('active');
-        document.body.style.overflow = '';
-    }
+        function open(src, alt, from) {
+            img.src = src; img.alt = alt;
+            box.hidden = false;
+            document.body.style.overflow = 'hidden';   // cegah scroll di belakang
+            trigger = from;
+            closeBtn.focus();
+        }
+        function close() {
+            box.hidden = true; img.src = '';
+            document.body.style.overflow = '';
+            if (trigger) trigger.focus();
+        }
 
-    // Tutup dengan tombol Escape
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') closeCertLightbox();
-    });
+        document.querySelectorAll('[data-cert]').forEach(function (b) {
+            b.addEventListener('click', function () { open(b.dataset.cert, b.dataset.alt, b); });
+        });
+        box.addEventListener('click', function (e) { if (e.target !== img) close(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+    })();
 </script>
-@endpush
+@endsection

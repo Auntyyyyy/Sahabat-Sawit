@@ -12,6 +12,7 @@ use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
 use App\Http\Controllers\Admin\PengetahuanController;
+use App\Http\Controllers\Admin\PerformaController; 
 // FIX: class ini dipakai di grup route 'go' di bawah tapi sebelumnya belum
 // di-import sama sekali — bakal error "Class not found" begitu dipanggil.
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
@@ -80,4 +81,7 @@ Route::middleware(['auth', 'admin:hr'])
 
         // Dashboard Kehadiran → URL /hr/kehadiran, nama route hr.kehadiran.dashboard
         Route::get('kehadiran', [KehadiranController::class, 'dashboard'])->name('kehadiran.dashboard');
+
+        // BARU: Dashboard Performa → URL /hr/performa, nama route hr.performa.dashboard
+        Route::get('performa', [PerformaController::class, 'index'])->name('performa.dashboard');
     });

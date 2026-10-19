@@ -16,6 +16,7 @@
                 <a href="{{ route('about') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('about') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_tentang') }}</a>
                 <a href="{{ route('products') }}" class="nav-link px-2 py-1.5 rounded-md transition-colors {{ request()->routeIs('products*') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('sustainability') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('sustainability') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                <a href="{{ route('career') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('career*') ? 'nav-link-active font-semibold' : '' }}">{{ app()->getLocale() == 'en' ? 'Careers' : 'Karir' }}</a>
                 <a href="{{ route('contact') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('contact') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
@@ -77,6 +78,7 @@
                 <a href="{{ route('about') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('about') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_tentang') }}</a>
                 <a href="{{ route('products') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('products*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_produk') }}</a>
                 <a href="{{ route('sustainability') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('sustainability') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_keberlanjutan') }}</a>
+                 <a href="{{ route('career') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('career*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ app()->getLocale() == 'en' ? 'Careers' : 'Karir' }}</a>
                 <a href="{{ route('contact') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('contact') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->

@@ -276,16 +276,6 @@
 .footer-brand-text span:first-child { color: #1f4d2c !important; }
 .footer-brand-text span:last-child { color: #6b7280 !important; }
 
-.footer-credit {
-    margin-top: 10px;
-    font-size: 12px;
-    color: #64748b;
-}
-
-.footer-credit span {
-    color: #175b3b;
-    font-weight: 600;
-}
 /* ============================
    PRODUCT CARD
    ============================ */
@@ -484,6 +474,28 @@
     font-size: 0.7rem;
     border-radius: 50%;
     pointer-events: none;
+}
+
+.footer-credit {
+    padding-top: 16px;
+    border-top: 1px solid #e5ebe6;
+    font-size: 12px;
+    color: #64748b;
+}
+
+.footer-credit span {
+    margin-top: 2px;
+    font-size: 14px;
+    color: #175b3b;
+    font-weight: 600;
+}
+
+/* Desktop: tiga kolom, garis pemisah credit dihilangkan */
+@media (min-width: 1024px) {
+    .footer-credit {
+        padding-top: 0;
+        border-top: 0;
+    }
 }
 
 .product-gallery-grid .gallery-item { cursor: zoom-in; }

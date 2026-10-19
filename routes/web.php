@@ -9,6 +9,8 @@ use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PlantationController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\PengetahuanController;
+use App\Http\Controllers\CareerController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -29,13 +31,11 @@ Route::get('/cek-auth', function () {
 |--------------------------------------------------------------------------
 */
 
-// Landing page (halaman pertama saat website dibuka)
-Route::get('/', function () {
-    return view('landing');
-})->name('landing');
+// Beranda = halaman pertama saat website dibuka (juga tujuan logo / menu Home)
+Route::get('/', [HomeController::class, 'index'])->name('home');
 
-// Beranda (tujuan saat logo / menu Home diklik)
-Route::get('/beranda', [HomeController::class, 'index'])->name('home');
+// Link atau bookmark lama ke /beranda dialihkan ke halaman utama
+Route::redirect('/beranda', '/');
 
 Route::get('/tentang', [AboutController::class, 'profil'])->name('about');
 Route::get('/tentang/struktur', [AboutController::class, 'struktur'])->name('about.struktur');
@@ -47,7 +47,10 @@ Route::get('/produk/{slug}', [ProductController::class, 'show'])->name('products
 Route::get('/keberlanjutan', [SustainabilityController::class, 'index'])->name('sustainability');
 Route::get('/kontak', [ContactController::class, 'index'])->name('contact');
 Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
+Route::get('/karier', [CareerController::class, 'index'])->name('career');
 Route::get('/perkebunan', [PlantationController::class, 'index'])->name('plantation');
+Route::get('/perkebunan', [PlantationController::class, 'index'])->name('plantation');
+
 
 /*
 |--------------------------------------------------------------------------

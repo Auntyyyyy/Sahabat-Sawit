@@ -235,18 +235,18 @@
                 <p class="nav-label">DATA</p>
                 <a href="{{ route('hr.karyawan.index') }}" class="nav-item {{ request()->routeIs('hr.karyawan.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    Data Karyawan
+                    Dashboard Karyawan
                 </a>
-<a href="{{ route('hr.kehadiran.dashboard') }}" class="nav-item {{ request()->routeIs('hr.kehadiran.*') ? 'active' : '' }}">                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+                <a href="{{ route('hr.kehadiran.dashboard') }}" class="nav-item {{ request()->routeIs('hr.kehadiran.*') ? 'active' : '' }}">                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
                     Dashboard Kehadiran
                 </a>
-                <a href="#" class="nav-item">
+                <a href="{{ route('hr.performa.dashboard') }}" class="nav-item {{ request()->routeIs('hr.performa.*') ? 'active' : '' }}">                    
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg>
-                    Performa
+                    Dashboard Performa
                 </a>
                 <a href="#" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
-                    Kehadiran
+                    Dashboard ???
                 </a>
                 <p class="nav-label">LAINNYA</p>
                 <a href="#" class="nav-item">

@@ -4,412 +4,350 @@
 
 @section('content')
 
-{{-- BARU: CSS kartu kegiatan + popup (file ada di public/css/csr-activities.css) --}}
-<link rel="stylesheet" href="{{ asset('css/csr-activities.css') }}">
-
+{{-- Foto sementara: ganti nama file di sini setelah foto asli terkumpul (file ada di public/images). --}}
 @php
-    // GANTI ARRAY DI BAWAH INI dengan foto-foto asli kamu nanti.
-    // Sekarang masih pakai 'herotentang.png' berulang sebagai placeholder.
-    $heroMarqueeImages = [
-        'herotentang.png', 'herotentang.png', 'herotentang.png',
-        'herotentang.png', 'herotentang.png', 'herotentang.png',
-        'herotentang.png', 'herotentang.png', 'herotentang.png',
-    ];
-    $heroMarqueeCols = array_chunk($heroMarqueeImages, ceil(count($heroMarqueeImages) / 3));
+    $fotoHero  = 'herotentang.png';
+    $fotoPilar = 'sawitangkong.jpg';
+    $fotoAngka = 'prosesnunggu.png';
 @endphp
 
-<section class="relative min-h-screen flex items-center overflow-hidden hero-marquee-section text-white">
+<style>
+    /* Halaman Keberlanjutan — gaya disamakan dengan Home/Produk/Tentang Kami/Kontak. Class berawalan "sb-". */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
 
-    <!-- Grid Foto Bergerak -->
-    <div class="hero-marquee-wrap">
-        <div class="hero-marquee-grid">
-            @foreach($heroMarqueeCols as $colIndex => $colImages)
-            <div class="hero-marquee-col {{ $colIndex % 2 === 0 ? 'marquee-up' : 'marquee-down' }}">
-                {{-- Diulang 2x supaya loop-nya mulus tanpa jeda --}}
-                @for ($rep = 0; $rep < 2; $rep++)
-                    @foreach($colImages as $img)
-                    <div class="hero-marquee-card">
-                        <img src="{{ asset('images/' . $img) }}"
-                             alt="Galeri PT Sahabat Sawit"
-                             onerror="this.src='https://placehold.co/400x300/1F5F3B/F5F1E8?text=Foto'">
-                    </div>
-                    @endforeach
-                @endfor
-            </div>
-            @endforeach
+    .sb {
+        --hijau: #16321f; --hijau-muda: #2f5a3a; --emas: #e3a72f; --krem: #f2f4ec;
+        --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--hijau); color: var(--krem); line-height: 1.6;
+    }
+    .sb *, .sb *::before, .sb *::after { box-sizing: border-box; }
+    .sb a { color: inherit; text-decoration: none; }
+    .sb a:focus-visible, .sb button:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
+
+    .sb-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: min(92vh, 58rem); background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .sb-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(22,50,31,.92) 0%, rgba(22,50,31,.6) 50%, rgba(22,50,31,.2) 100%), linear-gradient(0deg, rgba(22,50,31,.85) 0%, transparent 45%); }
+    .sb-hero-inner { width: 100%; padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .sb-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+    .sb-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
+    .sb-crumb a:hover { color: var(--krem); }
+    .sb-crumb [aria-current] { color: var(--krem); }
+    .sb-title { margin-top: 1.5rem; max-width: 14ch; font-size: clamp(2.6rem, 8vw, 6.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
+    .sb-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
+
+    .sb-sec { padding: clamp(4rem, 10vh, 7rem) var(--gutter); }
+    .sb-hero + .sb-sec, .sb-sec + .sb-sec { border-top: 1px solid rgba(242,244,236,.12); }
+    .sb-label { font-size: .95rem; color: rgba(242,244,236,.6); }
+    .sb-h2 { margin-top: .5rem; max-width: 20ch; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+    .sb-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); }
+    .sb-link { display: inline-flex; align-items: center; gap: .55rem; margin-top: 2rem; font-weight: 600; font-size: .95rem; border-bottom: 2px solid var(--emas); padding-bottom: .2rem; }
+    .sb-link:hover { color: var(--emas); }
+
+    /* Pernyataan: satu kalimat besar, rata tengah, di latar paling pekat */
+    .sb-statement { background: #0f2417; text-align: center; }
+    .sb-statement p { margin: 0 auto; max-width: 26em; font-size: clamp(1.6rem, 3.8vw, 3.2rem); font-weight: 800; line-height: 1.15; letter-spacing: -.03em; }
+
+    /* Pilar: section terang sebagai jeda, judul + foto menempel di kiri */
+    .sb-light { background: var(--krem); color: var(--hijau); }
+    .sb-light .sb-label { color: rgba(22,50,31,.6); }
+    .sb-split { display: grid; grid-template-columns: 1fr; gap: 3rem; }
+    @media (min-width: 900px) { .sb-split { grid-template-columns: 5fr 7fr; gap: 5rem; align-items: start; } .sb-sticky { position: sticky; top: 7rem; } }
+    .sb-photo-tall { display: block; width: 100%; margin-top: 2.5rem; aspect-ratio: 4 / 5; object-fit: cover; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .sb-pillars { list-style: none; margin: 0; padding: 0; }
+    .sb-pil { padding: 1.75rem 0; border-top: 1px solid rgba(22,50,31,.2); }
+    .sb-pil:last-child { border-bottom: 1px solid rgba(22,50,31,.2); }
+    .sb-pil-no { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; color: rgba(22,50,31,.2); }
+    .sb-pil h3 { margin-top: .75rem; font-size: clamp(1.5rem, 2.8vw, 2.3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+    .sb-pil p { margin-top: .6rem; max-width: 34rem; color: rgba(22,50,31,.78); }
+
+    /* Angka: pita lebar berlatar foto, angka raksasa rata tengah */
+    .sb-band { position: relative; isolation: isolate; overflow: hidden; text-align: center; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .sb-band::after { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(15,36,23,.8); }
+    .sb-band .sb-h2, .sb-band .sb-p { margin-left: auto; margin-right: auto; }
+    .sb-stats { margin: clamp(2.5rem, 6vh, 4rem) 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr)); gap: 2.5rem 3rem; }
+    .sb-stat-value { font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; color: var(--emas); }
+    .sb-stat-label { margin-top: .75rem; font-size: 1rem; color: rgba(242,244,236,.8); }
+
+    /* Program CSR */
+    .sb-bar { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
+    .sb-tabs { display: flex; flex-wrap: wrap; gap: .75rem 1.75rem; }
+    .sb-tab { padding: 0 0 .2rem; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-weight: 600; font-size: .95rem; color: rgba(242,244,236,.6); cursor: pointer; transition: color .2s, border-color .2s; }
+    .sb-tab:hover { color: var(--krem); }
+    .sb-tab[aria-selected="true"] { color: var(--krem); border-bottom-color: var(--emas); }
+    .sb-tab span { margin-right: .4rem; }
+    .sb-arrows { display: flex; gap: .6rem; }
+    .sb-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(242,244,236,.4); background: transparent; color: var(--krem); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .sb-btn:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .sb-btn svg { width: 20px; height: 20px; }
+    .sb-panel[hidden] { display: none; }
+    .sb-panel-desc { margin-top: 2.5rem; max-width: 40rem; }
+    .sb-panel-desc h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 700; letter-spacing: -.02em; }
+    .sb-panel-desc p { margin-top: .75rem; color: rgba(242,244,236,.75); }
+    .sb-acts { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr; gap: 2.5rem 1.5rem; }
+    @media (min-width: 700px)  { .sb-acts { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1100px) { .sb-acts { grid-template-columns: repeat(3, 1fr); } }
+    .sb-act-img { display: block; width: 100%; padding: 0; border: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); cursor: pointer; }
+    .sb-act-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+    .sb-act-img:hover img { transform: scale(1.04); }
+    .sb-act-meta { margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; font-size: .85rem; color: rgba(242,244,236,.6); }
+    .sb-act h4 { margin-top: .35rem; font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+    .sb-act-story { margin-top: .5rem; font-size: .95rem; color: rgba(242,244,236,.7); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .sb-act-more { margin-top: 1rem; padding: 0 0 .15rem; border: 0; border-bottom: 2px solid var(--emas); background: none; color: var(--krem); font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; }
+    .sb-act-more:hover { color: var(--emas); }
+    .sb-empty { margin-top: 2.5rem; padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; }
+
+    /* Popup cerita kegiatan */
+    .sb-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,8,5,.9); overflow-y: auto; }
+    .sb-modal[hidden] { display: none; }
+    .sb-dialog { position: relative; width: min(100%, 44rem); max-height: 90vh; overflow-y: auto; border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; background: #102a1a; }
+    .sb-dialog img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+    .sb-dialog-body { padding: 1.5rem; }
+    .sb-dialog h3 { margin-top: .5rem; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+    .sb-dialog-story { margin-top: 1rem; color: rgba(242,244,236,.8); white-space: pre-line; }
+    .sb-close { position: absolute; top: .75rem; right: .75rem; }
+    .sb-close.sb-btn { background: rgba(16,42,26,.8); }
+</style>
+
+<div class="sb">
+
+    {{-- HERO berfoto --}}
+    <header class="sb-hero">
+        <img class="sb-bg" src="{{ asset('images/' . $fotoHero) }}" alt="" onerror="this.style.display='none'">
+        <div class="sb-hero-inner">
+            <nav class="sb-crumb" aria-label="Breadcrumb">
+                <a href="{{ url('/') }}">Beranda</a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Keberlanjutan</span>
+            </nav>
+            <h1 class="sb-title">Komitmen untuk Keberlanjutan</h1>
+            <p class="sb-lead">Menjaga keseimbangan antara produktivitas, lingkungan, dan kesejahteraan masyarakat.</p>
         </div>
-    </div>
+    </header>
 
-    <!-- Overlay -->
-    <div class="absolute inset-0 hero-marquee-overlay"></div>
-
-    <!-- Konten Teks -->
-    <div class="relative w-full max-w-5xl mx-auto px-6 lg:px-8 text-center z-10">
-
-        <!-- Icon aksen -->
-        <div class="sustain-fade sustain-delay-1 flex justify-center mb-4">
-            <div class="sustain-icon-badge">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c-1.5 4-4 6-4 10a4 4 0 008 0c0-4-2.5-6-4-10z"/>
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21v-6"/>
-                </svg>
-            </div>
-        </div>
-
-        <span class="sustain-fade sustain-delay-2 block font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Keberlanjutan</span>
-        <h1 class="sustain-fade sustain-delay-3 mt-3 font-heading font-bold text-3xl md:text-5xl">Komitmen untuk Keberlanjutan</h1>
-        <p class="sustain-fade sustain-delay-4 mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
-            Menjaga keseimbangan antara produktivitas, lingkungan, dan kesejahteraan masyarakat.
+    {{-- PERNYATAAN --}}
+    <section class="sb-sec sb-statement">
+        <p>
+            Setiap keputusan operasional kami berpijak pada pilar-pilar utama ini, demi keberlanjutan
+            usaha dan manfaat jangka panjang bagi lingkungan serta masyarakat sekitar.
         </p>
+    </section>
 
-        <!-- Highlight angka singkat -->
-        <div class="sustain-fade sustain-delay-5 flex flex-wrap justify-center gap-4 mt-8">
+    {{-- PILAR (section terang) --}}
+    <section class="sb-sec sb-light">
+        <div class="sb-split">
+            <div class="sb-sticky">
+                <p class="sb-label">Fondasi kami</p>
+                <h2 class="sb-h2">Pilar Keberlanjutan</h2>
+                <img class="sb-photo-tall" src="{{ asset('images/' . $fotoPilar) }}" alt="" loading="lazy" onerror="this.style.display='none'">
+            </div>
+            <ul class="sb-pillars">
+                @foreach($pillars as $pillar)
+                <li class="sb-pil">
+                    <span class="sb-pil-no">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                    <h3>{{ $pillar['title'] }}</h3>
+                    <p>{{ $pillar['desc'] }}</p>
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </section>
+
+    {{-- ANGKA (pita foto lebar) --}}
+    <section class="sb-sec sb-band" data-counter-section>
+        <img class="sb-bg" src="{{ asset('images/' . $fotoAngka) }}" alt="" loading="lazy" onerror="this.style.display='none'">
+        <p class="sb-label">Pencapaian kami</p>
+        <h2 class="sb-h2">Keberlanjutan dalam Angka</h2>
+        <p class="sb-p">Sejumlah pencapaian yang mencerminkan konsistensi kami dalam menjalankan praktik berkelanjutan.</p>
+        <div class="sb-stats">
             @foreach($statistics as $stat)
-            <div class="sustain-stat-chip">
-                <span class="sustain-stat-value">{{ $stat['value'] }}</span>
-                <span class="sustain-stat-label">{{ $stat['label'] }}</span>
+            <div>
+                <p class="sb-stat-value" data-counter="{{ $stat['value'] }}">{{ $stat['value'] }}</p>
+                <p class="sb-stat-label">{{ $stat['label'] }}</p>
             </div>
             @endforeach
         </div>
-    </div>
-</section>
+    </section>
 
-{{-- ============================= --}}
-{{-- TIGA PILAR KEBERLANJUTAN --}}
-{{-- ============================= --}}
-<section class="py-20 lg:py-24 bg-cream">
-    <div class="max-w-7xl mx-auto px-6 lg:px-8">
-
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Fondasi Kami</span>
-            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Pilar Keberlanjutan</h2>
-            <p class="mt-4 text-gray-text leading-relaxed">
-                Setiap keputusan operasional kami berpijak pada tiga pilar utama ini, demi keberlanjutan
-                usaha dan manfaat jangka panjang bagi lingkungan serta masyarakat sekitar.
-            </p>
-        </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            @foreach($pillars as $pillar)
-            <div class="group relative bg-white rounded-brand border border-dark-green/10 p-8 shadow-sm hover:shadow-xl hover:-translate-y-1.5 transition-all duration-300 overflow-hidden">
-
-                <span class="block font-heading font-extrabold text-3xl text-secondary-green/40 group-hover:text-secondary-green transition-colors duration-300 mb-4">
-                    {{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}
-                </span>
-
-                <h3 class="relative font-heading font-bold text-lg text-dark-green mb-2.5">{{ $pillar['title'] }}</h3>
-                <p class="relative text-sm text-gray-text leading-relaxed">{{ $pillar['desc'] }}</p>
-
-                <span class="absolute bottom-0 left-0 w-0 group-hover:w-full h-1 bg-secondary-green transition-all duration-500"></span>
-            </div>
-            @endforeach
-        </div>
-    </div>
-</section>
-
-{{-- ============================= --}}
-{{-- KEBERLANJUTAN DALAM ANGKA --}}
-{{-- ============================= --}}
-<section data-counter-section class="relative py-20 lg:py-24 bg-dark-green overflow-hidden">
-    <div class="absolute inset-0 opacity-[0.05]" style="background-image: radial-gradient(circle at 20% 20%, #ffffff, transparent 45%), radial-gradient(circle at 85% 75%, #ffffff, transparent 40%);"></div>
-
-    <div class="relative max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Pencapaian Kami</span>
-            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-white">Keberlanjutan dalam Angka</h2>
-            <p class="mt-4 text-white/70 leading-relaxed">
-                Sejumlah pencapaian yang mencerminkan konsistensi kami dalam menjalankan praktik berkelanjutan.
-            </p>
-        </div>
-
-        <div class="flex flex-wrap justify-center gap-4 md:gap-6">
-            @foreach($statistics as $stat)
-            <div class="w-[47%] sm:w-56 md:w-60 bg-white/10 border border-white/15 rounded-brand p-6 md:p-8 text-center backdrop-blur-sm hover:bg-white/15 hover:-translate-y-1 transition-all duration-300">
-                <p data-counter="{{ $stat['value'] }}" class="font-heading font-extrabold text-3xl md:text-5xl text-gold">0</p>
-                <p class="mt-3 text-xs md:text-base text-white/70 leading-snug">{{ $stat['label'] }}</p>
-            </div>
-            @endforeach
-        </div>
-
-        <p class="text-center mt-8 text-xs text-white/40">*Angka statistik dapat diperbarui melalui data perusahaan.</p>
-    </div>
-</section>
-
-{{-- ============================= --}}
-{{-- PROGRAM CSR (sekarang dari database, dikelola dari admin) --}}
-{{-- ============================= --}}
-<section class="pt-16 pb-20 lg:pt-20 lg:pb-24 bg-cream">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto">
-            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Program CSR</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-4xl text-dark-green">
-                Kontribusi Kami untuk Masyarakat
-            </h2>
-            <p class="mt-4 text-gray-text leading-relaxed">
-                Pilar-pilar utama program tanggung jawab sosial perusahaan yang kami jalankan secara berkelanjutan.
-            </p>
-        </div>
+    {{-- PROGRAM CSR (dari database, dikelola dari admin) --}}
+    <section class="sb-sec">
+        <p class="sb-label">Program CSR</p>
+        <h2 class="sb-h2">Kontribusi Kami untuk Masyarakat</h2>
+        <p class="sb-p">Pilar-pilar utama program tanggung jawab sosial perusahaan yang kami jalankan secara berkelanjutan.</p>
 
         @if($csrCategories->isNotEmpty())
-
-        <!-- Kartu Kategori CSR -->
-        <div class="mt-12 bg-white rounded-brand border border-dark-green/10 shadow-sm p-3 md:p-4">
-            <div class="flex flex-wrap justify-center gap-3" id="csr-tabs">
+        <div class="sb-bar">
+            <div class="sb-tabs" role="tablist" aria-label="Kategori program CSR">
                 @foreach($csrCategories as $index => $category)
-                <button type="button"
-                        class="csr-tab-btn {{ $index === 0 ? 'active' : '' }} flex-none w-[calc(50%-0.375rem)] sm:w-[calc(33.333%-0.5rem)] lg:flex-1 lg:w-auto lg:min-w-[130px]"
-                        data-target="csr-panel-{{ $index }}"
-                        onclick="switchCsrTab({{ $index }})">
-                    <span class="csr-tab-icon">{{ $category->icon }}</span>
-                    <span class="csr-tab-title">{{ $category->title }}</span>
+                <button type="button" class="sb-tab" role="tab" data-sb-tab aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                    @if($category->icon)<span aria-hidden="true">{{ $category->icon }}</span>@endif{{ $category->title }}
                 </button>
                 @endforeach
             </div>
+            @if($csrCategories->count() > 1)
+            <div class="sb-arrows">
+                <button type="button" class="sb-btn" data-sb-nav="-1" aria-label="Program CSR sebelumnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button type="button" class="sb-btn" data-sb-nav="1" aria-label="Program CSR selanjutnya">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                </button>
+            </div>
+            @endif
         </div>
-        
-        <!-- Deskripsi & Galeri Kegiatan per Kategori, dengan navigasi kategori di sisi kiri-kanan -->
-        <div class="csr-carousel-wrap">
-            <button type="button" class="csr-nav-arrow csr-nav-prev" onclick="csrNavCategory(-1)" aria-label="Program CSR Sebelumnya">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-            </button>
 
-            <div class="csr-carousel-content">
-                @foreach($csrCategories as $index => $category)
-                <div id="csr-panel-{{ $index }}" class="csr-panel {{ $index === 0 ? 'active' : '' }}">
-                    <div class="csr-panel-desc">
-                        <h3 class="font-heading font-bold text-xl text-dark-green">{{ $category->title }}</h3>
-                        <p class="mt-2 text-gray-text leading-relaxed">{{ $category->description }}</p>
+        @foreach($csrCategories as $index => $category)
+        <div class="sb-panel" data-sb-panel role="tabpanel" @unless($index === 0) hidden @endunless>
+            <div class="sb-panel-desc">
+                <h3>{{ $category->title }}</h3>
+                <p>{{ $category->description }}</p>
+            </div>
+
+            @if($category->activities->isNotEmpty())
+            <div class="sb-acts">
+                @foreach($category->activities as $activity)
+                @php $imageUrl = $activity->image ? asset('storage/' . $activity->image) : null; @endphp
+                <article class="sb-act"
+                         data-title="{{ $activity->title }}" data-date="{{ $activity->date }}"
+                         data-location="{{ $activity->location }}" data-story="{{ $activity->story }}"
+                         data-image="{{ $imageUrl }}">
+                    <button type="button" class="sb-act-img" data-sb-open aria-label="Baca selengkapnya: {{ $activity->title }}">
+                        @if($imageUrl)
+                            <img src="{{ $imageUrl }}" alt="" loading="lazy" onerror="this.style.display='none'">
+                        @endif
+                    </button>
+                    <div class="sb-act-meta">
+                        <span>{{ $activity->date }}</span>
+                        <span>{{ $activity->location }}</span>
                     </div>
-
-                    @if($category->activities->isNotEmpty())
-                    {{-- BARU: grid kartu kegiatan (menggantikan csr-gallery + csr-timeline-card) --}}
-                    <div class="csr-act-grid">
-                        @foreach($category->activities as $activity)
-                        @php
-                            $imageUrl = $activity->image
-                                ? asset('storage/' . $activity->image)
-                                : 'https://placehold.co/800x600/164A2E/F5F1E8?text=Foto+Kegiatan';
-                        @endphp
-                        <article class="csr-act-card"
-                                 data-title="{{ $activity->title }}"
-                                 data-date="{{ $activity->date }}"
-                                 data-location="{{ $activity->location }}"
-                                 data-story="{{ $activity->story }}"
-                                 data-image="{{ $imageUrl }}">
-
-                            <div class="csr-act-media" data-csr-open>
-                                <img src="{{ $imageUrl }}"
-                                     alt="{{ $activity->title }}"
-                                     loading="lazy"
-                                     onerror="this.onerror=null;this.src='https://placehold.co/800x600/164A2E/F5F1E8?text=Foto+Kegiatan'">
-                                <div class="csr-act-date">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                                    <span>{{ $activity->date }}</span>
-                                </div>
-                            </div>
-
-                            <div class="csr-act-body">
-                                <div class="csr-act-location">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                                    <span>{{ $activity->location }}</span>
-                                </div>
-                                <h4 class="csr-act-title font-heading font-bold">{{ $activity->title }}</h4>
-                                <p class="csr-act-story">{{ $activity->story }}</p>
-                                <button type="button" class="csr-act-more" data-csr-open>Baca selengkapnya</button>
-                            </div>
-                        </article>
-                        @endforeach
-                    </div>
-                    @else
-                    <p class="text-gray-text text-sm mt-6">Belum ada kegiatan untuk kategori ini.</p>
-                    @endif
-                </div>
+                    <h4>{{ $activity->title }}</h4>
+                    <p class="sb-act-story">{{ $activity->story }}</p>
+                    <button type="button" class="sb-act-more" data-sb-open>Baca selengkapnya</button>
+                </article>
                 @endforeach
             </div>
-
-            <button type="button" class="csr-nav-arrow csr-nav-next" onclick="csrNavCategory(1)" aria-label="Program CSR Selanjutnya">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-            </button>
+            @else
+            <p class="sb-empty">Belum ada kegiatan untuk kategori ini.</p>
+            @endif
         </div>
-
-        <!-- Progress Dots -->
-        <div class="csr-dots" id="csr-dots">
-            @foreach($csrCategories as $index => $category)
-            <button type="button"
-                    class="csr-dot {{ $index === 0 ? 'active' : '' }}"
-                    data-dot-index="{{ $index }}"
-                    onclick="switchCsrTab({{ $index }})"
-                    aria-label="Ke kategori {{ $category->title }}">
-            </button>
-            @endforeach
-        </div>
+        @endforeach
 
         @else
-        <div class="text-center py-16">
-            <p class="text-gray-text">Belum ada kategori CSR yang ditambahkan.</p>
-        </div>
+        <p class="sb-empty">Belum ada kategori CSR yang ditambahkan.</p>
         @endif
+    </section>
 
-        <!-- CTA penutup -->
-        <div class="mt-16 text-center">
-            <p class="font-body text-dark-text text-base md:text-lg font-medium mb-5">
-                Ingin tahu lebih jauh tentang komitmen keberlanjutan kami atau berdiskusi soal kerja sama program CSR?
-            </p>
-            <a href="{{ url('/kontak') }}"
-               class="inline-flex items-center gap-2.5 bg-secondary-green hover:bg-dark-green text-white font-heading font-semibold text-sm md:text-base px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-                <span>Hubungi Tim Kami</span>
-                <i class="bi bi-arrow-right"></i>
-            </a>
-        </div>
-    </div>
-</section>
+    {{-- PENUTUP --}}
+    <section class="sb-sec">
+        <h2 class="sb-h2" style="max-width:24ch">Ingin tahu lebih jauh atau berdiskusi soal program CSR?</h2>
+        <p class="sb-p">Ingin tahu lebih jauh tentang komitmen keberlanjutan kami atau berdiskusi soal kerja sama program CSR?</p>
+        <a class="sb-link" href="{{ route('contact') }}">Hubungi Tim Kami</a>
+    </section>
 
-{{-- BARU: Popup cerita lengkap kegiatan (satu popup dipakai semua kartu) --}}
-<div id="csr-modal" class="csr-modal" role="dialog" aria-modal="true" aria-labelledby="csr-modal-title" aria-hidden="true">
-    <div class="csr-modal-backdrop" data-csr-close></div>
-    <div class="csr-modal-dialog">
-        <button type="button" class="csr-modal-close" data-csr-close aria-label="Tutup">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
-        </button>
-        <img id="csr-modal-img" class="csr-modal-img" src="" alt=""
-             onerror="this.onerror=null;this.src='https://placehold.co/800x450/164A2E/F5F1E8?text=Foto+Kegiatan'">
-        <div class="csr-modal-body">
-            <div class="csr-modal-meta">
-                <span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
-                    <b id="csr-modal-date" class="font-medium"></b>
-                </span>
-                <span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-                    <b id="csr-modal-location" class="font-medium"></b>
-                </span>
+    {{-- POPUP: satu popup dipakai semua kartu kegiatan --}}
+    <div class="sb-modal" id="sbModal" role="dialog" aria-modal="true" aria-labelledby="sbModalTitle" hidden>
+        <div class="sb-dialog">
+            <button type="button" class="sb-btn sb-close" id="sbClose" aria-label="Tutup">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+            <img id="sbModalImg" src="" alt="">
+            <div class="sb-dialog-body">
+                <p class="sb-act-meta" style="margin-top:0"><span id="sbModalDate"></span><span id="sbModalLoc"></span></p>
+                <h3 id="sbModalTitle"></h3>
+                <p class="sb-dialog-story" id="sbModalStory"></p>
             </div>
-            <h3 id="csr-modal-title" class="csr-modal-title font-heading font-bold"></h3>
-            <p id="csr-modal-story" class="csr-modal-story"></p>
         </div>
     </div>
+
 </div>
 
 <script>
-const csrTotalCategories = {{ count($csrCategories) }};
-let csrCurrentCategory = 0;
-
-function switchCsrTab(index) {
-    document.querySelectorAll('.csr-tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.csr-panel').forEach(panel => panel.classList.remove('active'));
-    document.querySelectorAll('.csr-dot').forEach(dot => dot.classList.remove('active'));
-
-    document.querySelectorAll('.csr-tab-btn')[index].classList.add('active');
-    document.getElementById(`csr-panel-${index}`).classList.add('active');
-    const dot = document.querySelector(`.csr-dot[data-dot-index="${index}"]`);
-    if (dot) dot.classList.add('active');
-
-    csrCurrentCategory = index;
-}
-
-function csrNavCategory(direction) {
-    let next = csrCurrentCategory + direction;
-    if (next < 0) next = csrTotalCategories - 1;
-    if (next >= csrTotalCategories) next = 0;
-    switchCsrTab(next);
-}
-
-// BARU: popup cerita lengkap kegiatan
-(function () {
-    const modal = document.getElementById('csr-modal');
-    if (!modal) return;
-
-    const imgEl      = document.getElementById('csr-modal-img');
-    const titleEl    = document.getElementById('csr-modal-title');
-    const dateEl     = document.getElementById('csr-modal-date');
-    const locationEl = document.getElementById('csr-modal-location');
-    const storyEl    = document.getElementById('csr-modal-story');
-    const closeBtn   = modal.querySelector('.csr-modal-close');
-    let lastFocused  = null;
-
-    function openModal(card) {
-        imgEl.src = card.dataset.image;
-        imgEl.alt = card.dataset.title;
-        titleEl.textContent = card.dataset.title;
-        dateEl.textContent = card.dataset.date;
-        locationEl.textContent = card.dataset.location;
-        storyEl.textContent = card.dataset.story;
-
-        lastFocused = document.activeElement;
-        modal.classList.add('is-open');
-        modal.setAttribute('aria-hidden', 'false');
-        document.body.classList.add('csr-modal-open');
-        closeBtn.focus();
-    }
-
-    function closeModal() {
-        modal.classList.remove('is-open');
-        modal.setAttribute('aria-hidden', 'true');
-        document.body.classList.remove('csr-modal-open');
-        if (lastFocused) lastFocused.focus();
-    }
-
-    document.addEventListener('click', function (e) {
-        const opener = e.target.closest('[data-csr-open]');
-        if (opener) {
-            const card = opener.closest('.csr-act-card');
-            if (card) openModal(card);
-            return;
+    // Tab kategori CSR + tombol panah
+    (function () {
+        const tabs = [...document.querySelectorAll('[data-sb-tab]')];
+        const panels = [...document.querySelectorAll('[data-sb-panel]')];
+        if (!tabs.length) return;
+        let cur = 0;
+        function show(i) {
+            cur = (i + tabs.length) % tabs.length;
+            tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === cur ? 'true' : 'false'); });
+            panels.forEach(function (p, k) { p.hidden = k !== cur; });
         }
-        if (e.target.closest('[data-csr-close]')) closeModal();
-    });
+        tabs.forEach(function (t, k) { t.addEventListener('click', function () { show(k); }); });
+        document.querySelectorAll('[data-sb-nav]').forEach(function (b) {
+            b.addEventListener('click', function () { show(cur + Number(b.dataset.sbNav)); });
+        });
+    })();
 
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape' && modal.classList.contains('is-open')) closeModal();
-    });
-})();
+    // Popup cerita lengkap kegiatan
+    (function () {
+        const modal = document.getElementById('sbModal');
+        if (!modal) return;
+        const img = document.getElementById('sbModalImg');
+        const closeBtn = document.getElementById('sbClose');
+        let last = null;
 
-// Animasi angka counter saat section masuk viewport
-document.addEventListener('DOMContentLoaded', function () {
-    const counterSection = document.querySelector('[data-counter-section]');
-    if (!counterSection) return;
+        function open(card) {
+            img.hidden = !card.dataset.image;
+            img.src = card.dataset.image || '';
+            img.alt = card.dataset.title;
+            document.getElementById('sbModalTitle').textContent = card.dataset.title;
+            document.getElementById('sbModalDate').textContent = card.dataset.date;
+            document.getElementById('sbModalLoc').textContent = card.dataset.location;
+            document.getElementById('sbModalStory').textContent = card.dataset.story;
+            last = document.activeElement;
+            modal.hidden = false;
+            document.body.style.overflow = 'hidden';
+            closeBtn.focus();
+        }
+        function close() {
+            modal.hidden = true;
+            document.body.style.overflow = '';
+            if (last) last.focus();
+        }
 
-    const counters = counterSection.querySelectorAll('[data-counter]');
-    let hasAnimated = false;
+        document.addEventListener('click', function (e) {
+            const opener = e.target.closest('[data-sb-open]');
+            if (opener) { open(opener.closest('.sb-act')); return; }
+            if (e.target === modal || e.target.closest('#sbClose')) close();
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !modal.hidden) close(); });
+    })();
 
-    function animateCounters() {
-        counters.forEach(el => {
-            const rawValue = el.getAttribute('data-counter');
-            const numericMatch = rawValue.match(/[\d.,]+/);
-            if (!numericMatch) return;
+    // Animasi angka saat section masuk layar (dilewati bila "kurangi gerakan")
+    document.addEventListener('DOMContentLoaded', function () {
+        const section = document.querySelector('[data-counter-section]');
+        if (!section || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-            const suffix = rawValue.replace(numericMatch[0], '');
-            const target = parseFloat(numericMatch[0].replace(/,/g, ''));
-            const duration = 1500;
-            const startTime = performance.now();
+        const counters = [...section.querySelectorAll('[data-counter]')].filter(function (el) {
+            return /[\d.,]+/.test(el.dataset.counter);
+        });
+        counters.forEach(function (el) {
+            const raw = el.dataset.counter;
+            el.textContent = raw.replace(/[\d.,]+/, '0');
+        });
 
-            function tick(now) {
-                const progress = Math.min((now - startTime) / duration, 1);
-                const eased = 1 - Math.pow(1 - progress, 3);
-                const current = Math.floor(eased * target);
-                el.textContent = current.toLocaleString('id-ID') + suffix;
-
-                if (progress < 1) {
-                    requestAnimationFrame(tick);
-                } else {
-                    el.textContent = target.toLocaleString('id-ID') + suffix;
+        function run() {
+            counters.forEach(function (el) {
+                const raw = el.dataset.counter;
+                const num = raw.match(/[\d.,]+/)[0];
+                const suffix = raw.replace(num, '');
+                const target = parseFloat(num.replace(/,/g, ''));
+                const start = performance.now(), dur = 1500;
+                function tick(now) {
+                    const p = Math.min((now - start) / dur, 1);
+                    const eased = 1 - Math.pow(1 - p, 3);
+                    el.textContent = (p < 1 ? Math.floor(eased * target) : target).toLocaleString('id-ID') + suffix;
+                    if (p < 1) requestAnimationFrame(tick);
                 }
-            }
-            requestAnimationFrame(tick);
-        });
-    }
+                requestAnimationFrame(tick);
+            });
+        }
 
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting && !hasAnimated) {
-                hasAnimated = true;
-                animateCounters();
-                observer.disconnect();
-            }
-        });
-    }, { threshold: 0.4 });
-
-    observer.observe(counterSection);
-});
+        const io = new IntersectionObserver(function (entries) {
+            if (entries.some(function (e) { return e.isIntersecting; })) { io.disconnect(); run(); }
+        }, { threshold: 0.4 });
+        io.observe(section);
+    });
 </script>
+
 @endsection

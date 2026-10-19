@@ -4,419 +4,226 @@
 
 @section('content')
 
-{{-- ============================= --}}
-{{-- HERO SECTION - HALAMAN KONTAK --}}
-{{-- ============================= --}}
-<section class="relative overflow-hidden bg-dark-green py-28 md:py-36 lg:py-40">
+@php
+    $lokasi = [
+        'kantor-pusat' => [
+            'label'  => 'Kantor Pusat',
+            'alamat' => 'Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36, Kel. Hamdan, Kec. Medan Maimun, Kota Medan, Sumatera Utara',
+            'q'      => 'Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36, Kel. Hamdan, Kec. Medan Maimun, Kota Medan, Sumatera Utara',
+        ],
+        'site-operasional' => [
+            'label'  => 'Site / Operasional',
+            'alamat' => 'Jl. Lintas Medan KM 1, RT/RW 001/001 Kepenghuluan Sungai Meranti, Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983',
+            'q'      => 'Jl. Lintas Medan KM 1, Kepenghuluan Sungai Meranti, Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983',
+        ],
+    ];
 
-    {{-- Foto latar full-bleed --}}
-    {{-- TODO: ganti path gambar di bawah dengan foto asli kebun/operasional perusahaan --}}
-    <div class="absolute inset-0">
-        <img src="{{ asset('images/prosesnunggu.png') }}"
-             alt="Perkebunan Kelapa Sawit PT. Sahabat Sawit Rokan Sejahtera"
-             class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-r from-dark-green/95 via-dark-green/70 to-dark-green/20"></div>
-        <div class="absolute inset-0 bg-gradient-to-t from-dark-green/60 via-transparent to-transparent"></div>
-    </div>
+    $faq = [
+        ['Apa saja bidang usaha PT. Sahabat Sawit Rokan Sejahtera?',
+         'Kami bergerak di bidang perkebunan dan pengolahan kelapa sawit, mulai dari budidaya, panen, hingga distribusi hasil produksi, dengan berpegang pada prinsip pengelolaan yang bertanggung jawab.'],
+        ['Di mana lokasi kebun dan operasional perusahaan?',
+         'Kantor pusat kami berada di Kota Medan, Sumatera Utara, sedangkan area perkebunan dan operasional utama berlokasi di Kabupaten Rokan Hilir, Provinsi Riau.'],
+        ['Bagaimana cara menjalin kerja sama atau kemitraan?',
+         'Silakan hubungi tim kami melalui WhatsApp pada tombol di atas. Tim kami akan menindaklanjuti dan menjadwalkan diskusi lebih lanjut sesuai kebutuhan kerja sama Anda.'],
+        ['Apakah perusahaan membuka lowongan pekerjaan?',
+         'Informasi lowongan yang tersedia akan kami umumkan melalui halaman <a href="' . route('career') . '">Karir</a> di situs ini. Anda juga dapat menanyakan langsung melalui WhatsApp untuk informasi terbaru.'],
+        ['Bagaimana komitmen perusahaan terhadap keberlanjutan?',
+         'Kami menerapkan praktik perkebunan yang bertanggung jawab dan berkelanjutan, memperhatikan kelestarian lingkungan serta kesejahteraan masyarakat sekitar area operasional.'],
+    ];
+@endphp
 
-    <div class="relative max-w-7xl mx-auto px-6">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+<style>
+    /* Halaman Kontak — gaya disamakan dengan Home/Produk/Tentang Kami. Class berawalan "ct-". */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
 
-            {{-- Kolom Teks --}}
-            <div class="text-left">
+    .ct {
+        --hijau: #16321f; --hijau-muda: #2f5a3a; --emas: #e3a72f; --krem: #f2f4ec;
+        --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--hijau); color: var(--krem); line-height: 1.6;
+    }
+    .ct *, .ct *::before, .ct *::after { box-sizing: border-box; }
+    .ct a { color: inherit; text-decoration: none; }
+    .ct a:focus-visible, .ct button:focus-visible, .ct summary:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
 
-                <!-- Breadcrumb -->
-                <div class="contact-fade contact-delay-1 flex items-center gap-2 text-sm text-white/60 mb-6">
-                    <a href="{{ url('/') }}" class="hover:text-white transition-colors">Beranda</a>
-                    <span>/</span>
-                    <span class="text-white/90">Kontak</span>
-                </div>
+    .ct-hero { padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .ct-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
+    .ct-crumb a:hover { color: var(--krem); }
+    .ct-crumb [aria-current] { color: var(--krem); }
+    .ct-title { margin-top: 1.5rem; max-width: 16ch; font-size: clamp(2.4rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
+    .ct-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
+    .ct-links { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
+    .ct-link { display: inline-flex; align-items: center; gap: .55rem; font-weight: 600; font-size: .95rem; border-bottom: 2px solid var(--emas); padding-bottom: .2rem; }
+    .ct-link:hover { color: var(--emas); }
 
-                <span class="contact-fade contact-delay-2 block font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Kontak Kami</span>
+    .ct-sec { padding: clamp(4rem, 10vh, 7rem) var(--gutter); }
+    .ct-hero + .ct-sec, .ct-sec + .ct-sec { border-top: 1px solid rgba(242,244,236,.12); }
+    .ct-label { font-size: .95rem; color: rgba(242,244,236,.6); }
+    .ct-h2 { margin-top: .5rem; max-width: 20ch; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+    .ct-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); }
 
-                <h1 class="contact-fade contact-delay-3 mt-4 font-heading font-extrabold text-4xl md:text-5xl lg:text-[3.25rem] leading-[1.1] text-white uppercase">
-                    Terbuka untuk<br>
-                    Kerja Sama &amp;<br>
-                    Kemitraan Sawit
-                </h1>
+    /* Kanal kontak */
+    .ct-channels { display: grid; grid-template-columns: 1fr; gap: 2rem 3rem; }
+    @media (min-width: 900px) { .ct-channels { grid-template-columns: repeat(3, 1fr); } }
+    .ct-channel { display: block; padding-top: 1.25rem; border-top: 1px solid rgba(242,244,236,.2); }
+    .ct-channel-label { font-size: .95rem; color: rgba(242,244,236,.6); }
+    .ct-channel-value { margin-top: .4rem; font-size: clamp(1.25rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; overflow-wrap: anywhere; transition: color .25s; }
+    .ct-channel-hint { margin-top: .4rem; font-size: .9rem; color: rgba(242,244,236,.65); }
+    a.ct-channel:hover .ct-channel-value { color: var(--emas); }
 
-                <p class="contact-fade contact-delay-4 mt-6 max-w-md text-white/80 leading-relaxed text-base md:text-lg">
-                    Kami terbuka untuk menjalin kerja sama, kemitraan, maupun menjawab pertanyaan
-                    seputar PT. Sahabat Sawit Rokan Sejahtera. Tim kami siap membantu Anda.
-                </p>
+    /* Lokasi */
+    .ct-tabs { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; }
+    .ct-tab { padding: 0 0 .2rem; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-weight: 600; font-size: .95rem; color: rgba(242,244,236,.6); cursor: pointer; transition: color .2s, border-color .2s; }
+    .ct-tab:hover { color: var(--krem); }
+    .ct-tab[aria-selected="true"] { color: var(--krem); border-bottom-color: var(--emas); }
+    .ct-map { margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
+    @media (min-width: 900px) { .ct-map { grid-template-columns: 1fr 2fr; gap: 3rem; } }
+    .ct-addr-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -.02em; }
+    .ct-addr { margin-top: .75rem; color: rgba(242,244,236,.78); }
+    .ct-frame { display: block; width: 100%; height: clamp(320px, 45vw, 480px); border: 0; border-radius: .25rem; }
+    .ct-frame[hidden], .ct-panel[hidden] { display: none; }
 
-                <!-- CTA Utama Hero -->
-                <div class="contact-fade contact-delay-5 flex flex-wrap items-center gap-4 mt-9">
-                    <a href="https://wa.me/628139654581"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="inline-flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1EBE5A] text-white font-heading font-semibold text-sm md:text-base pl-6 pr-7 py-3.5 rounded-full shadow-lg shadow-[#25D366]/25 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-                        <i class="bi bi-whatsapp text-lg"></i>
-                        <span>Hubungi Kami</span>
-                    </a>
-                    <a href="mailto:info@sahabatsawitrokan.co.id"
-                       class="inline-flex items-center gap-2.5 text-white/90 hover:text-white font-heading font-semibold text-sm md:text-base transition-colors">
-                        <span class="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center">
-                            <i class="bi bi-envelope-fill text-sm"></i>
-                        </span>
-                        <span>Kirim Email</span>
-                    </a>
-                </div>
-            </div>
+    /* FAQ (details/summary: tanpa JavaScript) */
+    .ct-faq { margin-top: clamp(2.5rem, 6vh, 4rem); max-width: 52rem; }
+    .ct-faq details { border-top: 1px solid rgba(242,244,236,.15); }
+    .ct-faq details:last-child { border-bottom: 1px solid rgba(242,244,236,.15); }
+    .ct-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.25rem 0; list-style: none; cursor: pointer; font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 700; letter-spacing: -.01em; line-height: 1.25; transition: color .2s; }
+    .ct-faq summary::-webkit-details-marker { display: none; }
+    .ct-faq summary:hover { color: var(--emas); }
+    .ct-faq summary::after { content: '+'; flex: none; width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(242,244,236,.35); border-radius: 50%; font-size: 1.2rem; font-weight: 400; transition: transform .25s, background .25s, border-color .25s, color .25s; }
+    .ct-faq details[open] summary::after { transform: rotate(45deg); background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .ct-ans { max-width: 42rem; padding: 0 3.5rem 1.5rem 0; color: rgba(242,244,236,.75); }
+    .ct-ans a { border-bottom: 1px solid var(--emas); }
+</style>
 
-            {{-- Kolom Foto Bertumpuk --}}
-            <div class="contact-fade contact-delay-6 relative hidden lg:block h-[420px]">
-                {{-- TODO: ganti kedua path gambar berikut dengan foto asli (hasil panen & pekerja/operasional) --}}
-                <div class="absolute top-0 right-16 w-56 h-72 rounded-brand bg-white/10 border border-white/20 rotate-3 shadow-2xl overflow-hidden">
-                    <img src="{{ asset('images/hero/hasil-sawit.jpg') }}" alt="Hasil Kelapa Sawit" class="w-full h-full object-cover">
-                </div>
-                <div class="absolute bottom-0 right-0 w-64 h-80 rounded-brand -rotate-2 shadow-2xl overflow-hidden border-4 border-white/10">
-                    <img src="{{ asset('images/hero/pekerja-sawit.jpg') }}" alt="Pekerja PT. Sahabat Sawit Rokan Sejahtera" class="w-full h-full object-cover">
-                </div>
-            </div>
+<div class="ct">
+
+    {{-- HERO --}}
+    <header class="ct-hero">
+        <nav class="ct-crumb" aria-label="Breadcrumb">
+            <a href="{{ url('/') }}">Beranda</a>
+            <span aria-hidden="true">/</span>
+            <span aria-current="page">Kontak</span>
+        </nav>
+
+        <h1 class="ct-title">Terbuka untuk Kerja Sama & Kemitraan Sawit</h1>
+        <p class="ct-lead">
+            Kami terbuka untuk menjalin kerja sama, kemitraan, maupun menjawab pertanyaan
+            seputar PT. Sahabat Sawit Rokan Sejahtera. Tim kami siap membantu Anda.
+        </p>
+
+        <div class="ct-links">
+            <a class="ct-link" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Hubungi Kami lewat WhatsApp</a>
+            <a class="ct-link" href="mailto:info@sahabatsawitrokan.co.id">Kirim Email</a>
         </div>
-    </div>
+    </header>
 
-    {{-- Lengkung putih di bagian bawah hero --}}
-    <div class="absolute bottom-0 left-0 w-full leading-none pointer-events-none">
-        <svg viewBox="0 0 1440 100" class="w-full h-16 md:h-24" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M0,100 C280,10 620,100 1440,30 L1440,100 L0,100 Z" fill="var(--color-body-bg, #ffffff)"></path>
-        </svg>
-    </div>
-</section>
-
-{{-- ============================= --}}
-{{-- KANAL KONTAK --}}
-{{-- ============================= --}}
-<section class="relative -mt-6 md:-mt-10 z-10">
-    <div class="max-w-5xl mx-auto px-6">
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 md:gap-6">
-
-            <a href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer"
-               class="group bg-white rounded-brand border border-dark-green/10 shadow-lg p-7 text-center hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-                <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-[#25D366]/10 text-[#25D366] flex items-center justify-center text-2xl group-hover:bg-[#25D366] group-hover:text-white transition-colors duration-300">
-                    <i class="bi bi-whatsapp"></i>
-                </div>
-                <h3 class="font-heading font-bold text-dark-green mb-1.5">WhatsApp</h3>
-                <p class="font-body text-sm text-dark-text/70 mb-1">Respon tercepat untuk pertanyaan & kerja sama</p>
-                <span class="font-body text-sm text-secondary-green font-semibold">+62 813-9654-581</span>
+    {{-- KANAL KONTAK --}}
+    <section class="ct-sec">
+        <div class="ct-channels">
+            <a class="ct-channel" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">
+                <p class="ct-channel-label">WhatsApp</p>
+                <p class="ct-channel-value">+62 813-9654-581</p>
+                <p class="ct-channel-hint">Respon tercepat untuk pertanyaan & kerja sama</p>
             </a>
-
-            <a href="mailto:info@sahabatsawitrokan.co.id"
-               class="group bg-white rounded-brand border border-dark-green/10 shadow-lg p-7 text-center hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-                <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-secondary-green/10 text-secondary-green flex items-center justify-center text-2xl group-hover:bg-secondary-green group-hover:text-white transition-colors duration-300">
-                    <i class="bi bi-envelope-fill"></i>
-                </div>
-                <h3 class="font-heading font-bold text-dark-green mb-1.5">Email</h3>
-                <p class="font-body text-sm text-dark-text/70 mb-1">Untuk surat resmi, proposal, dan dokumen kerja sama</p>
-                <span class="font-body text-sm text-secondary-green font-semibold">info@sahabatsawitrokan.co.id</span>
+            <a class="ct-channel" href="mailto:info@sahabatsawitrokan.co.id">
+                <p class="ct-channel-label">Email</p>
+                <p class="ct-channel-value">info@sahabatsawitrokan.co.id</p>
+                <p class="ct-channel-hint">Untuk surat resmi, proposal, dan dokumen kerja sama</p>
             </a>
-
-            <div class="bg-white rounded-brand border border-dark-green/10 shadow-lg p-7 text-center hover:-translate-y-1.5 hover:shadow-xl transition-all duration-300">
-                <div class="w-14 h-14 mx-auto mb-4 rounded-full bg-secondary-green/10 text-secondary-green flex items-center justify-center text-2xl">
-                    <i class="bi bi-clock-fill"></i>
-                </div>
-                <h3 class="font-heading font-bold text-dark-green mb-1.5">Jam Operasional</h3>
-                <p class="font-body text-sm text-dark-text/70 mb-1">Senin – Jumat</p>
-                <span class="font-body text-sm text-secondary-green font-semibold">08.00 – 17.00 WIB</span>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- ============================= --}}
-{{-- INFORMASI LOKASI + MAPS (TAB) --}}
-{{-- ============================= --}}
-<section class="py-20 bg-body-bg">
-    <div class="max-w-5xl mx-auto px-6">
-
-        <div class="text-center mb-10">
-            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">Lokasi Kami</span>
-            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Titik Lokasi di Peta</h2>
-        </div>
-
-        {{-- Tab Switcher --}}
-        <div class="flex justify-center mb-8">
-            <div class="inline-flex bg-white border border-dark-green/10 rounded-full p-1.5 shadow-sm" id="map-tabs">
-                <button type="button"
-                        class="map-tab-btn active px-6 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300"
-                        data-target="kantor-pusat">
-                    Kantor Pusat
-                </button>
-                <button type="button"
-                        class="map-tab-btn px-6 py-2.5 rounded-full font-heading font-semibold text-sm transition-all duration-300"
-                        data-target="site-operasional">
-                    Site / Operasional
-                </button>
+            <div class="ct-channel">
+                <p class="ct-channel-label">Jam Operasional</p>
+                <p class="ct-channel-value">08.00 – 17.00 WIB</p>
+                <p class="ct-channel-hint">Senin – Jumat</p>
             </div>
         </div>
+    </section>
 
-        {{-- Kotak Maps + Kartu Info --}}
-        <div class="relative rounded-brand border border-dark-green/10 overflow-hidden shadow-sm">
+    {{-- LOKASI + PETA --}}
+    <section class="ct-sec">
+        <p class="ct-label">Lokasi kami</p>
+        <h2 class="ct-h2">Titik Lokasi di Peta</h2>
 
-            {{-- Kartu Info (overlay kiri atas) --}}
-            <div class="absolute top-4 left-4 z-10 w-[280px] max-w-[80%] bg-white rounded-brand shadow-lg p-5" id="map-info-card">
+        <div class="ct-tabs" role="tablist" aria-label="Pilih lokasi">
+            @foreach($lokasi as $key => $l)
+                <button type="button" class="ct-tab" role="tab" data-ct-tab="{{ $key }}"
+                        aria-selected="{{ $loop->first ? 'true' : 'false' }}">{{ $l['label'] }}</button>
+            @endforeach
+        </div>
 
-                <div id="info-kantor-pusat" class="map-info-panel">
-                    <div class="flex items-start justify-between gap-2">
-                        <h3 class="font-heading font-bold text-dark-green leading-snug">Kantor Pusat</h3>
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            <a href="https://www.google.com/maps?q=Jl.+Haji+Misbah,+Komplek+Multatuli+Indah+Blok+D+No.+36,+Kel.+Hamdan,+Kec.+Medan+Maimun,+Kota+Medan,+Sumatera+Utara"
-                               target="_blank" rel="noopener noreferrer"
-                               class="w-8 h-8 rounded-full bg-body-bg flex items-center justify-center text-dark-green hover:bg-secondary-green hover:text-white transition-colors">
-                                <i class="bi bi-box-arrow-up-right text-sm"></i>
-                            </a>
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=Jl.+Haji+Misbah,+Komplek+Multatuli+Indah+Blok+D+No.+36,+Kel.+Hamdan,+Kec.+Medan+Maimun,+Kota+Medan,+Sumatera+Utara"
-                               target="_blank" rel="noopener noreferrer"
-                               class="w-8 h-8 rounded-full bg-secondary-green flex items-center justify-center text-white hover:bg-dark-green transition-colors">
-                                <i class="bi bi-signpost-split-fill text-sm"></i>
-                            </a>
-                        </div>
+        <div class="ct-map">
+            <div>
+                @foreach($lokasi as $key => $l)
+                <div class="ct-panel" data-ct-panel="{{ $key }}" @unless($loop->first) hidden @endunless>
+                    <h3 class="ct-addr-title">{{ $l['label'] }}</h3>
+                    <p class="ct-addr">{{ $l['alamat'] }}</p>
+                    <div class="ct-links" style="margin-top:1.5rem">
+                        <a class="ct-link" href="https://www.google.com/maps?q={{ urlencode($l['q']) }}" target="_blank" rel="noopener noreferrer">Buka di Google Maps</a>
+                        <a class="ct-link" href="https://www.google.com/maps/dir/?api=1&destination={{ urlencode($l['q']) }}" target="_blank" rel="noopener noreferrer">Petunjuk arah</a>
                     </div>
-                    <p class="mt-2 font-body text-sm text-dark-text/80 leading-relaxed">
-                        Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36, Kel. Hamdan,
-                        Kec. Medan Maimun, Kota Medan, Sumatera Utara
-                    </p>
                 </div>
-
-                <div id="info-site-operasional" class="map-info-panel hidden">
-                    <div class="flex items-start justify-between gap-2">
-                        <h3 class="font-heading font-bold text-dark-green leading-snug">Site / Operasional</h3>
-                        <div class="flex items-center gap-1.5 shrink-0">
-                            <a href="https://www.google.com/maps?q=Jl.+Lintas+Medan+KM+1,+Kepenghuluan+Sungai+Meranti,+Kec.+Tanjung+Medan,+Kab.+Rokan+Hilir,+Riau+28983"
-                               target="_blank" rel="noopener noreferrer"
-                               class="w-8 h-8 rounded-full bg-body-bg flex items-center justify-center text-dark-green hover:bg-secondary-green hover:text-white transition-colors">
-                                <i class="bi bi-box-arrow-up-right text-sm"></i>
-                            </a>
-                            <a href="https://www.google.com/maps/dir/?api=1&destination=Jl.+Lintas+Medan+KM+1,+Kepenghuluan+Sungai+Meranti,+Kec.+Tanjung+Medan,+Kab.+Rokan+Hilir,+Riau+28983"
-                               target="_blank" rel="noopener noreferrer"
-                               class="w-8 h-8 rounded-full bg-secondary-green flex items-center justify-center text-white hover:bg-dark-green transition-colors">
-                                <i class="bi bi-signpost-split-fill text-sm"></i>
-                            </a>
-                        </div>
-                    </div>
-                    <p class="mt-2 font-body text-sm text-dark-text/80 leading-relaxed">
-                        Jl. Lintas Medan KM 1, RT/RW 001/001 Kepenghuluan Sungai Meranti,
-                        Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983
-                    </p>
-                </div>
+                @endforeach
             </div>
 
-            {{-- Iframe Peta --}}
-            <div class="w-full h-[480px]">
-                <iframe
-                    id="map-frame-kantor-pusat"
-                    src="https://www.google.com/maps?q=Jl.+Haji+Misbah,+Komplek+Multatuli+Indah+Blok+D+No.+36,+Kel.+Hamdan,+Kec.+Medan+Maimun,+Kota+Medan,+Sumatera+Utara&output=embed"
-                    class="map-frame w-full h-full border-0"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="Peta Lokasi Kantor Pusat PT. Sahabat Sawit Rokan Sejahtera">
-                </iframe>
-                <iframe
-                    id="map-frame-site-operasional"
-                    src="https://www.google.com/maps?q=Jl.+Lintas+Medan+KM+1,+Kepenghuluan+Sungai+Meranti,+Kec.+Tanjung+Medan,+Kab.+Rokan+Hilir,+Riau+28983&output=embed"
-                    class="map-frame w-full h-full border-0 hidden"
-                    loading="lazy"
-                    referrerpolicy="no-referrer-when-downgrade"
-                    title="Peta Lokasi Site Operasional PT. Sahabat Sawit Rokan Sejahtera">
-                </iframe>
+            <div>
+                @foreach($lokasi as $key => $l)
+                <iframe class="ct-frame" data-ct-frame="{{ $key }}" @unless($loop->first) hidden @endunless
+                        src="https://www.google.com/maps?q={{ urlencode($l['q']) }}&output=embed"
+                        loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+                        title="Peta Lokasi {{ $l['label'] }} PT. Sahabat Sawit Rokan Sejahtera"></iframe>
+                @endforeach
             </div>
         </div>
-    </div>
-</section>
+    </section>
 
-{{-- ============================= --}}
-{{-- FAQ SECTION --}}
-{{-- ============================= --}}
-<section class="py-20 bg-cream">
-    <div class="max-w-3xl mx-auto px-6">
-        <div class="text-center mb-14">
-            <span class="font-heading font-semibold text-secondary-green uppercase text-sm tracking-widest">FAQ</span>
-            <h2 class="mt-3 font-heading font-bold text-3xl md:text-4xl text-dark-green">Pertanyaan yang Sering Diajukan</h2>
-            <p class="mt-4 text-dark-text/80 leading-relaxed">
-                Beberapa hal yang paling sering ditanyakan seputar perusahaan dan kerja sama dengan kami.
-                Tidak menemukan jawaban yang Anda cari? Hubungi kami langsung via WhatsApp.
-            </p>
+    {{-- FAQ --}}
+    <section class="ct-sec">
+        <p class="ct-label">FAQ</p>
+        <h2 class="ct-h2">Pertanyaan yang Sering Diajukan</h2>
+        <p class="ct-p">
+            Beberapa hal yang paling sering ditanyakan seputar perusahaan dan kerja sama dengan kami.
+            Tidak menemukan jawaban yang Anda cari? Hubungi kami langsung via WhatsApp.
+        </p>
+
+        <div class="ct-faq">
+            @foreach($faq as [$tanya, $jawab])
+            <details name="faq">
+                <summary>{{ $tanya }}</summary>
+                <p class="ct-ans">{!! $jawab !!}</p>
+            </details>
+            @endforeach
         </div>
+    </section>
 
-        <div class="space-y-4" id="faq-accordion">
-
-            <div class="faq-item bg-white rounded-brand border border-dark-green/10 overflow-hidden">
-                <button type="button" class="faq-trigger w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-heading font-semibold text-dark-green">
-                    <span class="flex items-start gap-3">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold flex items-center justify-center">01</span>
-                        Apa saja bidang usaha PT. Sahabat Sawit Rokan Sejahtera?
-                    </span>
-                    <i class="bi bi-chevron-down faq-icon text-secondary-green transition-transform duration-300 shrink-0"></i>
-                </button>
-                <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
-                    <p class="pl-[3.75rem] pr-6 pb-5 font-body text-dark-text/90 leading-relaxed">
-                        Kami bergerak di bidang perkebunan dan pengolahan kelapa sawit, mulai dari budidaya, panen,
-                        hingga distribusi hasil produksi, dengan berpegang pada prinsip pengelolaan yang bertanggung jawab.
-                    </p>
-                </div>
-            </div>
-
-            <div class="faq-item bg-white rounded-brand border border-dark-green/10 overflow-hidden">
-                <button type="button" class="faq-trigger w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-heading font-semibold text-dark-green">
-                    <span class="flex items-start gap-3">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold flex items-center justify-center">02</span>
-                        Di mana lokasi kebun dan operasional perusahaan?
-                    </span>
-                    <i class="bi bi-chevron-down faq-icon text-secondary-green transition-transform duration-300 shrink-0"></i>
-                </button>
-                <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
-                    <p class="pl-[3.75rem] pr-6 pb-5 font-body text-dark-text/90 leading-relaxed">
-                        Kantor pusat kami berada di Kota Medan, Sumatera Utara, sedangkan area perkebunan dan
-                        operasional utama berlokasi di Kabupaten Rokan Hilir, Provinsi Riau.
-                    </p>
-                </div>
-            </div>
-
-            <div class="faq-item bg-white rounded-brand border border-dark-green/10 overflow-hidden">
-                <button type="button" class="faq-trigger w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-heading font-semibold text-dark-green">
-                    <span class="flex items-start gap-3">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold flex items-center justify-center">03</span>
-                        Bagaimana cara menjalin kerja sama atau kemitraan?
-                    </span>
-                    <i class="bi bi-chevron-down faq-icon text-secondary-green transition-transform duration-300 shrink-0"></i>
-                </button>
-                <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
-                    <p class="pl-[3.75rem] pr-6 pb-5 font-body text-dark-text/90 leading-relaxed">
-                        Silakan hubungi tim kami melalui WhatsApp pada tombol di atas. Tim kami akan menindaklanjuti
-                        dan menjadwalkan diskusi lebih lanjut sesuai kebutuhan kerja sama Anda.
-                    </p>
-                </div>
-            </div>
-
-            <div class="faq-item bg-white rounded-brand border border-dark-green/10 overflow-hidden">
-                <button type="button" class="faq-trigger w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-heading font-semibold text-dark-green">
-                    <span class="flex items-start gap-3">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold flex items-center justify-center">04</span>
-                        Apakah perusahaan membuka lowongan pekerjaan?
-                    </span>
-                    <i class="bi bi-chevron-down faq-icon text-secondary-green transition-transform duration-300 shrink-0"></i>
-                </button>
-                <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
-                    <p class="pl-[3.75rem] pr-6 pb-5 font-body text-dark-text/90 leading-relaxed">
-                        Informasi lowongan yang tersedia akan kami umumkan melalui halaman Karier di situs ini.
-                        Anda juga dapat menanyakan langsung melalui WhatsApp untuk informasi terbaru.
-                    </p>
-                </div>
-            </div>
-
-            <div class="faq-item bg-white rounded-brand border border-dark-green/10 overflow-hidden">
-                <button type="button" class="faq-trigger w-full flex items-center justify-between gap-4 text-left px-6 py-5 font-heading font-semibold text-dark-green">
-                    <span class="flex items-start gap-3">
-                        <span class="shrink-0 w-7 h-7 rounded-full bg-secondary-green/10 text-secondary-green text-xs font-bold flex items-center justify-center">05</span>
-                        Bagaimana komitmen perusahaan terhadap keberlanjutan?
-                    </span>
-                    <i class="bi bi-chevron-down faq-icon text-secondary-green transition-transform duration-300 shrink-0"></i>
-                </button>
-                <div class="faq-content max-h-0 overflow-hidden transition-all duration-300">
-                    <p class="pl-[3.75rem] pr-6 pb-5 font-body text-dark-text/90 leading-relaxed">
-                        Kami menerapkan praktik perkebunan yang bertanggung jawab dan berkelanjutan, memperhatikan
-                        kelestarian lingkungan serta kesejahteraan masyarakat sekitar area operasional.
-                    </p>
-                </div>
-            </div>
-
-        </div>
-    </div>
-</section>
-
-{{-- ============================= --}}
-{{-- SECTION PENUTUP --}}
-{{-- ============================= --}}
-<section class="relative bg-dark-green py-16 md:py-20 overflow-hidden">
-    <div class="absolute inset-0 opacity-90 bg-gradient-to-br from-dark-green via-dark-green to-secondary-green"></div>
-
-    <div class="relative max-w-2xl mx-auto px-6 text-center">
-        <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-widest">Bersama Membangun</span>
-        <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-white mb-4">Mari Terhubung Bersama Kami</h2>
-        <p class="font-body text-white/80 leading-relaxed mb-8">
+    {{-- PENUTUP --}}
+    <section class="ct-sec">
+        <p class="ct-label">Bersama membangun</p>
+        <h2 class="ct-h2">Mari Terhubung Bersama Kami</h2>
+        <p class="ct-p">
             Bersama membangun industri kelapa sawit yang produktif, bertanggung jawab,
             dan berkelanjutan bagi masyarakat serta lingkungan di Rokan Hilir, Riau.
         </p>
-
-        <div class="flex flex-wrap items-center justify-center gap-3">
-            <a href="https://wa.me/628139654581"
-               target="_blank"
-               rel="noopener noreferrer"
-               class="inline-flex items-center gap-2.5 bg-[#25D366] hover:bg-[#1EBE5A] text-white font-heading font-semibold text-sm md:text-base px-7 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300">
-                <i class="bi bi-whatsapp text-lg"></i>
-                <span>Mulai Percakapan</span>
-            </a>
-            <a href="mailto:info@sahabatsawitrokan.co.id"
-               class="inline-flex items-center gap-2.5 bg-white/10 hover:bg-white/20 border border-white/25 text-white font-heading font-semibold text-sm md:text-base px-7 py-3.5 rounded-full backdrop-blur-sm hover:-translate-y-0.5 transition-all duration-300">
-                <i class="bi bi-envelope-fill text-lg"></i>
-                <span>Kirim Email</span>
-            </a>
+        <div class="ct-links">
+            <a class="ct-link" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Mulai Percakapan</a>
+            <a class="ct-link" href="mailto:info@sahabatsawitrokan.co.id">Kirim Email</a>
         </div>
-    </div>
-</section>
+    </section>
 
-@push('styles')
-<style>
-    .map-tab-btn {
-        color: var(--color-dark-text, #4b4b4b);
-    }
-    .map-tab-btn.active {
-        background-color: var(--color-dark-green, #1f3d2b);
-        color: #fff;
-    }
-</style>
-@endpush
+</div>
 
-@push('scripts')
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // FAQ accordion
-        document.querySelectorAll('.faq-trigger').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var item = btn.closest('.faq-item');
-                var content = item.querySelector('.faq-content');
-                var icon = item.querySelector('.faq-icon');
-                var isOpen = item.classList.contains('faq-open');
-
-                document.querySelectorAll('.faq-item').forEach(function (other) {
-                    other.classList.remove('faq-open');
-                    other.querySelector('.faq-content').style.maxHeight = null;
-                    other.querySelector('.faq-icon').classList.remove('rotate-180');
-                });
-
-                if (!isOpen) {
-                    item.classList.add('faq-open');
-                    content.style.maxHeight = content.scrollHeight + 'px';
-                    icon.classList.add('rotate-180');
-                }
+    // Ganti lokasi di bagian peta (Kantor Pusat / Site Operasional)
+    (function () {
+        const tabs = document.querySelectorAll('[data-ct-tab]');
+        tabs.forEach(function (tab) {
+            tab.addEventListener('click', function () {
+                const key = tab.dataset.ctTab;
+                tabs.forEach(function (t) { t.setAttribute('aria-selected', t === tab ? 'true' : 'false'); });
+                document.querySelectorAll('[data-ct-panel]').forEach(function (p) { p.hidden = p.dataset.ctPanel !== key; });
+                document.querySelectorAll('[data-ct-frame]').forEach(function (f) { f.hidden = f.dataset.ctFrame !== key; });
             });
         });
-
-        // Map tab switcher
-        document.querySelectorAll('.map-tab-btn').forEach(function (btn) {
-            btn.addEventListener('click', function () {
-                var target = btn.getAttribute('data-target');
-
-                document.querySelectorAll('.map-tab-btn').forEach(function (b) {
-                    b.classList.remove('active');
-                });
-                btn.classList.add('active');
-
-                document.querySelectorAll('.map-frame').forEach(function (frame) {
-                    frame.classList.add('hidden');
-                });
-                document.getElementById('map-frame-' + target).classList.remove('hidden');
-
-                document.querySelectorAll('.map-info-panel').forEach(function (panel) {
-                    panel.classList.add('hidden');
-                });
-                document.getElementById('info-' + target).classList.remove('hidden');
-            });
-        });
-    });
+    })();
 </script>
-@endpush
 
 @endsection
