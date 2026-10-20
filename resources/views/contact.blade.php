@@ -5,6 +5,10 @@
 @section('content')
 
 @php
+    // Foto sementara: ganti nama file di sini setelah foto asli terkumpul (file ada di public/images).
+    $fotoHero    = 'prosesnunggu.png';
+    $fotoPenutup = 'sawitangkong.jpg';
+
     $lokasi = [
         'kantor-pusat' => [
             'label'  => 'Kantor Pusat',
@@ -46,11 +50,14 @@
     .ct a { color: inherit; text-decoration: none; }
     .ct a:focus-visible, .ct button:focus-visible, .ct summary:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
 
-    .ct-hero { padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .ct-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: min(92vh, 58rem); background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .ct-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(22,50,31,.92) 0%, rgba(22,50,31,.6) 50%, rgba(22,50,31,.2) 100%), linear-gradient(0deg, rgba(22,50,31,.85) 0%, transparent 45%); }
+    .ct-hero-inner { width: 100%; padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .ct-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
     .ct-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
     .ct-crumb a:hover { color: var(--krem); }
     .ct-crumb [aria-current] { color: var(--krem); }
-    .ct-title { margin-top: 1.5rem; max-width: 16ch; font-size: clamp(2.4rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
+    .ct-title { margin-top: 1.5rem; max-width: 15ch; font-size: clamp(2.4rem, 7vw, 6rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
     .ct-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
     .ct-links { margin-top: 2.5rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
     .ct-link { display: inline-flex; align-items: center; gap: .55rem; font-weight: 600; font-size: .95rem; border-bottom: 2px solid var(--emas); padding-bottom: .2rem; }
@@ -71,20 +78,33 @@
     .ct-channel-hint { margin-top: .4rem; font-size: .9rem; color: rgba(242,244,236,.65); }
     a.ct-channel:hover .ct-channel-value { color: var(--emas); }
 
+    /* Kanal kontak di section terang: jeda dari latar gelap, nilai kontak jadi titik fokus */
+    .ct-light { background: var(--krem); color: var(--hijau); }
+    .ct-light .ct-channel { border-top-color: rgba(22,50,31,.25); }
+    .ct-light .ct-channel-label { color: rgba(22,50,31,.6); }
+    .ct-light .ct-channel-hint { color: rgba(22,50,31,.72); }
+    .ct-light .ct-channel-value { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+    .ct-light a.ct-channel:hover .ct-channel-value { color: var(--hijau-muda); }
+
+    /* Lokasi di latar paling pekat */
+    .ct-deep { background: #0f2417; }
+
     /* Lokasi */
     .ct-tabs { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; }
     .ct-tab { padding: 0 0 .2rem; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-weight: 600; font-size: .95rem; color: rgba(242,244,236,.6); cursor: pointer; transition: color .2s, border-color .2s; }
     .ct-tab:hover { color: var(--krem); }
     .ct-tab[aria-selected="true"] { color: var(--krem); border-bottom-color: var(--emas); }
     .ct-map { margin-top: 2rem; display: grid; grid-template-columns: 1fr; gap: 2rem; align-items: start; }
-    @media (min-width: 900px) { .ct-map { grid-template-columns: 1fr 2fr; gap: 3rem; } }
+    @media (min-width: 900px) { .ct-map { grid-template-columns: 2fr 1fr; gap: 3rem; } .ct-map > :first-child { order: 2; } }
     .ct-addr-title { font-size: 1.4rem; font-weight: 700; letter-spacing: -.02em; }
     .ct-addr { margin-top: .75rem; color: rgba(242,244,236,.78); }
     .ct-frame { display: block; width: 100%; height: clamp(320px, 45vw, 480px); border: 0; border-radius: .25rem; }
     .ct-frame[hidden], .ct-panel[hidden] { display: none; }
 
-    /* FAQ (details/summary: tanpa JavaScript) */
-    .ct-faq { margin-top: clamp(2.5rem, 6vh, 4rem); max-width: 52rem; }
+    /* FAQ (details/summary: tanpa JavaScript); judul menempel di kiri, daftar di kanan */
+    .ct-split { display: grid; grid-template-columns: 1fr; gap: 2.5rem; }
+    @media (min-width: 900px) { .ct-split { grid-template-columns: 5fr 7fr; gap: 5rem; align-items: start; } .ct-sticky { position: sticky; top: 7rem; } }
+    .ct-faq { max-width: 52rem; }
     .ct-faq details { border-top: 1px solid rgba(242,244,236,.15); }
     .ct-faq details:last-child { border-bottom: 1px solid rgba(242,244,236,.15); }
     .ct-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; padding: 1.25rem 0; list-style: none; cursor: pointer; font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 700; letter-spacing: -.01em; line-height: 1.25; transition: color .2s; }
@@ -94,41 +114,51 @@
     .ct-faq details[open] summary::after { transform: rotate(45deg); background: var(--emas); border-color: var(--emas); color: var(--hijau); }
     .ct-ans { max-width: 42rem; padding: 0 3.5rem 1.5rem 0; color: rgba(242,244,236,.75); }
     .ct-ans a { border-bottom: 1px solid var(--emas); }
+
+    /* Penutup: pita berfoto, rata tengah */
+    .ct-band { position: relative; isolation: isolate; overflow: hidden; text-align: center; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .ct-band::after { content: ''; position: absolute; inset: 0; z-index: -1; background: rgba(15,36,23,.8); }
+    .ct-band .ct-h2 { max-width: 18ch; font-size: clamp(2.2rem, 6vw, 4.5rem); }
+    .ct-band .ct-h2, .ct-band .ct-p { margin-left: auto; margin-right: auto; }
+    .ct-band .ct-links { justify-content: center; }
 </style>
 
 <div class="ct">
 
-    {{-- HERO --}}
+    {{-- HERO berfoto --}}
     <header class="ct-hero">
-        <nav class="ct-crumb" aria-label="Breadcrumb">
-            <a href="{{ url('/') }}">Beranda</a>
-            <span aria-hidden="true">/</span>
-            <span aria-current="page">Kontak</span>
-        </nav>
+        <img class="ct-bg" src="{{ asset('images/' . $fotoHero) }}" alt="" onerror="this.style.display='none'">
+        <div class="ct-hero-inner">
+            <nav class="ct-crumb" aria-label="Breadcrumb">
+                <a href="{{ url('/') }}">Beranda</a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Kontak</span>
+            </nav>
 
-        <h1 class="ct-title">Terbuka untuk Kerja Sama & Kemitraan Sawit</h1>
-        <p class="ct-lead">
-            Kami terbuka untuk menjalin kerja sama, kemitraan, maupun menjawab pertanyaan
-            seputar PT. Sahabat Sawit Rokan Sejahtera. Tim kami siap membantu Anda.
-        </p>
+            <h1 class="ct-title">Terbuka untuk Kerja Sama & Kemitraan Sawit</h1>
+            <p class="ct-lead">
+                Kami terbuka untuk menjalin kerja sama, kemitraan, maupun menjawab pertanyaan
+                seputar PT. Sahabat Sawit Rokan Sejahtera. Tim kami siap membantu Anda.
+            </p>
 
-        <div class="ct-links">
-            <a class="ct-link" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Hubungi Kami lewat WhatsApp</a>
-            <a class="ct-link" href="mailto:info@sahabatsawitrokan.co.id">Kirim Email</a>
+            <div class="ct-links">
+                <a class="ct-link" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Hubungi Kami lewat WhatsApp</a>
+                <a class="ct-link" href="mailto:info@sahabatsawitrokan.co.id">Kirim Email</a>
+            </div>
         </div>
     </header>
 
-    {{-- KANAL KONTAK --}}
-    <section class="ct-sec">
+    {{-- KANAL KONTAK (section terang) --}}
+    <section class="ct-sec ct-light">
         <div class="ct-channels">
             <a class="ct-channel" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">
                 <p class="ct-channel-label">WhatsApp</p>
                 <p class="ct-channel-value">+62 813-9654-581</p>
                 <p class="ct-channel-hint">Respon tercepat untuk pertanyaan & kerja sama</p>
             </a>
-            <a class="ct-channel" href="mailto:info@sahabatsawitrokan.co.id">
+            <a class="ct-channel" href="mailto:ptsahabatsawitrokansejahtera@gmail.com">
                 <p class="ct-channel-label">Email</p>
-                <p class="ct-channel-value">info@sahabatsawitrokan.co.id</p>
+                <p class="ct-channel-value">ptsahabatsawitrokansejahtera@gmail.com</p>
                 <p class="ct-channel-hint">Untuk surat resmi, proposal, dan dokumen kerja sama</p>
             </a>
             <div class="ct-channel">
@@ -140,7 +170,7 @@
     </section>
 
     {{-- LOKASI + PETA --}}
-    <section class="ct-sec">
+    <section class="ct-sec ct-deep">
         <p class="ct-label">Lokasi kami</p>
         <h2 class="ct-h2">Titik Lokasi di Peta</h2>
 
@@ -178,25 +208,30 @@
 
     {{-- FAQ --}}
     <section class="ct-sec">
-        <p class="ct-label">FAQ</p>
-        <h2 class="ct-h2">Pertanyaan yang Sering Diajukan</h2>
-        <p class="ct-p">
-            Beberapa hal yang paling sering ditanyakan seputar perusahaan dan kerja sama dengan kami.
-            Tidak menemukan jawaban yang Anda cari? Hubungi kami langsung via WhatsApp.
-        </p>
+        <div class="ct-split">
+            <div class="ct-sticky">
+                <p class="ct-label">FAQ</p>
+                <h2 class="ct-h2">Pertanyaan yang Sering Diajukan</h2>
+                <p class="ct-p">
+                    Beberapa hal yang paling sering ditanyakan seputar perusahaan dan kerja sama dengan kami.
+                    Tidak menemukan jawaban yang Anda cari? Hubungi kami langsung via WhatsApp.
+                </p>
+            </div>
 
-        <div class="ct-faq">
-            @foreach($faq as [$tanya, $jawab])
-            <details name="faq">
-                <summary>{{ $tanya }}</summary>
-                <p class="ct-ans">{!! $jawab !!}</p>
-            </details>
-            @endforeach
+            <div class="ct-faq">
+                @foreach($faq as [$tanya, $jawab])
+                <details name="faq">
+                    <summary>{{ $tanya }}</summary>
+                    <p class="ct-ans">{!! $jawab !!}</p>
+                </details>
+                @endforeach
+            </div>
         </div>
     </section>
 
-    {{-- PENUTUP --}}
-    <section class="ct-sec">
+    {{-- PENUTUP (pita foto) --}}
+    <section class="ct-sec ct-band">
+        <img class="ct-bg" src="{{ asset('images/' . $fotoPenutup) }}" alt="" loading="lazy" onerror="this.style.display='none'">
         <p class="ct-label">Bersama membangun</p>
         <h2 class="ct-h2">Mari Terhubung Bersama Kami</h2>
         <p class="ct-p">
@@ -205,7 +240,7 @@
         </p>
         <div class="ct-links">
             <a class="ct-link" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Mulai Percakapan</a>
-            <a class="ct-link" href="mailto:info@sahabatsawitrokan.co.id">Kirim Email</a>
+            <a class="ct-link" href="mailto:ptsahabatsawitrokansejahtera@gmail.com">Kirim Email</a>
         </div>
     </section>
 
