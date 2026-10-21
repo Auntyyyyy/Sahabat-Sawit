@@ -3,271 +3,257 @@
 @section('title', 'Perkebunan Kami — PT Sahabat Sawit')
 
 @section('content')
-<section class="relative bg-dark-green text-white py-16 lg:py-20 bg-cover bg-center"
-         style="background-image: url('{{ asset('images/sawit.jpeg') }}');">
-    <div class="absolute inset-0 bg-dark-green/80"></div>
-
-    <div class="relative max-w-5xl mx-auto px-6 lg:px-8 text-center">
-    <div class="hero-top-row">
-        <nav aria-label="Breadcrumb" class="breadcrumb-pill">
-            <a href="{{ route('home') }}" class="breadcrumb-link" aria-label="Home">
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                          d="M3 9.75L12 3l9 6.75V21a.75.75 0 01-.75.75H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H3.75A.75.75 0 013 21V9.75z"/>
-                </svg>
-            </a>
-            <svg class="breadcrumb-chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
-            </svg>
-            <span class="breadcrumb-current text-light-green">Perkebunan Kami</span>
-        </nav>
-    </div>
-    <span class="font-heading font-semibold text-light-green uppercase text-sm tracking-wide">Perkebunan Kami</span>
-    <h1 class="mt-3 font-heading font-bold text-3xl md:text-5xl">DARI BUMI ROKAN HILIR</h1>
-    <p class="mt-4 text-white/75 max-w-2xl mx-auto leading-relaxed">
-        Bertumbuh bersama dari sumber terbaik.
-    </p>
-</div>
-</section>
-
-<section class="py-16 lg:py-20 bg-white">
-    <div class="max-w-6xl mx-auto px-6 lg:px-8">
-        <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center mb-14">
-            <div class="bg-cream rounded-brand p-6">
-                <p class="text-xs uppercase text-gray-text tracking-wide">Lokasi</p>
-                <p class="mt-2 font-heading font-bold text-dark-green">{{ $stats['lokasi'] }}</p>
-            </div>
-            <div class="bg-cream rounded-brand p-6">
-                <p class="text-xs uppercase text-gray-text tracking-wide">Luas Area</p>
-                <p class="mt-2 font-heading font-bold text-dark-green">{{ $stats['luas_area'] }}</p>
-            </div>
-            <div class="bg-cream rounded-brand p-6">
-                <p class="text-xs uppercase text-gray-text tracking-wide">Kemitraan</p>
-                <p class="mt-2 font-heading font-bold text-dark-green">{{ $stats['kemitraan'] }}</p>
-            </div>
-            <div class="bg-cream rounded-brand p-6">
-                <p class="text-xs uppercase text-gray-text tracking-wide">Diusahakan Sendiri</p>
-                <p class="mt-2 font-heading font-bold text-dark-green">{{ $stats['diusahakan_sendiri'] }}</p>
-            </div>
-        </div>
-
-        <div class="map-frame shadow-2xl">
-            <img src="{{ asset('images/bahanbaku.png') }}"
-                alt="Peta Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau"
-                class="map-frame-img"
-                onerror="this.src='https://placehold.co/1200x450/6B8E23/F5F1E8?text=Peta+Lokasi+Perkebunan'">
-        </div>
-        <p class="mt-4 text-xs text-gray-text">*SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
-    </div>
-</section>
-
-<section class="py-16 lg:py-20 bg-cream">
-    <div class="max-w-5xl mx-auto px-6 lg:px-8">
-        <div class="text-center max-w-2xl mx-auto mb-14">
-            <span class="font-heading font-semibold text-primary-green uppercase text-sm tracking-wide">Kemitraan</span>
-            <h2 class="mt-3 font-heading font-bold text-2xl md:text-3xl text-dark-green">JEJAK KEMITRAAN</h2>
-            <p class="mt-4 text-gray-text leading-relaxed">
-                Mengabadikan perjalanan, kerja keras, dan kebersamaan bersama para petani mitra.                    </p>
-        </div>
-
-        <div class="mitra-carousel" id="mitraCarousel">
-            <div class="mitra-carousel-track" id="mitraTrack">
-                @foreach($mitra_photos as $photo)
-                <div class="mitra-slide">
-                    <img src="{{ asset('images/' . $photo['src']) }}"
-                         alt="{{ $photo['title'] ?? 'Perkebunan mitra PT Sahabat Sawit' }}"
-                         class="mitra-slide-img cursor-zoom-in"
-                         onclick="mitraOpenLightbox(this.src, this.alt)"
-                         onerror="this.src='https://placehold.co/900x600/6B8E23/F5F1E8?text=Kebun+Mitra'">
-                </div>
-                @endforeach
-            </div>
-
-            @if(count($mitra_photos) > 1)
-            <button type="button" class="mitra-nav mitra-nav-prev" onclick="mitraGoTo(-1)" aria-label="Sebelumnya">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
-                </svg>
-            </button>
-            <button type="button" class="mitra-nav mitra-nav-next" onclick="mitraGoTo(1)" aria-label="Berikutnya">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
-                </svg>
-            </button>
-            @endif
-        </div>
-
-        <!-- Judul & keterangan yang berubah mengikuti gambar aktif -->
-        <div class="mitra-caption" id="mitraCaption">
-            <h3 class="mitra-caption-title" id="mitraCaptionTitle">
-                {{ $mitra_photos[0]['title'] ?? '' }}
-            </h3>
-            <p class="mitra-caption-desc" id="mitraCaptionDesc">
-                {{ $mitra_photos[0]['desc'] ?? '' }}
-            </p>
-        </div>
-
-        @if(count($mitra_photos) > 1)
-        <div class="mitra-dots" id="mitraDots">
-            @foreach($mitra_photos as $i => $photo)
-            <button type="button" class="mitra-dot" onclick="mitraGoToIndex({{ $i }})" aria-label="Foto {{ $i + 1 }}"></button>
-            @endforeach
-        </div>
-        @endif
-    </div>
-</section>
-
-<!-- Lightbox untuk gambar mitra yang diklik -->
-<div id="mitraLightbox" class="mitra-lightbox" onclick="mitraCloseLightbox()">
-    <button type="button" class="mitra-lightbox-close" onclick="mitraCloseLightbox()" aria-label="Tutup">&times;</button>
-    <img id="mitraLightboxImg" src="" alt="" class="mitra-lightbox-img" onclick="event.stopPropagation()">
-</div>
 
 @php
-$mitraCaptions = array_map(fn($p) => [
-    'title' => $p['title'] ?? '',
-    'desc'  => $p['desc'] ?? '',
-], $mitra_photos);
+    $fotoHero = 'sawit.jpeg';   // foto hero (file ada di public/images)
+    $peta     = 'bahanbaku.png';
+    $mitra    = collect($mitra_photos)->values();
 @endphp
 
 <style>
-.mitra-lightbox {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.85);
-    z-index: 9999;
-    align-items: center;
-    justify-content: center;
-    padding: 1.5rem;
-}
-.mitra-lightbox.is-open { display: flex; }
-.mitra-lightbox-img {
-    max-width: 100%;
-    max-height: 90vh;
-    border-radius: 8px;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-}
-.mitra-lightbox-close {
-    position: absolute;
-    top: 1.5rem;
-    right: 1.5rem;
-    color: white;
-    font-size: 2rem;
-    line-height: 1;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-.cursor-zoom-in { cursor: zoom-in; }
+    /* Perkebunan — hero berfoto, angka sebagai titik fokus, peta selebar layar, dan galeri kemitraan. Class berawalan "pl-". */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
+
+    .pl {
+        --hijau: #16321f; --hijau-muda: #2f5a3a; --emas: #e3a72f; --krem: #f2f4ec;
+        --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+        background: var(--hijau); color: var(--krem); line-height: 1.6;
+    }
+    .pl *, .pl *::before, .pl *::after { box-sizing: border-box; }
+    .pl a { color: inherit; text-decoration: none; }
+    .pl a:focus-visible, .pl button:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
+
+    /* Hero berfoto */
+    .pl-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: min(92vh, 58rem); background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .pl-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(22,50,31,.9) 0%, rgba(22,50,31,.55) 50%, rgba(22,50,31,.15) 100%), linear-gradient(0deg, rgba(22,50,31,.85) 0%, transparent 45%); }
+    .pl-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+    .pl-hero-inner { width: 100%; padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .pl-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
+    .pl-crumb a:hover { color: var(--krem); }
+    .pl-crumb [aria-current] { color: var(--krem); }
+    .pl-title { margin-top: 1.5rem; max-width: 12ch; font-size: clamp(2.8rem, 9vw, 7.5rem); font-weight: 800; line-height: .98; letter-spacing: -.045em; }
+    .pl-lead { margin-top: 1.5rem; max-width: 34rem; font-size: 1.1rem; color: rgba(242,244,236,.8); }
+
+    /* Section */
+    .pl-sec { padding: clamp(4rem, 10vh, 7rem) var(--gutter); }
+    .pl-label { font-size: .95rem; color: rgba(242,244,236,.6); }
+    .pl-h2 { margin-top: .5rem; max-width: 18ch; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+    .pl-p { margin-top: 1.25rem; max-width: 34rem; color: rgba(242,244,236,.78); }
+
+    /* Angka: satu angka raksasa sebagai titik fokus (section terang) */
+    .pl-light { background: var(--krem); color: var(--hijau); }
+    .pl-light .pl-label { color: rgba(22,50,31,.6); }
+    .pl-stats { display: grid; grid-template-columns: 1fr; gap: 3rem; align-items: end; }
+    @media (min-width: 900px) { .pl-stats { grid-template-columns: 7fr 5fr; gap: 5rem; } }
+    .pl-bigval { margin-top: .5rem; font-size: clamp(2.4rem, 6vw, 5.5rem); font-weight: 800; line-height: 1; letter-spacing: -.05em; overflow-wrap: anywhere; }
+    .pl-facts { margin: 0; }
+    .pl-fact { padding: 1.1rem 0; border-top: 1px solid rgba(22,50,31,.2); }
+    .pl-fact:last-child { border-bottom: 1px solid rgba(22,50,31,.2); }
+    .pl-fact dt { font-size: .95rem; color: rgba(22,50,31,.6); }
+    .pl-fact dd { margin: .2rem 0 0; font-size: clamp(1.3rem, 2.4vw, 1.9rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
+
+    /* Peta: selebar layar di latar paling pekat */
+    .pl-deep { background: #0f2417; }
+    .pl-map-btn { display: block; width: 100%; margin-top: 2rem; padding: 0; border: 0; background: none; cursor: zoom-in; }
+    .pl-map { display: block; width: 100%; height: auto; border-radius: .25rem; background: #fff; }
+    .pl-note { margin-top: 1rem; font-size: .85rem; color: rgba(242,244,236,.55); }
+
+    /* Galeri kemitraan */
+    .pl-car { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: center; }
+    @media (max-width: 899px) { .pl-view { order: -1; } }
+    @media (min-width: 900px) { .pl-car { grid-template-columns: 5fr 7fr; gap: 4rem; } }
+    .pl-cap { min-height: 8rem; margin-top: 2rem; transition: opacity .15s; }
+    .pl-cap.is-fading { opacity: 0; }
+    .pl-cap h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 800; letter-spacing: -.02em; line-height: 1.15; }
+    .pl-cap p { margin-top: .75rem; color: rgba(242,244,236,.75); }
+    .pl-ctrl { margin-top: 1.5rem; display: flex; align-items: center; gap: 1rem; }
+    .pl-count { min-width: 4.5rem; font-size: .9rem; font-weight: 600; color: rgba(242,244,236,.7); }
+    .pl-prog { flex: 1; max-width: 12rem; height: 2px; background: rgba(242,244,236,.2); }
+    .pl-prog span { display: block; width: 0; height: 100%; background: var(--emas); transition: width .5s ease; }
+    .pl-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(242,244,236,.4); background: transparent; color: var(--krem); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .pl-btn:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .pl-btn svg { width: 20px; height: 20px; }
+    .pl-btns { display: flex; gap: .6rem; margin-left: auto; }
+    .pl-view { position: relative; overflow: hidden; aspect-ratio: 4 / 3; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); touch-action: pan-y; }
+    .pl-track { display: flex; height: 100%; transition: transform .5s cubic-bezier(.2,.8,.2,1); }
+    .pl-slide { flex: 0 0 100%; height: 100%; }
+    .pl-slide button { display: block; width: 100%; height: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
+    .pl-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+    /* Lightbox */
+    .pl-lightbox { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 2rem; background: rgba(5,8,5,.92); }
+    .pl-lightbox[hidden] { display: none; }
+    .pl-lightbox img { max-width: min(94vw, 70rem); max-height: 88vh; object-fit: contain; border-radius: .25rem; }
+    .pl-lightbox-close { position: absolute; top: 1rem; right: 1.25rem; width: 44px; height: 44px; border: 1px solid rgba(242,244,236,.4); border-radius: 50%; background: transparent; color: var(--krem); font-size: 1.6rem; line-height: 1; cursor: pointer; }
+    .pl-lightbox-close:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+
+    @media (prefers-reduced-motion: reduce) { .pl-track, .pl-prog span, .pl-cap { transition: none; } }
 </style>
 
+<div class="pl">
+
+    {{-- HERO berfoto --}}
+    <header class="pl-hero">
+        <img class="pl-bg" src="{{ asset('images/' . $fotoHero) }}" alt="" onerror="this.style.display='none'">
+        <div class="pl-hero-inner">
+            <nav class="pl-crumb" aria-label="Breadcrumb">
+                <a href="{{ route('home') }}">Beranda</a>
+                <span aria-hidden="true">/</span>
+                <span aria-current="page">Perkebunan Kami</span>
+            </nav>
+            <h1 class="pl-title">Dari Bumi Rokan Hilir</h1>
+            <p class="pl-lead">Bertumbuh bersama dari sumber terbaik.</p>
+        </div>
+    </header>
+
+    {{-- ANGKA: luas area jadi titik fokus (section terang) --}}
+    <section class="pl-sec pl-light">
+        <div class="pl-stats">
+            <div>
+                <p class="pl-label">Luas area</p>
+                <p class="pl-bigval">{{ $stats['luas_area'] }}</p>
+            </div>
+            <dl class="pl-facts">
+                <div class="pl-fact"><dt>Lokasi</dt><dd>{{ $stats['lokasi'] }}</dd></div>
+                <div class="pl-fact"><dt>Kemitraan</dt><dd>{{ $stats['kemitraan'] }}</dd></div>
+                <div class="pl-fact"><dt>Diusahakan sendiri</dt><dd>{{ $stats['diusahakan_sendiri'] }}</dd></div>
+            </dl>
+        </div>
+    </section>
+
+    {{-- PETA selebar layar --}}
+    <section class="pl-sec pl-deep">
+        <p class="pl-label">Peta lokasi</p>
+        <h2 class="pl-h2">Sebaran Lahan Kami</h2>
+        <button type="button" class="pl-map-btn" data-pl-zoom="{{ asset('images/' . $peta) }}"
+                data-alt="Peta Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau" aria-label="Perbesar peta lokasi">
+            <img class="pl-map" src="{{ asset('images/' . $peta) }}"
+                 alt="Peta Lokasi Perkebunan PT Sahabat Sawit di Rokan Hilir, Riau" loading="lazy"
+                 onerror="this.style.display='none'">
+        </button>
+        <p class="pl-note">Klik peta untuk memperbesar.</p>
+        <p class="pl-note">*SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
+    </section>
+
+    {{-- JEJAK KEMITRAAN --}}
+    @if($mitra->isNotEmpty())
+    <section class="pl-sec" id="jejak-kemitraan">
+        <div class="pl-car">
+            <div>
+                <p class="pl-label">Kemitraan</p>
+                <h2 class="pl-h2">Jejak Kemitraan</h2>
+                <p class="pl-p">Mengabadikan perjalanan, kerja keras, dan kebersamaan bersama para petani mitra.</p>
+
+                <div class="pl-cap" id="plCap" aria-live="polite">
+                    <h3 id="plCapTitle">{{ $mitra[0]['title'] ?? '' }}</h3>
+                    <p id="plCapDesc">{{ $mitra[0]['desc'] ?? '' }}</p>
+                </div>
+
+                @if($mitra->count() > 1)
+                <div class="pl-ctrl">
+                    <span class="pl-count" id="plCount">01 / {{ str_pad($mitra->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="pl-prog" aria-hidden="true"><span id="plProg"></span></span>
+                    <div class="pl-btns">
+                        <button type="button" class="pl-btn" data-pl-nav="-1" aria-label="Foto sebelumnya">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                        </button>
+                        <button type="button" class="pl-btn" data-pl-nav="1" aria-label="Foto berikutnya">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                        </button>
+                    </div>
+                </div>
+                @endif
+            </div>
+
+            <div class="pl-view" id="plView">
+                <div class="pl-track" id="plTrack">
+                    @foreach($mitra as $photo)
+                    <div class="pl-slide">
+                        <button type="button" data-pl-zoom="{{ asset('images/' . $photo['src']) }}"
+                                data-alt="{{ $photo['title'] ?? 'Perkebunan mitra PT Sahabat Sawit' }}"
+                                aria-label="Perbesar foto: {{ $photo['title'] ?? 'Perkebunan mitra' }}">
+                            <img src="{{ asset('images/' . $photo['src']) }}" alt="{{ $photo['title'] ?? 'Perkebunan mitra PT Sahabat Sawit' }}" loading="{{ $loop->first ? 'eager' : 'lazy' }}" onerror="this.style.display='none'">
+                        </button>
+                    </div>
+                    @endforeach
+                </div>
+            </div>
+        </div>
+    </section>
+    @endif
+
+    {{-- Lightbox --}}
+    <div class="pl-lightbox" id="plLightbox" role="dialog" aria-modal="true" aria-label="Foto diperbesar" hidden>
+        <button type="button" class="pl-lightbox-close" id="plLightboxClose" aria-label="Tutup">&times;</button>
+        <img id="plLightboxImg" src="" alt="">
+    </div>
+
+</div>
+
+@php
+    $mitraCaptions = $mitra->map(fn ($p) => ['title' => $p['title'] ?? '', 'desc' => $p['desc'] ?? ''])->values();
+@endphp
+
 <script>
-(function () {
-    const carousel = document.getElementById('mitraCarousel');
-    const track = document.getElementById('mitraTrack');
-    const dotsWrap = document.getElementById('mitraDots');
-    const captionTitle = document.getElementById('mitraCaptionTitle');
-    const captionDesc = document.getElementById('mitraCaptionDesc');
-    const captionWrap = document.getElementById('mitraCaption');
-    if (!track) return;
+    (function () {
+        const track = document.getElementById('plTrack');
+        if (track) {
+        const captions = @json($mitraCaptions);
+        const n = captions.length;
+        const cap = document.getElementById('plCap');
+        const capTitle = document.getElementById('plCapTitle');
+        const capDesc = document.getElementById('plCapDesc');
+        const count = document.getElementById('plCount');
+        const prog = document.getElementById('plProg');
+        const view = document.getElementById('plView');
+        let cur = 0;
 
-    // Data judul & deskripsi tiap slide, dikirim dari Blade
-    const captions = @json($mitraCaptions);
+        const pad = function (x) { return String(x).padStart(2, '0'); };
 
-    const slideCount = track.children.length;
-    let current = 0;
-
-    function updateCaption() {
-        if (!captionWrap || !captions[current]) return;
-        captionWrap.classList.add('is-fading');
-        setTimeout(() => {
-            captionTitle.textContent = captions[current].title;
-            captionDesc.textContent = captions[current].desc;
-            captionWrap.classList.remove('is-fading');
-        }, 150);
-    }
-
-    function render() {
-        track.style.transform = `translateX(-${current * 100}%)`;
-        if (dotsWrap) {
-            [...dotsWrap.children].forEach((dot, i) => {
-                dot.classList.toggle('is-active', i === current);
-            });
+        function render(first) {
+            track.style.transform = 'translateX(-' + (cur * 100) + '%)';
+            if (count) count.textContent = pad(cur + 1) + ' / ' + pad(n);
+            if (prog) prog.style.width = ((cur + 1) / n * 100) + '%';
+            if (first) return;
+            cap.classList.add('is-fading');
+            setTimeout(function () {
+                capTitle.textContent = captions[cur].title;
+                capDesc.textContent = captions[cur].desc;
+                cap.classList.remove('is-fading');
+            }, 150);
         }
-        updateCaption();
-    }
 
-    window.mitraGoTo = function (dir) {
-        current = (current + dir + slideCount) % slideCount;
-        render();
-    };
+        function go(dir) { cur = (cur + dir + n) % n; render(); }
 
-    window.mitraGoToIndex = function (i) {
-        current = i;
-        render();
-    };
+        document.querySelectorAll('[data-pl-nav]').forEach(function (b) {
+            b.addEventListener('click', function () { go(Number(b.dataset.plNav)); });
+        });
 
-    render();
+        // Geser dengan jari atau mouse
+        let sx = null;
+        view.addEventListener('pointerdown', function (e) { sx = e.clientX; });
+        window.addEventListener('pointerup', function (e) {
+            if (sx === null) return;
+            const dx = e.clientX - sx; sx = null;
+            if (n > 1 && Math.abs(dx) > 50) go(dx < 0 ? 1 : -1);
+        });
 
-    // --- Dukungan swipe/touch untuk HP ---
-    let startX = 0;
-    let deltaX = 0;
-    let isDragging = false;
-    const swipeThreshold = 40;
-
-    carousel.addEventListener('touchstart', function (e) {
-        if (slideCount <= 1) return;
-        startX = e.touches[0].clientX;
-        isDragging = true;
-        track.style.transition = 'none';
-    }, { passive: true });
-
-    carousel.addEventListener('touchmove', function (e) {
-        if (!isDragging) return;
-        deltaX = e.touches[0].clientX - startX;
-        const percent = (deltaX / carousel.offsetWidth) * 100;
-        track.style.transform = `translateX(calc(-${current * 100}% + ${percent}%))`;
-    }, { passive: true });
-
-    carousel.addEventListener('touchend', function () {
-        if (!isDragging) return;
-        isDragging = false;
-        track.style.transition = 'transform 0.4s ease';
-
-        if (Math.abs(deltaX) > swipeThreshold) {
-            if (deltaX < 0) {
-                mitraGoTo(1);
-            } else {
-                mitraGoTo(-1);
-            }
-        } else {
-            render();
+        render(true);
         }
-        deltaX = 0;
-    });
 
-    // --- Lightbox untuk gambar mitra ---
-    window.mitraOpenLightbox = function (src, alt) {
-        const lightbox = document.getElementById('mitraLightbox');
-        const img = document.getElementById('mitraLightboxImg');
-        img.src = src;
-        img.alt = alt;
-        lightbox.classList.add('is-open');
-        document.body.style.overflow = 'hidden';
-    };
-
-    window.mitraCloseLightbox = function () {
-        document.getElementById('mitraLightbox').classList.remove('is-open');
-        document.body.style.overflow = '';
-    };
-
-    // Tutup lightbox dengan tombol Escape
-    document.addEventListener('keydown', function (e) {
-        if (e.key === 'Escape') {
-            mitraCloseLightbox();
-        }
-    });
-})();
+        // Lightbox
+        const box = document.getElementById('plLightbox');
+        const img = document.getElementById('plLightboxImg');
+        const closeBtn = document.getElementById('plLightboxClose');
+        let trigger = null;
+        function open(src, alt, from) { img.src = src; img.alt = alt; box.hidden = false; document.body.style.overflow = 'hidden'; trigger = from; closeBtn.focus(); }
+        function close() { box.hidden = true; img.src = ''; document.body.style.overflow = ''; if (trigger) trigger.focus(); }
+        document.querySelectorAll('[data-pl-zoom]').forEach(function (b) {
+            b.addEventListener('click', function () { open(b.dataset.plZoom, b.dataset.alt, b); });
+        });
+        box.addEventListener('click', function (e) { if (e.target !== img) close(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+    })();
 </script>
 @endsection

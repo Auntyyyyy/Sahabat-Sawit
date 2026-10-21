@@ -2,30 +2,21 @@
 
 namespace App\Providers;
 
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
-use App\Models\ActivityLog;
-use App\Observers\ActivityObserver;
 
 class AppServiceProvider extends ServiceProvider
 {
-    /**
-     * Register any application services.
-     */
     public function register(): void
     {
         //
     }
 
-    /**
-     * Bootstrap any application services.
-     */
     public function boot(): void
     {
-        foreach (array_keys(ActivityLog::SUBJECTS) as $modelClass) {
-        if (class_exists($modelClass)) {
-            $modelClass::observe(ActivityObserver::class);
+        // ngrok mengirim header ini saat diakses lewat https
+        if (request()->header('x-forwarded-proto') === 'https') {
+            URL::forceScheme('https');
         }
     }
-}
-
 }

@@ -2962,6 +2962,10 @@ body { background-color: var(--sw-cream); }
     border-color: #25d366;
 }
 
+.ql-align-center  { text-align: center !important; }
+.ql-align-right   { text-align: right !important; }
+.ql-align-justify { text-align: justify !important; }
+.ql-align-center img { margin-left: auto; margin-right: auto; }
 /* === CSR Tabs === */
 
 .csr-tab-btn {

@@ -1,80 +1,77 @@
-{{-- Kartu login/register bergaya neumorphism dengan panel geser.
+{{-- Kartu login/register dengan panel geser (gaya disamakan dengan website: hijau tua, huruf tegas, tanpa efek timbul).
      Dipakai oleh login.blade.php dan register.blade.php. Variabel: $mode = 'login' | 'register' --}}
 @php $isReg = $mode === 'register'; @endphp
 
 <style>
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
+
     :root {
-        --base: #EFEBE0;
-        --sd: #D2CBB9;
-        --sl: #FFFFFF;
-        --dark-green: #123524;
-        --primary-green: #1F5F3B;
-        --gold: #C9A227;
-        --text: #1F2933;
-        --muted: #5B6560;
-        --raise: 12px 12px 24px var(--sd), -12px -12px 24px var(--sl);
-        --inset: inset 5px 5px 10px var(--sd), inset -5px -5px 10px var(--sl);
+        --hijau: #16321f;
+        --hijau-muda: #2f5a3a;
+        --emas: #e3a72f;
+        --krem: #f2f4ec;
     }
     * { box-sizing: border-box; }
-    html, body { margin: 0; min-height: 100%; background: var(--base); font-family: 'Inter', sans-serif; color: var(--text); }
+    html, body { margin: 0; min-height: 100%; background: var(--hijau); font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif; color: var(--krem); line-height: 1.6; }
 
     .auth-page { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1.5rem; padding: 2rem 1rem; }
 
-    .brand-row { display: flex; align-items: center; justify-content: center; gap: .6rem; }
+    .brand-row { display: flex; align-items: center; justify-content: center; gap: .7rem; }
     .brand-row img { height: 46px; width: auto; display: block; }
-    .brand-row strong { display: block; font-family: 'Poppins', sans-serif; font-size: .95rem; color: var(--dark-green); line-height: 1.2; }
-    .brand-row span { display: block; font-family: 'Poppins', sans-serif; font-size: .72rem; color: var(--muted); }
+    .brand-row strong { display: block; font-size: 1rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.2; color: var(--krem); }
+    .brand-row span { display: block; font-size: .75rem; color: rgba(242,244,236,.65); }
 
     /* ===== Kartu ===== */
-    .auth-card { position: relative; width: min(1000px, 100%); height: 720px; background: var(--base); border-radius: 28px; box-shadow: var(--raise); overflow: hidden; }
+    .auth-card { position: relative; width: min(1000px, 100%); height: 720px; background: var(--krem); border-radius: .5rem; overflow: hidden; box-shadow: 0 30px 70px rgba(0,0,0,.4); }
 
-    /* ===== Panel geser ===== */
-    .switch { position: absolute; top: 0; left: 0; width: 40%; height: 100%; z-index: 2; background: var(--base); border-radius: 28px; box-shadow: var(--raise); overflow: hidden; transition: transform .7s cubic-bezier(.65, 0, .35, 1); }
+    /* ===== Panel geser (gelap, berfoto) ===== */
+    .switch { position: absolute; top: 0; left: 0; width: 40%; height: 100%; z-index: 2; overflow: hidden; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); transition: transform .7s cubic-bezier(.65, 0, .35, 1); }
     .is-login .switch { transform: translateX(150%); }
-    .switch::before, .switch::after { content: ""; position: absolute; width: 320px; height: 320px; border-radius: 50%; box-shadow: var(--inset); }
-    .switch::before { top: -140px; left: -120px; }
-    .switch::after { bottom: -160px; right: -140px; }
+    .switch-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .4; }
+    .switch::after { content: ""; position: absolute; inset: 0; background: linear-gradient(0deg, rgba(15,36,23,.88) 0%, rgba(15,36,23,.4) 100%); }
     .switch-brand { position: absolute; top: 2rem; left: 0; right: 0; z-index: 1; }
     .switch-copy { position: absolute; inset: 0; z-index: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 2.5rem; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
     .is-register .copy-to-login, .is-login .copy-to-register { opacity: 1; visibility: visible; transition: opacity .35s ease .4s, visibility 0s linear .4s; }
-    .switch-copy h2 { font-family: 'Poppins', sans-serif; font-size: 1.6rem; color: var(--dark-green); margin: 0; }
-    .switch-copy p { font-size: .92rem; line-height: 1.6; color: var(--muted); margin: 0 0 1.75rem; max-width: 260px; }
-    .bar { display: block; width: 40px; height: 4px; border-radius: 2px; background: var(--gold); margin: .8rem auto 1rem; }
+    .switch-copy h2 { margin: 0; max-width: 12ch; font-size: clamp(1.8rem, 3vw, 2.5rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; color: var(--krem); }
+    .switch-copy p { margin: 0 0 1.75rem; max-width: 260px; font-size: .95rem; line-height: 1.6; color: rgba(242,244,236,.78); }
+    .bar { display: block; width: 40px; height: 3px; margin: 1rem auto; background: var(--emas); }
 
     /* ===== Panel form ===== */
-    .pane { position: absolute; top: 0; width: 60%; height: 100%; padding: 2rem 3.5rem; display: flex; flex-direction: column; justify-content: center; justify-content: safe center; overflow-y: auto; opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
+    .pane { position: absolute; top: 0; width: 60%; height: 100%; padding: 2rem 3.5rem; display: flex; flex-direction: column; justify-content: center; justify-content: safe center; overflow-y: auto; color: var(--hijau); opacity: 0; visibility: hidden; transition: opacity .25s ease, visibility 0s linear .25s; }
     .pane-login { left: 0; }
     .pane-register { left: 40%; }
     .is-login .pane-login, .is-register .pane-register { opacity: 1; visibility: visible; transition: opacity .35s ease .3s, visibility 0s linear .3s; }
-    .pane h2 { font-family: 'Poppins', sans-serif; font-size: 1.5rem; color: var(--dark-green); text-align: center; margin: 0 0 .25rem; }
-    .subtitle { text-align: center; font-size: .85rem; color: var(--muted); margin: 0 0 1.4rem; }
+    .pane h2 { margin: 0 0 .25rem; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; color: var(--hijau); }
+    .subtitle { margin: 0 0 1.6rem; font-size: .92rem; color: rgba(22,50,31,.65); }
 
-    .field { margin-bottom: .9rem; }
-    .field label { display: block; font-size: .8rem; font-weight: 600; color: var(--dark-green); margin: 0 0 .35rem .4rem; }
-    .field input, .field select { width: 100%; border: 0; border-radius: 14px; padding: .75rem 1rem; font: inherit; font-size: .92rem; color: var(--text); background: var(--base); box-shadow: var(--inset); }
-    .field select { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%235B6560' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right 1rem center; background-size: 18px; }
-    .field input:focus-visible, .field select:focus-visible, .btn:focus-visible, .pane a:focus-visible { outline: 2px solid var(--primary-green); outline-offset: 3px; }
-    .hint { font-size: .75rem; color: var(--muted); margin: .35rem 0 0 .4rem; }
-    .remember-row { display: flex; align-items: center; gap: .5rem; margin: 0 0 1.2rem .4rem; font-size: .85rem; color: var(--muted); }
-    .remember-row input { accent-color: var(--primary-green); }
+    .field { margin-bottom: 1rem; }
+    .field label { display: block; margin: 0 0 .4rem; font-size: .85rem; font-weight: 600; color: var(--hijau); }
+    .field input, .field select { width: 100%; padding: .75rem .9rem; border: 1px solid rgba(22,50,31,.3); border-radius: .25rem; background: #fff; font: inherit; font-size: .95rem; color: var(--hijau); transition: border-color .2s; }
+    .field input:hover, .field select:hover { border-color: rgba(22,50,31,.55); }
+    .field select { appearance: none; background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2316321f' stroke-width='2'%3e%3cpath d='M6 9l6 6 6-6'/%3e%3c/svg%3e"); background-repeat: no-repeat; background-position: right .9rem center; background-size: 18px; }
+    .field input:focus-visible, .field select:focus-visible { outline: 2px solid var(--hijau-muda); outline-offset: 2px; border-color: var(--hijau-muda); }
+    .hint { margin: .4rem 0 0; font-size: .8rem; color: rgba(22,50,31,.6); }
+    .remember-row { display: flex; align-items: center; gap: .5rem; margin: 0 0 1.25rem; font-size: .9rem; color: rgba(22,50,31,.75); }
+    .remember-row input { accent-color: var(--hijau-muda); }
 
-    .btn { display: inline-block; border: 0; cursor: pointer; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: .9rem; letter-spacing: .04em; border-radius: 999px; padding: .8rem 2.4rem; background: var(--dark-green); color: #FAF6EE; box-shadow: 6px 6px 14px var(--sd), -6px -6px 14px var(--sl); transition: background .2s, box-shadow .2s, transform .15s; }
-    .btn:hover { background: var(--primary-green); }
-    .btn:active { box-shadow: inset 3px 3px 6px rgba(0, 0, 0, .35); transform: scale(.98); }
-    .btn-ghost { background: var(--base); color: var(--dark-green); }
-    .btn-ghost:hover { background: var(--base); color: var(--primary-green); }
-    .btn-ghost:active { box-shadow: var(--inset); }
+    .btn { display: inline-block; padding: .8rem 2rem; border: 1px solid var(--hijau); border-radius: .25rem; background: var(--hijau); color: var(--krem); font: inherit; font-weight: 600; font-size: .95rem; text-decoration: none; cursor: pointer; transition: background .2s, border-color .2s, color .2s, transform .15s; }
+    .btn:hover { background: var(--hijau-muda); border-color: var(--hijau-muda); }
+    .btn:active { transform: scale(.98); }
+    .btn:focus-visible, .pane a:focus-visible { outline: 3px solid var(--hijau-muda); outline-offset: 3px; }
+    .btn-ghost { background: transparent; border-color: rgba(242,244,236,.6); color: var(--krem); }
+    .btn-ghost:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .switch .btn:focus-visible { outline-color: var(--krem); }
     .btn-block { display: block; width: 100%; margin-top: .4rem; }
 
-    .alert-box { background: #FCEBEC; border: 1px solid #F3C1C6; color: #92273A; border-radius: 14px; padding: .75rem 1rem; font-size: .83rem; margin-bottom: 1rem; }
+    .alert-box { margin-bottom: 1rem; padding: .75rem 1rem; border-left: 3px solid #b3261e; border-radius: .25rem; background: #fdecea; color: #7a1a14; font-size: .88rem; }
     .alert-box ul { margin: 0; padding-left: 1.1rem; }
 
     .mobile-only { display: none; }
-    .switch-link { text-align: center; font-size: .85rem; color: var(--muted); margin: 1.25rem 0 0; }
-    .switch-link a { color: var(--primary-green); font-weight: 600; text-decoration: none; }
+    .switch-link { margin: 1.25rem 0 0; text-align: center; font-size: .9rem; color: rgba(22,50,31,.7); }
+    .switch-link a { font-weight: 600; color: var(--hijau); text-decoration: underline; text-decoration-color: var(--emas); text-underline-offset: 3px; }
 
     @media (max-width: 820px) {
-        .auth-card { height: auto; border-radius: 24px; }
+        .auth-card { height: auto; }
         .switch { display: none; }
         .pane { position: static; width: 100%; height: auto; padding: 2rem 1.5rem; display: none; opacity: 1; visibility: visible; }
         .is-login .pane-login, .is-register .pane-register { display: flex; }
@@ -97,6 +94,8 @@
 
         {{-- Panel geser --}}
         <aside class="switch">
+            <img class="switch-bg" src="{{ asset('images/herotentang.png') }}" alt="" onerror="this.style.display='none'">
+
             <div class="brand-row switch-brand">
                 <img src="{{ asset('images/logoaja.png') }}" alt="Logo PT. Sahabat Sawit Rokan Sejahtera">
                 <div><strong>Sahabat Sawit</strong><span>Rokan Sejahtera</span></div>
@@ -136,11 +135,11 @@
                 @csrf
                 <div class="field">
                     <label for="login-email">Email</label>
-                    <input type="email" id="login-email" name="email" value="{{ $isReg ? '' : old('email') }}" required {{ $isReg ? '' : 'autofocus' }}>
+                    <input type="email" id="login-email" name="email" value="{{ $isReg ? '' : old('email') }}" autocomplete="username" required {{ $isReg ? '' : 'autofocus' }}>
                 </div>
                 <div class="field">
                     <label for="login-password">Password</label>
-                    <input type="password" id="login-password" name="password" required>
+                    <input type="password" id="login-password" name="password" autocomplete="current-password" required>
                 </div>
                 <div class="remember-row">
                     <input type="checkbox" name="remember" id="remember">
@@ -171,11 +170,11 @@
                 @csrf
                 <div class="field">
                     <label for="name">Nama Lengkap</label>
-                    <input type="text" id="name" name="name" value="{{ $isReg ? old('name') : '' }}" required {{ $isReg ? 'autofocus' : '' }}>
+                    <input type="text" id="name" name="name" value="{{ $isReg ? old('name') : '' }}" autocomplete="name" required {{ $isReg ? 'autofocus' : '' }}>
                 </div>
                 <div class="field">
                     <label for="reg-email">Email</label>
-                    <input type="email" id="reg-email" name="email" value="{{ $isReg ? old('email') : '' }}" required>
+                    <input type="email" id="reg-email" name="email" value="{{ $isReg ? old('email') : '' }}" autocomplete="email" required>
                 </div>
                 <div class="field">
                     <label for="role">Jabatan</label>
@@ -188,11 +187,11 @@
                 </div>
                 <div class="field">
                     <label for="reg-password">Password</label>
-                    <input type="password" id="reg-password" name="password" required minlength="8">
+                    <input type="password" id="reg-password" name="password" autocomplete="new-password" required minlength="8">
                 </div>
                 <div class="field">
                     <label for="password_confirmation">Konfirmasi Password</label>
-                    <input type="password" id="password_confirmation" name="password_confirmation" required minlength="8">
+                    <input type="password" id="password_confirmation" name="password_confirmation" autocomplete="new-password" required minlength="8">
                 </div>
                 <button type="submit" class="btn btn-block">Daftar</button>
             </form>
