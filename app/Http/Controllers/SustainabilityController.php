@@ -9,11 +9,11 @@ class SustainabilityController extends Controller
     public function index()
     {
         $pillars = [
-            ['title' => 'Perlindungan Lingkungan', 'desc' => 'Menjaga kawasan konservasi dan keanekaragaman hayati di sekitar area operasional.'],
-            ['title' => 'Pengelolaan Sumber Daya', 'desc' => 'Penggunaan air, energi, dan lahan secara efisien dan bertanggung jawab.'],
-            ['title' => 'Keselamatan & Kesehatan Kerja', 'desc' => 'Standar K3 yang ketat untuk melindungi seluruh tenaga kerja.'],
-            ['title' => 'Pemberdayaan Masyarakat', 'desc' => 'Program kemitraan dan pengembangan ekonomi bagi masyarakat sekitar.'],
-            ['title' => 'Praktik Perkebunan Bertanggung Jawab', 'desc' => 'Kepatuhan terhadap regulasi dan standar sertifikasi kelapa sawit berkelanjutan.'],
+            ['title' => 'Kelestarian Lingkungan', 'desc' => 'Menjalankan operasional yang memperhatikan kelestarian lingkungan serta mengurangi emisi gas rumah kaca (GRK).'],
+            ['title' => 'Ketenagakerjaan & Hak Asasi Manusia', 'desc' => 'Menjamin upah layak, perlindungan pekerja, kesempatan kerja yang setara, serta lingkungan kerja bebas dari diskriminasi dan kekerasan.'],
+            ['title' => 'Kualitas, Keselamatan & Kesehatan Kerja', 'desc' => 'Menjaga mutu produk serta melindungi keselamatan dan kesehatan pekerja melalui sistem manajemen yang terintegrasi.'],
+            ['title' => 'Tanggung Jawab Sosial & Masyarakat', 'desc' => 'Menghormati hak masyarakat, menghargai kearifan lokal, dan menjalankan usaha dengan memperhatikan tanggung jawab sosial.'],
+            ['title' => 'Tata Kelola & Integritas Bisnis', 'desc' => 'Mematuhi peraturan, menjunjung kejujuran dan tanggung jawab, serta mencegah korupsi, penyuapan, penggelapan, dan pencucian uang.'],
         ];
 
         $statistics = [

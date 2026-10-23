@@ -13,14 +13,17 @@
     .ab a:focus-visible, .ab button:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
 
     /* Hero */
-    .ab-hero { padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(3rem, 8vh, 5rem); }
+    .ab-hero { position: relative; isolation: isolate; overflow: hidden; display: flex; align-items: flex-end; min-height: min(90vh, 58rem); background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
+    .ab-hero::after { content: ''; position: absolute; inset: 0; z-index: -1; background: linear-gradient(90deg, rgba(22,50,31,.92) 0%, rgba(22,50,31,.6) 50%, rgba(22,50,31,.2) 100%), linear-gradient(0deg, rgba(22,50,31,.88) 0%, transparent 50%); }
+    .ab-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
+    .ab-hero-inner { width: 100%; padding: clamp(8rem, 18vh, 11rem) var(--gutter) clamp(2.5rem, 6vh, 4rem); }
     .ab-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
     .ab-crumb a:hover { color: var(--krem); }
     .ab-crumb [aria-current] { color: var(--krem); }
-    .ab-title { margin-top: 1.5rem; font-size: clamp(2.4rem, 7vw, 5.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; max-width: 18ch; }
+    .ab-title { margin-top: 1.5rem; font-size: clamp(2.4rem, 7.5vw, 6rem); font-weight: 800; line-height: 1; letter-spacing: -.045em; max-width: 16ch; }
     .ab-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
     .ab-pills { list-style: none; margin: 2rem 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-    .ab-pills li { font-size: .85rem; padding: .3rem .85rem; border: 1px solid rgba(242,244,236,.25); border-radius: 99px; color: rgba(242,244,236,.8); }
+    .ab-pills li { font-size: .85rem; padding: .3rem .85rem; border: 1px solid rgba(242,244,236,.3); border-radius: 99px; background: rgba(15,36,23,.35); color: rgba(242,244,236,.85); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 
     /* Sub-navigasi */
     .ab-tabs { margin-top: 2.5rem; padding-top: 1.25rem; border-top: 1px solid rgba(242,244,236,.15); display: flex; flex-wrap: wrap; gap: .5rem 1.75rem; }

@@ -3,8 +3,12 @@
     Pemakaian:
       @include('about._hero', ['title' => '...', 'lead' => '...'])                       // halaman Profil Perusahaan
       @include('about._hero', ['title' => '...', 'lead' => '...', 'crumb' => 'Nama'])     // halaman lainnya
+    Foto latar: default herotentang.png; tiap halaman bisa memakai foto sendiri lewat parameter 'foto' => 'nama-file.jpg'
+    (file ada di public/images).
 --}}
 <header class="ab-hero">
+    <img class="ab-bg" src="{{ asset('images/' . ($foto ?? 'herotentang.png')) }}" alt="" onerror="this.style.display='none'">
+    <div class="ab-hero-inner">
     <nav class="ab-crumb" aria-label="Breadcrumb">
         <a href="{{ url('/') }}">Beranda</a>
         <span aria-hidden="true">/</span>
@@ -27,4 +31,5 @@
     </ul>
 
     @include('about._subnav')
+    </div>
 </header>

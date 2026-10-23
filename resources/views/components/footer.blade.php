@@ -1,112 +1,134 @@
 <style>
-    /* Watermark logo SSRS di sisi kiri footer (dekoratif, di belakang konten) */
-    .footer-wm { position: relative; overflow: hidden; isolation: isolate; }
-    .footer-wm-mark {
-        position: absolute; z-index: -1; left: -3%; bottom: -14%;
-        width: min(44vw, 34rem); aspect-ratio: 1 / 1;
-        background: url('{{ asset('images/logo (2).png') }}') no-repeat left bottom / contain;
-        filter: brightness(0) invert(1);   /* jadikan siluet putih; hapus baris ini jika ingin warna asli logo */
-        opacity: .07; pointer-events: none;
+    /* Footer — versi putih, gaya disamakan dengan website baru (huruf tegas, garis tipis). Class berawalan "ft-". */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
+
+    footer.ft {
+        --hijau: #16321f; --hijau-muda: #2f5a3a; --emas: #e3a72f; --krem: #f2f4ec;
+        --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
+        position: relative; overflow: hidden; isolation: isolate;
+        margin: 0; border: 0; box-shadow: none;
+        padding: clamp(4rem, 9vh, 6rem) var(--gutter) 2rem;
+        background: #fff; color: var(--hijau);
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif; line-height: 1.6;
     }
-    @media (max-width: 1023px) {
-        .footer-wm-mark { width: min(72vw, 22rem); left: -10%; bottom: -8%; }
-    }
+    .ft *, .ft *::before, .ft *::after { box-sizing: border-box; }
+    .ft a { color: inherit; text-decoration: none; }
+    .ft a:focus-visible { outline: 3px solid var(--hijau-muda); outline-offset: 3px; }
+
+    .ft-main { display: grid; grid-template-columns: 1fr; gap: 2.5rem 3rem; }
+    @media (min-width: 640px)  { .ft-main { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .ft-main { grid-template-columns: 1.5fr 1fr 1.5fr 1.4fr; } }
+
+    .ft-logo { display: inline-flex; align-items: center; gap: .7rem; }
+    .ft-logo img { height: 44px; width: auto; display: block; }
+    .ft-logo strong { display: block; font-size: 1.1rem; font-weight: 800; letter-spacing: -.01em; line-height: 1.15; }
+    .ft-logo span { display: block; font-size: .8rem; color: rgba(22,50,31,.65); }
+    .ft-desc { margin-top: 1.25rem; max-width: 24rem; font-size: .95rem; color: rgba(22,50,31,.7); }
+
+    .ft-col h3 { margin: 0 0 1rem; font-size: .95rem; font-weight: 600; color: rgba(22,50,31,.55); }
+    .ft-col ul { list-style: none; margin: 0; padding: 0; }
+    .ft-col li + li { margin-top: .55rem; }
+    .ft-link { font-size: 1rem; font-weight: 600; transition: color .2s; }
+    .ft-link:hover { color: var(--hijau-muda); text-decoration: underline; text-decoration-color: var(--emas); text-underline-offset: 3px; }
+    .ft-col address { font-style: normal; font-size: .95rem; color: rgba(22,50,31,.78); }
+    .ft-col address + address { margin-top: 1.1rem; }
+    .ft-col address b { display: block; margin-bottom: .15rem; font-weight: 600; color: var(--hijau); }
+    .ft-contact { display: block; font-size: 1rem; font-weight: 600; overflow-wrap: anywhere; transition: color .2s; }
+    .ft-contact + .ft-contact { margin-top: .75rem; }
+    .ft-contact small { display: block; font-size: .85rem; font-weight: 400; color: rgba(22,50,31,.55); }
+    .ft-contact:hover { color: var(--hijau-muda); text-decoration: underline; text-decoration-color: var(--emas); text-underline-offset: 3px; }
+
+    .ft-cert { margin-top: clamp(3rem, 7vh, 4.5rem); padding-top: 1.75rem; border-top: 1px solid rgba(22,50,31,.15); display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.5rem; }
+    .ft-cert-label { font-size: .95rem; color: rgba(22,50,31,.55); }
+    .ft-cert-logos { display: flex; flex-wrap: wrap; gap: .75rem; }
+    .ft-cert-logos img { display: block; height: 3.25rem; width: auto; padding: .35rem; border-radius: .25rem; background: #fff; border: 1px solid rgba(22,50,31,.15); }
+
+    .ft-bottom { margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid rgba(22,50,31,.15); display: grid; grid-template-columns: 1fr; gap: 1rem; text-align: center; font-size: .85rem; color: rgba(22,50,31,.6); }
+    @media (min-width: 1024px) { .ft-bottom { grid-template-columns: 1fr auto 1fr; align-items: center; } .ft-copy { text-align: left; } .ft-legal { justify-content: flex-end; } }
+    .ft-bottom span.blk { display: block; }
+    .ft-credit b { display: block; font-weight: 600; color: var(--hijau); }
+    .ft-legal { display: flex; justify-content: center; gap: 1.5rem; }
+    .ft-legal a:hover { color: var(--hijau-muda); text-decoration: underline; text-decoration-color: var(--emas); text-underline-offset: 3px; }
 </style>
 
-<footer class="footer-ssrs footer-wm">
-    <span class="footer-wm-mark" aria-hidden="true"></span>
-    <div class="max-w-7xl mx-auto px-6 lg:px-8 py-10">
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-x-10 gap-y-8">
+<footer class="ft footer-ssrs">
+    <div class="ft-main">
 
-            <!-- Logo & Deskripsi -->
-            <div>
-               <a href="{{ route('home') }}" target="_blank" rel="noopener noreferrer" class="footer-logo-wrap inline-flex items-center gap-3 mb-3">
-                    <img src="{{ asset('images/logo.png') }}" alt="PT. Sahabat Sawit Rokan Sejahtera" class="footer-logo">
-                    <span class="footer-brand-text flex flex-col leading-tight">
-                        <span class="font-heading font-bold text-base md:text-lg text-white">Sahabat Sawit</span>
-                        <span class="font-heading text-[11px] md:text-xs text-white/60 tracking-wide -mt-0.5">Rokan Sejahtera</span>
-                    </span>
-                </a>
-                <p class="text-[13px] footer-text leading-normal text-justify">
-                    Perusahaan perkebunan dan industri kelapa sawit di Rokan Hilir, Riau, yang berkomitmen pada pertumbuhan berkelanjutan, kelestarian lingkungan, dan kesejahteraan masyarakat.
-                </p>
-            </div>
-
-            <!-- Quick Links -->
-            <div>
-                <h3 class="font-heading font-semibold footer-heading mb-3">Tautan Cepat</h3>
-                <ul class="space-y-1.5 text-[13px] footer-text">
-                    <li><a href="{{ route('about') }}" class="footer-link">Tentang Kami</a></li>
-                    <li><a href="{{ route('products') }}" class="footer-link">Produk</a></li>
-                    <li><a href="{{ route('sustainability') }}" class="footer-link">Keberlanjutan</a></li>
-                    <li><a href="{{ route('career') }}" class="footer-link">Karir</a></li>
-                </ul>
-            </div>
-
-            <!-- Alamat -->
-            <div>
-                <h3 class="font-heading font-semibold footer-heading mb-3">Alamat</h3>
-                    <ul class="space-y-3 text-[13px] leading-snug footer-text">
-                    <li>
-                        <span class="block font-heading font-medium footer-addr-label mb-0.5">Kantor Pusat</span>
-                        <span>Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36. Kel. Hamdan, Kec. Medan Maimun, Kota Medan, Sumatera Utara</span>
-                    </li>
-                    <li>
-                        <span class="block font-heading font-medium footer-addr-label mb-0.5">Site / Produksi</span>
-                        <span>Jl. Lintas Medan KM 1, RT/RW 001/001 Kepenghuluan Sungai Meranti, Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983</span>
-                    </li>
-                </ul>
-            </div>
-
-            <!-- Kontak -->
-            <div>
-                <h3 class="font-heading font-semibold footer-heading mb-3">Kontak</h3>
-                <div class="space-y-2 text-[13px] footer-text">
-                    <a href="mailto:ptsahabatsawitrokansejahtera@gmail.com"
-                       class="flex items-center gap-2 footer-link">
-                        <i class="bi bi-envelope-fill"></i>
-                        <span>ptsahabatsawitrokansejahtera@gmail.com</span>
-                    </a>
-                    <a href="https://wa.me/628139654581"
-                       target="_blank"
-                       rel="noopener noreferrer"
-                       class="flex items-center gap-2 footer-link">
-                        <i class="bi bi-telephone-fill"></i>
-                        <span>0813-965-4581</span>
-                    </a>
-                </div>
-            </div>
-
+        {{-- Logo & deskripsi --}}
+        <div>
+            <a href="{{ route('home') }}" class="ft-logo">
+                <img src="{{ asset('images/logo.png') }}" alt="PT. Sahabat Sawit Rokan Sejahtera">
+                <span><strong>Sahabat Sawit</strong><span>Rokan Sejahtera</span></span>
+            </a>
+            <p class="ft-desc">
+                Perusahaan perkebunan dan industri kelapa sawit di Rokan Hilir, Riau, yang berkomitmen pada pertumbuhan berkelanjutan, kelestarian lingkungan, dan kesejahteraan masyarakat.
+            </p>
         </div>
 
-        <!-- Logo Sertifikasi -->
-        <div class="footer-cert mt-8 pt-5 border-t border-white/10">
-            <span class="footer-cert-label">Sertifikasi Resmi</span>
-            <div class="footer-cert-logos">
-                <img src="{{ asset('images/halal.jpeg') }}" alt="Sertifikat Halal" class="footer-cert-logo">
-                <img src="{{ asset('images/ispo.jpeg') }}" alt="Sertifikat ISPO" class="footer-cert-logo">
-                <img src="{{ asset('images/tsi.jpeg') }}" alt="TSI" class="footer-cert-logo">
-                <img src="{{ asset('images/kan.jpeg') }}" alt="KAN" class="footer-cert-logo">
-            </div>
+        {{-- Tautan cepat --}}
+        <nav class="ft-col" aria-label="Tautan cepat">
+            <h3>Tautan Cepat</h3>
+            <ul>
+                <li><a href="{{ route('about') }}" class="ft-link">Tentang Kami</a></li>
+                <li><a href="{{ route('products') }}" class="ft-link">Produk</a></li>
+                <li><a href="{{ route('sustainability') }}" class="ft-link">Keberlanjutan</a></li>
+                <li><a href="{{ route('plantation') }}" class="ft-link">Perkebunan</a></li>
+                <li><a href="{{ route('career') }}" class="ft-link">Karir</a></li>
+            </ul>
+        </nav>
+
+        {{-- Alamat --}}
+        <div class="ft-col">
+            <h3>Alamat</h3>
+            <address>
+                <b>Kantor Pusat</b>
+                Jl. Haji Misbah, Komplek Multatuli Indah Blok D No. 36. Kel. Hamdan, Kec. Medan Maimun, Kota Medan, Sumatera Utara
+            </address>
+            <address>
+                <b>Site / Produksi</b>
+                Jl. Lintas Medan KM 1, RT/RW 001/001 Kepenghuluan Sungai Meranti, Kec. Tanjung Medan, Kab. Rokan Hilir, Riau 28983
+            </address>
         </div>
 
-            <div class="footer-bottom mt-5 pt-5 grid grid-cols-1 lg:grid-cols-3 items-center gap-4 lg:gap-6 text-center">
-                <!-- Copyright (kiri) -->
-                <p class="footer-copy lg:text-left">
-                    &copy; {{ date('Y') }} PT Sahabat Sawit Rokan Sejahtera.
-                    <span class="block">All Rights Reserved.</span>
-                </p>
+        {{-- Kontak --}}
+        <div class="ft-col">
+            <h3>Kontak</h3>
+            <a href="mailto:ptsahabatsawitrokansejahtera@gmail.com" class="ft-contact">
+                <small>Email</small>ptsahabatsawitrokansejahtera@gmail.com
+            </a>
+            <a href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer" class="ft-contact">
+                <small>WhatsApp</small>0813-965-4581
+            </a>
+        </div>
 
-                <!-- Credit developer (tengah) -->
-                <div class="footer-credit">
-                    Developed under the royal supervision of
-                    <span class="block">Kanjeng Ratu</span>
-                </div>
+    </div>
 
-                <!-- Legal links (kanan) -->
-                <div class="flex justify-center lg:justify-end gap-6">
-                    <a href="#" class="footer-link">Privacy Policy</a>
-                    <a href="#" class="footer-link">Terms & Conditions</a>
-                </div>
-            </div>
+    {{-- Sertifikasi --}}
+    <div class="ft-cert">
+        <span class="ft-cert-label">Sertifikasi Resmi</span>
+        <div class="ft-cert-logos">
+            <img src="{{ asset('images/halal.jpeg') }}" alt="Sertifikat Halal">
+            <img src="{{ asset('images/ispo.jpeg') }}" alt="Sertifikat ISPO">
+            <img src="{{ asset('images/tsi.jpeg') }}" alt="TSI">
+            <img src="{{ asset('images/kan.jpeg') }}" alt="KAN">
+        </div>
+    </div>
+
+    {{-- Baris bawah: copyright (kiri), credit developer (tengah), legal (kanan) --}}
+    <div class="ft-bottom">
+        <p class="ft-copy" style="margin:0">
+            &copy; {{ date('Y') }} PT Sahabat Sawit Rokan Sejahtera.
+            <span class="blk">All Rights Reserved.</span>
+        </p>
+
+        <div class="ft-credit">
+            Developed under the royal supervision of
+            <b>Kanjeng Ratu</b>
+        </div>
+
+        <div class="ft-legal">
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms & Conditions</a>
+        </div>
+    </div>
 </footer>

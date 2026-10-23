@@ -31,7 +31,8 @@
     .sb-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
     .sb-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
     .sb-crumb a:hover { color: var(--krem); }
-    .sb-crumb [aria-current] { color: var(--krem); }
+    .sb-crumb [a
+    ria-current] { color: var(--krem); }
     .sb-title { margin-top: 1.5rem; max-width: 14ch; font-size: clamp(2.6rem, 8vw, 6.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
     .sb-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
 
