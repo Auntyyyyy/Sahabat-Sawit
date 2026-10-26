@@ -50,7 +50,7 @@
 
     /* Detail produk */
     .pd-cat { display: inline-block; margin-top: 1.25rem; padding: .2rem .85rem; border: 1px solid rgba(242,244,236,.35); border-radius: 99px; font-size: .85rem; color: rgba(242,244,236,.85); }
-    .pd-detail { margin-top: 1.5rem; max-width: 40rem; font-size: 1.05rem; color: rgba(242,244,236,.8); }
+    .pd-detail { margin-top: 1.5rem; max-width: 40rem; font-size: 1.05rem; color: rgba(242,244,236,.8); text-align: justify; text-justify: inter-word; }
     .pd-zoombtn { position: relative; display: block; width: 100%; padding: 0; border: 0; background: none; cursor: zoom-in; }
     .pd-photo { display: block; width: 100%; height: clamp(300px, 42vw, 520px); object-fit: cover; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
     .pd-zoomhint { position: absolute; right: 1rem; bottom: 1rem; width: 2.5rem; height: 2.5rem; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(242,244,236,.5); border-radius: 50%; background: rgba(22,50,31,.6); transition: background .2s, color .2s; }

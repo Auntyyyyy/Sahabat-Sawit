@@ -215,7 +215,7 @@
         </div>
 
         <div class="pr-split pr-mt" style="align-items:start">
-            <img class="pr-photo" style="height:clamp(280px,40vw,480px)" src="{{ asset('images/sebaranid.png') }}" alt="Peta Daerah Penghasil Kelapa Sawit di Indonesia" onerror="this.style.display='none'">
+            <img class="pr-photo" style="height:clamp(280px,40vw,480px)" src="{{ asset('images/peta.png') }}" alt="Peta Daerah Penghasil Kelapa Sawit di Indonesia" onerror="this.style.display='none'">
             <div>
                 <p class="pr-label">Sebaran Wilayah</p>
                 <h3 class="pr-title" style="margin-top:.5rem;font-size:clamp(1.6rem,3.2vw,2.4rem)">Daerah Penghasil Utama di Indonesia</h3>

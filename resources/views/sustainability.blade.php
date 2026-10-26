@@ -98,7 +98,7 @@
     .sb-empty { margin-top: 2.5rem; padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; }
 
     /* Popup cerita kegiatan */
-    .sb-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,8,5,.9); overflow-y: auto; }
+    .sb-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,8,5,.9); overflow-y: auto; text-align: justify; }
     .sb-modal[hidden] { display: none; }
     .sb-dialog { position: relative; width: min(100%, 44rem); max-height: 90vh; overflow-y: auto; border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; background: #102a1a; }
     .sb-dialog img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }

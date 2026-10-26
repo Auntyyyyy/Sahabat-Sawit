@@ -42,9 +42,9 @@
     }
     .ab-label { font-size: .95rem; color: rgba(242,244,236,.6); }
     .ab-h2 { margin-top: .5rem; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; max-width: 20ch; }
-    .ab-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); }
+    .ab-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); text-align: justify; }
     .ab-p strong, .ab-prose strong { color: var(--krem); font-weight: 600; }
-    .ab-prose { margin-top: 2rem; max-width: 44rem; color: rgba(242,244,236,.78); }
+    .ab-prose { margin-top: 2rem; max-width: 44rem; color: rgba(242,244,236,.78); text-align: justify; }
     .ab-prose p + p { margin-top: 1.25rem; }
     .ab-photo { display: block; width: 100%; height: clamp(280px, 38vw, 460px); object-fit: cover; border-radius: .25rem; background: var(--hijau-muda); }
 

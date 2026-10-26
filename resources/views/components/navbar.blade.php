@@ -20,7 +20,8 @@
                 <a href="{{ route('contact') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('contact') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
-                <div class="relative">
+                <!-- Terbuka otomatis saat kursor diarahkan / disentuh, tidak perlu klik panah -->
+                <div id="media-menu-wrap" class="relative">
                     <button id="media-menu-btn" type="button"
                             class="media-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'nav-link-active font-semibold' : '' }}"
                             aria-haspopup="true" aria-expanded="false">
@@ -29,17 +30,21 @@
                             <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/>
                         </svg>
                     </button>
-                    <div id="media-menu-dropdown"
-                         class="hidden absolute left-0 mt-2 w-64 bg-white rounded-brand shadow-lg border border-gray-100 overflow-hidden z-50">
-                        <a href="{{ route('media.berita') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('media.berita') || request()->routeIs('media.berita.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Berita & Galeri Kegiatan
-                        </a>
-                        <a href="{{ route('media.pengetahuan') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Pengetahuan
-                        </a>
-                        <a href="{{ route('admin.login') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                            Masuk Admin
-                        </a>
+
+                    {{-- pt-2 (bukan mt-2) supaya tidak ada celah kosong antara tombol dan menu,
+                         jadi dropdown tidak menutup saat kursor bergerak ke bawah --}}
+                    <div id="media-menu-dropdown" class="hidden absolute left-0 top-full pt-2 w-64 z-50">
+                        <div class="bg-white rounded-brand shadow-lg border border-gray-100 overflow-hidden">
+                            <a href="{{ route('media.berita') }}" class="block px-4 py-3 text-sm hover:bg-cream {{ request()->routeIs('media.berita') || request()->routeIs('media.berita.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
+                                Berita & Galeri Kegiatan
+                            </a>
+                            <a href="{{ route('media.pengetahuan') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
+                                Pengetahuan
+                            </a>
+                            <a href="{{ route('admin.login') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
+                                Masuk Admin
+                            </a>
+                        </div>
                     </div>
                 </div>
 
@@ -82,6 +87,7 @@
                 <a href="{{ route('contact') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('contact') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
                 <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
+                <!-- Seluruh baris "Media" bisa disentuh untuk membuka/menutup submenu -->
                 <div class="border-t border-gray-100 pt-3">
                     <button id="media-accordion-btn" type="button"
                             class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
@@ -273,6 +279,7 @@
 
         const langBtn = document.getElementById('lang-switch-btn');
         const langDropdown = document.getElementById('lang-switch-dropdown');
+        const mediaWrap = document.getElementById('media-menu-wrap');
         const mediaBtn = document.getElementById('media-menu-btn');
         const mediaDropdown = document.getElementById('media-menu-dropdown');
 
@@ -291,13 +298,49 @@
             });
         }
 
-        if (mediaBtn && mediaDropdown) {
+        /* ===== Menu Media (Desktop): terbuka otomatis saat kursor diarahkan ===== */
+        if (mediaWrap && mediaBtn && mediaDropdown) {
+            // true di laptop/PC (ada mouse); false di layar sentuh seperti tablet
+            const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+            let mediaCloseTimer = null;
+
+            function openMedia() {
+                clearTimeout(mediaCloseTimer);
+                if (langDropdown) { langDropdown.classList.add('hidden'); langBtn?.setAttribute('aria-expanded', false); }
+                mediaDropdown.classList.remove('hidden');
+                mediaBtn.setAttribute('aria-expanded', true);
+            }
+
+            function closeMedia(delay = 0) {
+                clearTimeout(mediaCloseTimer);
+                mediaCloseTimer = setTimeout(() => {
+                    mediaDropdown.classList.add('hidden');
+                    mediaBtn.setAttribute('aria-expanded', false);
+                }, delay);
+            }
+
+            if (canHover) {
+                // Kursor masuk area "Media" -> langsung terbuka.
+                // Kursor keluar -> tutup setelah jeda singkat (150 ms) supaya tidak berkedip.
+                mediaWrap.addEventListener('mouseenter', openMedia);
+                mediaWrap.addEventListener('mouseleave', () => closeMedia(150));
+            }
+
             mediaBtn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                const isHidden = mediaDropdown.classList.contains('hidden');
-                closeAllDropdowns();
-                mediaDropdown.classList.toggle('hidden', !isHidden);
-                mediaBtn.setAttribute('aria-expanded', isHidden);
+                if (canHover) {
+                    // Di perangkat dengan mouse: menu sudah terbuka lewat hover,
+                    // klik tidak boleh menutupnya lagi.
+                    openMedia();
+                } else {
+                    // Di layar sentuh (tablet): sentuh sekali untuk buka, sentuh lagi untuk tutup.
+                    mediaDropdown.classList.contains('hidden') ? openMedia() : closeMedia(0);
+                }
+            });
+
+            // Tombol Esc menutup menu
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') closeMedia(0);
             });
         }
 
