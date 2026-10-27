@@ -23,7 +23,7 @@ class ProductController extends Controller
         [
             'step'  => '03',
             'label' => 'proses penyortiran dan Grading TBS (Tandan Buah Segar).',
-            'image' => 'sortasi',
+            'image' => 'grading.png',
             'alt'   => 'proses penyortiran',
         ],
         [

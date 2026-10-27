@@ -11,7 +11,7 @@
         playsinline
         poster="{{ asset('images/tangki.png') }}"
         onerror="this.style.display='none'">
-        <source src="{{ asset('images/tangki.png') }}" type="video/mp4">
+        <source src="{{ asset('images/profil.mp4') }}" type="video/mp4">
         Browser Anda tidak mendukung tag video.
     </video>
     <div class="absolute inset-0 bg-gradient-to-b from-dark-green/90 via-dark-green/70 to-dark-green/95 lg:bg-gradient-to-r lg:from-dark-green/95 lg:via-dark-green/75 lg:to-transparent"></div>

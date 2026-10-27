@@ -3,11 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script>document.documentElement.classList.add('js-on');</script>
     <title>@yield('title', 'Dashboard K3') - PT Sahabat Sawit</title>
 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    {{-- Font dimuat tanpa menahan halaman (non-blocking). Kalau koneksi ke Google Fonts lambat,
+         script jam dan lainnya tetap jalan dan font cadangan dipakai sementara. --}}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+          rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    </noscript>
 
     <style>
         /* ===== PALET WARNA K3: merah, putih, hitam, dongker =====
@@ -118,6 +128,7 @@
         .k3-topbar h1{ font-size:1.25rem; font-weight:700; margin:0; }
         .k3-toggle{
             display:none; background:transparent; border:none; color:#fff; font-size:1.6rem; margin-right:12px; padding:0;
+            cursor:pointer; line-height:1;
         }
         .k3-user{ display:flex; align-items:center; gap:12px; }
         .k3-avatar{
@@ -167,20 +178,62 @@
         .k3-equip > div{ padding:6px 22px; }
         .k3-equip > div + div{ border-left:1px solid #E8EBF2; }
 
+        /* ===== TOMBOL, TABEL, FORM (dipakai halaman modul K3) ===== */
+        .k3-btn{
+            display:inline-flex; align-items:center; gap:6px;
+            padding:9px 16px; border-radius:10px;
+            border:1px solid transparent;
+            font-weight:600; font-size:.85rem;
+            text-decoration:none; cursor:pointer;
+            transition:background .2s, color .2s;
+        }
+        .k3-btn-red{ background:var(--k3-red); color:#fff; }
+        .k3-btn-red:hover{ background:var(--k3-red-dark); color:#fff; }
+        .k3-btn-outline{ background:#fff; color:var(--k3-navy); border-color:#D5DAE5; }
+        .k3-btn-outline:hover{ background:var(--k3-bg); color:var(--k3-navy); }
+        .k3-btn-icon{ width:34px; height:34px; padding:0; justify-content:center; border-radius:9px; }
+
+        .k3-table thead th{
+            background:var(--k3-navy); color:#fff;
+            font-size:.8rem; font-weight:600; white-space:nowrap;
+            border:none; padding:12px 14px;
+        }
+        .k3-table tbody td{ vertical-align:middle; padding:12px 14px; font-size:.9rem; }
+
+        .k3-label{ display:block; font-weight:600; font-size:.85rem; margin-bottom:6px; color:var(--k3-navy); }
+        .form-control:focus, .form-select:focus{
+            border-color:var(--k3-red);
+            box-shadow:0 0 0 .2rem rgba(200,16,46,.15);
+        }
+
+        /* Peringatan jam: tersembunyi, baru muncul 2 detik setelah halaman dibuka
+           dan hanya kalau jam belum berjalan. Kalau jam normal, ini tidak pernah terlihat. */
+        .k3-clock-warn{ display:none; font-size:.65rem; color:#FFB4B4; margin-top:6px; line-height:1.3; opacity:0; }
+        html:not(.js-on) .k3-clock-warn,
+        html.js-on:not(.clock-on) .k3-clock-warn{ display:block; animation:k3WarnIn 0s linear 2s forwards; }
+        html:not(.js-on) .k3-clock-warn::before{ content:'JavaScript halaman ini nonaktif'; }
+        html.js-on:not(.clock-on) .k3-clock-warn::before{ content:'Jam belum berjalan (cek Console)'; }
+        @keyframes k3WarnIn{ to{ opacity:1; } }
+
+        /* ===== OVERLAY SIDEBAR (HP / TABLET) ===== */
+        .k3-overlay{
+            display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1035;
+        }
+
         @media (max-width: 991.98px){
             .k3-sidebar{ transform:translateX(-100%); }
-            .k3-sidebar.is-open{ transform:translateX(0); }
             .k3-main{ margin-left:0; }
             .k3-toggle{ display:block; }
             .k3-topbar{ padding:0 16px; }
             .k3-content{ padding:18px 14px; }
             .k3-equip{ grid-template-columns:1fr; gap:10px; }
             .k3-equip > div + div{ border-left:none; border-top:1px solid #E8EBF2; padding-top:14px; }
+
+            /* Sidebar dibuka lewat checkbox tersembunyi (#k3NavToggle), tanpa JavaScript.
+               Tombol menu dan area gelap sama-sama berupa <label> untuk checkbox itu. */
+            .k3-nav-toggle:checked ~ .k3-sidebar{ transform:translateX(0); }
+            .k3-nav-toggle:checked ~ .k3-overlay{ display:block; }
         }
-        .k3-overlay{
-            display:none; position:fixed; inset:0; background:rgba(0,0,0,.55); z-index:1035;
-        }
-        .k3-overlay.is-open{ display:block; }
     </style>
     @stack('styles')
 </head>
@@ -191,7 +244,7 @@
     // Saat modulnya jadi, cukup tambahkan 'route' => 'k3.nama-route' pada baris menu terkait.
     $menu = [
         ['icon' => 'bi-speedometer2',     'label' => 'Dashboard',            'route' => 'k3.dashboard', 'active' => request()->routeIs('k3.dashboard')],
-        ['icon' => 'bi-file-earmark-check','label' => 'Dokumen Keselamatan'],
+        ['icon' => 'bi-file-earmark-check','label' => 'Dokumen Keselamatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.dokumen.index') ? 'k3.dokumen.index' : null, 'active' => request()->routeIs('k3.dokumen.*')],
         ['icon' => 'bi-clipboard-check',  'label' => 'Safety Patrol'],
         ['icon' => 'bi-heart-pulse',      'label' => 'Monitoring Kesehatan'],
         ['icon' => 'bi-wind',             'label' => 'Pengukuran Lingkungan'],
@@ -205,7 +258,9 @@
     $inisial = strtoupper(mb_substr($user->name ?? 'K', 0, 1));
 @endphp
 
-<div class="k3-overlay" id="k3Overlay"></div>
+{{-- Checkbox tersembunyi: pengatur buka/tutup sidebar di HP/tablet (tanpa JavaScript) --}}
+<input type="checkbox" id="k3NavToggle" class="k3-nav-toggle" hidden>
+<label for="k3NavToggle" class="k3-overlay" id="k3Overlay"></label>
 
 <aside class="k3-sidebar" id="k3Sidebar">
     <div class="k3-brand">
@@ -219,6 +274,7 @@
     <div class="k3-clock">
         <div class="k3-clock-time" id="k3ClockTime">--:--:--</div>
         <div class="k3-clock-date" id="k3ClockDate">&nbsp;</div>
+        <div class="k3-clock-warn" id="k3ClockWarn"></div>
     </div>
 
     <nav class="k3-nav">
@@ -247,7 +303,7 @@
 <div class="k3-main">
     <header class="k3-topbar">
         <div class="d-flex align-items-center">
-            <button class="k3-toggle" id="k3Toggle" type="button" aria-label="Buka menu"><i class="bi bi-list"></i></button>
+            <label for="k3NavToggle" class="k3-toggle" id="k3Toggle" role="button" aria-label="Buka menu"><i class="bi bi-list"></i></label>
             <h1>@yield('page_title', 'Dashboard')</h1>
         </div>
         <div class="k3-user">
@@ -264,30 +320,54 @@
     </main>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    /* Jam sidebar + penghitung Jam Kerja Aman.
+       Dibuat sederhana dan tahan gangguan: tidak memakai toLocale*, dan dijalankan ulang
+       saat jendela diubah ukurannya, difokuskan, atau halaman dipulihkan dari cache. */
     (function () {
-        // Jam digital di sidebar
-        const timeEl = document.getElementById('k3ClockTime');
-        const dateEl = document.getElementById('k3ClockDate');
-        function tickClock() {
-            const now = new Date();
-            timeEl.textContent = now.toLocaleTimeString('id-ID', { hour12: false }).replace(/\./g, ':');
-            dateEl.textContent = now.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' });
-        }
-        tickClock();
-        setInterval(tickClock, 1000);
+        var BULAN = ['JAN','FEB','MAR','APR','MEI','JUN','JUL','AGU','SEP','OKT','NOV','DES'];
 
-        // Buka/tutup sidebar di layar kecil
-        const sidebar = document.getElementById('k3Sidebar');
-        const overlay = document.getElementById('k3Overlay');
-        const toggle = document.getElementById('k3Toggle');
-        function setOpen(open) {
-            sidebar.classList.toggle('is-open', open);
-            overlay.classList.toggle('is-open', open);
+        function pad(n) { return (n < 10 ? '0' : '') + n; }
+
+        function tickClock() {
+            var timeEl = document.getElementById('k3ClockTime');
+            var dateEl = document.getElementById('k3ClockDate');
+            if (! timeEl) { return; }
+            var now = new Date();
+            timeEl.textContent = pad(now.getHours()) + ':' + pad(now.getMinutes()) + ':' + pad(now.getSeconds());
+            if (dateEl) {
+                dateEl.textContent = pad(now.getDate()) + ' ' + BULAN[now.getMonth()] + ' ' + now.getFullYear();
+            }
         }
-        toggle.addEventListener('click', () => setOpen(! sidebar.classList.contains('is-open')));
-        overlay.addEventListener('click', () => setOpen(false));
+
+        // Semua elemen ber-atribut data-since dihitung sebagai "waktu berjalan sejak tanggal itu"
+        function tickSince() {
+            var els = document.querySelectorAll('[data-since]');
+            for (var i = 0; i < els.length; i++) {
+                var start = new Date(els[i].getAttribute('data-since')).getTime();
+                if (isNaN(start)) { continue; }
+                var s = Math.max(0, Math.floor((Date.now() - start) / 1000));
+                var d = Math.floor(s / 86400); s = s % 86400;
+                els[i].textContent = d + ' hari ' + pad(Math.floor(s / 3600)) + ':' + pad(Math.floor((s % 3600) / 60)) + ':' + pad(s % 60);
+            }
+        }
+
+        function tick() {
+            try {
+                tickClock();
+                tickSince();
+                document.documentElement.classList.add('clock-on');
+            } catch (e) {
+                console.error('K3 jam error:', e);
+            }
+        }
+
+        tick();
+        setInterval(tick, 1000);
+        document.addEventListener('visibilitychange', tick);
+        window.addEventListener('pageshow', tick);
+        window.addEventListener('focus', tick);
+        window.addEventListener('resize', tick);
     })();
 </script>
 @stack('scripts')

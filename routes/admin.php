@@ -18,6 +18,10 @@ use App\Http\Controllers\Admin\PerformaController;
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\Admin\PengetahuanKategoriController;
+use App\Http\Controllers\Admin\K3DashboardController;
+use App\Http\Controllers\Admin\AtkItemController;
+use App\Http\Controllers\Admin\AtkStockInController;
+use App\Http\Controllers\Admin\AtkRequestController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -70,7 +74,24 @@ Route::middleware(['auth', 'admin:general_officer'])
 
         // Modul Aset / Inventaris
         Route::resource('assets', AssetController::class)->except(['show']);
-    });
+    
+        // Barang ATK (master barang + stok)
+        Route::resource('atk-items', AtkItemController::class)
+            ->except(['show'])
+            ->parameters(['atk-items' => 'atkItem']);
+        
+        // Barang masuk (menambah stok)
+        Route::resource('atk-stock-ins', AtkStockInController::class)
+            ->only(['index', 'create', 'store']);
+        
+        // Permintaan ATK
+        Route::resource('atk-requests', AtkRequestController::class)
+            ->except(['edit', 'update'])
+            ->parameters(['atk-requests' => 'atkRequest']);
+        
+        Route::patch('atk-requests/{atkRequest}/status', [AtkRequestController::class, 'updateStatus'])
+            ->name('atk-requests.status');
+        });
 
 // Dashboard HR
 Route::middleware(['auth', 'admin:hr'])
@@ -84,4 +105,17 @@ Route::middleware(['auth', 'admin:hr'])
 
         // BARU: Dashboard Performa → URL /hr/performa, nama route hr.performa.dashboard
         Route::get('performa', [PerformaController::class, 'index'])->name('performa.dashboard');
+    });
+
+    // Dashboard K3 (Keselamatan & Kesehatan Kerja)
+Route::middleware(['auth', 'admin:k3'])
+    ->prefix('k3')->name('k3.')
+    ->group(function () {
+        Route::get('dashboard', [K3DashboardController::class, 'index'])->name('dashboard');
+
+        // Modul Dokumen Keselamatan
+        Route::patch('dokumen/{dokumen}/status', [\App\Http\Controllers\Admin\K3DokumenController::class, 'toggleStatus'])->name('dokumen.status');
+        Route::resource('dokumen', \App\Http\Controllers\Admin\K3DokumenController::class)
+            ->except(['show'])
+            ->parameters(['dokumen' => 'dokumen']);
     });

@@ -2,60 +2,47 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Karyawan extends Model
+class K3Dokumen extends Model
 {
-    use HasFactory;
+    protected $table = 'k3_dokumen';
 
     protected $fillable = [
-        'name',
-        'email',
-        'phone',
-        'gender',
-        'birth_date',
-        'division',
-        'position',
-        'join_date',
+        'judul',
+        'kategori',
+        'tanggal',
+        'file',
         'status',
-        'address',
-        'photo',
+        'user_id',
     ];
 
     protected $casts = [
-        'birth_date' => 'date',
-        'join_date' => 'date',
+        'tanggal' => 'date',
     ];
 
-    /**
-     * Masa kerja dalam format "X tahun Y bulan".
-     */
-    public function getMasaKerjaAttribute(): string
+    // Daftar kategori dokumen. Mau menambah kategori? Cukup tambahkan di sini.
+    public const KATEGORI = [
+        'Safety Patrol',
+        'Insiden',
+        'Laporan P2K3',
+        'SOP',
+        'Kebijakan',
+        'Dokumen Lainnya',
+    ];
+
+    public const STATUS = ['aktif', 'arsip'];
+
+    // Hanya dokumen yang berstatus aktif
+    public function scopeAktif(Builder $query): Builder
     {
-        $years = $this->join_date->diffInYears(now());
-        $months = $this->join_date->diffInMonths(now()) % 12;
-
-        if ($years < 1 && $months < 1) {
-            return 'Kurang dari 1 bulan';
-        }
-
-        $parts = [];
-        if ($years > 0) {
-            $parts[] = $years . ' tahun';
-        }
-        if ($months > 0) {
-            $parts[] = $months . ' bulan';
-        }
-
-        return implode(' ', $parts);
+        return $query->where('status', 'aktif');
     }
 
-    /**
-     * Usia berdasarkan tanggal lahir.
-     */
-    public function getUsiaAttribute(): ?int
+    public function user(): BelongsTo
     {
-        return $this->birth_date ? $this->birth_date->age : null;
+        return $this->belongsTo(User::class);
     }
 }

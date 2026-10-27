@@ -6,7 +6,7 @@
 
 @php
     // Foto sementara: ganti nama file di sini setelah foto asli terkumpul (file ada di public/images).
-    $fotoHero    = 'prosesnunggu.png';
+    $fotoHero    = 'rebusan.png';
     $fotoPenutup = 'sawitangkong.jpg';
 
     $lokasi = [
