@@ -7,7 +7,7 @@
 
 {{-- Foto latar hero: taruh file Anda di public/images/ lalu samakan namanya di sini. --}}
 @php
-    $fotoKarir = 'karir.jpeg';
+    $fotoKarir = 'batik.jpeg';
 @endphp
 
 <style>

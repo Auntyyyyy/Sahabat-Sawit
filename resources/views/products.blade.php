@@ -84,11 +84,27 @@
     .pr-type img { width: 9rem; height: 9rem; object-fit: cover; border-radius: .25rem; display: block; background: var(--hijau-muda); }
     .pr-type h3 { margin-top: 1rem; font-size: 1.5rem; font-weight: 700; letter-spacing: -.02em; }
     .pr-type p { margin-top: .5rem; color: rgba(242,244,236,.7); }
-    .pr-regions { margin: 1.5rem 0 0; padding: 0; list-style: none; }
-    .pr-region { display: grid; grid-template-columns: 3rem 1fr; gap: .25rem 1rem; padding: 1rem 0; border-top: 1px solid rgba(242,244,236,.15); }
+
+    /* Sebaran wilayah: peta utuh (tidak dipotong) + daftar wilayah */
+    .pr-geo { display: grid; grid-template-columns: 1fr; gap: 2.5rem; align-items: start; }
+    @media (min-width: 900px) {
+        .pr-geo { grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 4rem; }
+        .pr-map { position: sticky; top: 7rem; }   /* peta ikut menempel saat daftar di kanan digulir */
+    }
+    .pr-map { margin: 0; }
+    .pr-map-frame { padding: clamp(.75rem, 2vw, 1.25rem); border-radius: .25rem; background: #fafaf8; }
+    .pr-map-frame img { display: block; width: 100%; height: auto; }
+    .pr-map figcaption { margin-top: .75rem; font-size: .85rem; color: rgba(242,244,236,.55); }
+
+    .pr-geo-title { margin-top: .5rem; max-width: 20ch; font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-weight: 800; line-height: 1.08; letter-spacing: -.03em; }
+    .pr-regions { margin: 2rem 0 0; padding: 0; list-style: none; }
+    .pr-region { display: grid; grid-template-columns: 2.5rem 1fr; gap: .25rem 1rem; padding: 1.1rem 0; border-top: 1px solid rgba(242,244,236,.15); }
     .pr-region:last-child { border-bottom: 1px solid rgba(242,244,236,.15); }
-    .pr-rank { font-size: .85rem; font-weight: 600; color: rgba(242,244,236,.5); padding-top: .2rem; }
-    .pr-region h4 { font-size: 1.15rem; font-weight: 700; display: flex; align-items: center; flex-wrap: wrap; gap: .75rem; }
+    .pr-region.is-main { margin: .35rem 0; padding: 1.1rem 1rem; border: 0; border-left: 3px solid var(--emas); border-radius: .25rem; background: rgba(242,244,236,.07); }
+    .pr-region.is-main + .pr-region { border-top: 0; }
+    .pr-rank { font-size: .85rem; font-weight: 600; color: rgba(242,244,236,.5); padding-top: .25rem; }
+    .pr-region.is-main .pr-rank { color: var(--emas); }
+    .pr-region h4 { font-size: 1.15rem; font-weight: 700; line-height: 1.3; display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .75rem; }
     .pr-badge { font-size: .75rem; font-weight: 600; padding: .1rem .65rem; border-radius: 99px; background: var(--emas); color: var(--hijau); }
     .pr-region p { margin-top: .25rem; font-size: .95rem; color: rgba(242,244,236,.7); }
     .pr-links { margin-top: 2rem; display: flex; flex-wrap: wrap; gap: 1rem 2rem; }
@@ -214,14 +230,22 @@
             </div>
         </div>
 
-        <div class="pr-split pr-mt" style="align-items:start">
-            <img class="pr-photo" style="height:clamp(280px,40vw,480px)" src="{{ asset('images/peta.png') }}" alt="Peta Daerah Penghasil Kelapa Sawit di Indonesia" onerror="this.style.display='none'">
+        {{-- Sebaran wilayah: peta utuh di kiri (menempel saat digulir), daftar wilayah di kanan --}}
+        <div class="pr-geo pr-mt">
+            <figure class="pr-map">
+                <div class="pr-map-frame">
+                    <img src="{{ asset('images/peta.png') }}" alt="Peta Daerah Penghasil Kelapa Sawit di Indonesia" onerror="this.style.display='none'">
+                </div>
+                <figcaption>Peta daerah penghasil kelapa sawit di Indonesia</figcaption>
+            </figure>
+
             <div>
                 <p class="pr-label">Sebaran Wilayah</p>
-                <h3 class="pr-title" style="margin-top:.5rem;font-size:clamp(1.6rem,3.2vw,2.4rem)">Daerah Penghasil Utama di Indonesia</h3>
+                <h3 class="pr-geo-title">Daerah Penghasil Utama di Indonesia</h3>
                 <p class="pr-lead">Indonesia merupakan produsen kelapa sawit terbesar di dunia, dengan sebagian besar perkebunan terkonsentrasi di Pulau Sumatera dan Kalimantan.</p>
-                <ul class="pr-regions">
-                    <li class="pr-region">
+
+                <ol class="pr-regions">
+                    <li class="pr-region is-main">
                         <span class="pr-rank">01</span>
                         <div>
                             <h4>Riau <span class="pr-badge">Lokasi Kebun Kami</span></h4>
@@ -240,7 +264,7 @@
                         <span class="pr-rank">04</span>
                         <div><h4>Sumatera Selatan & Jambi</h4><p>Kontributor produksi sawit yang terus berkembang di kawasan Sumatera bagian selatan.</p></div>
                     </li>
-                </ul>
+                </ol>
             </div>
         </div>
     </section>

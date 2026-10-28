@@ -52,9 +52,17 @@
     .bd-share-btn { width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(22,50,31,.3); border-radius: 50%; background: transparent; color: var(--hijau); font-size: 1.05rem; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
     .bd-share-btn:hover { background: var(--hijau); border-color: var(--hijau); color: var(--krem); }
 
-    .bd-lead { font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 600; line-height: 1.4; letter-spacing: -.01em; }
+    /* Ringkasan di atas artikel: rata kiri-kanan (justify) */
+    .bd-lead { font-size: clamp(1.25rem, 2.2vw, 1.6rem); font-weight: 600; line-height: 1.4; letter-spacing: -.01em; text-align: justify; text-justify: inter-word; hyphens: auto; }
     .bd-prose { margin-top: 2rem; padding-top: 2rem; border-top: 1px solid rgba(22,50,31,.2); font-size: 1.1rem; line-height: 1.8; color: rgba(22,50,31,.9); overflow-wrap: anywhere; }
     .bd-prose > * + * { margin-top: 1.25rem; }
+    /* Paragraf isi berita: rata kiri-kanan (justify) */
+    .bd-prose p { text-align: justify; text-justify: inter-word; hyphens: auto; }
+    /* Perataan dari editor Quill (bila admin memilihnya) — menimpa justify bawaan di atas */
+    .bd-prose .ql-align-left    { text-align: left; }
+    .bd-prose .ql-align-center  { text-align: center; }
+    .bd-prose .ql-align-right   { text-align: right; }
+    .bd-prose .ql-align-justify { text-align: justify; }
     .bd-prose h2 { margin-top: 2.5rem; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; color: var(--hijau); }
     .bd-prose h3 { margin-top: 2rem; font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; color: var(--hijau); }
     .bd-prose a { color: var(--hijau-muda); text-decoration: underline; text-decoration-color: var(--emas); text-underline-offset: 3px; }
@@ -138,7 +146,8 @@
                 </div>
             </aside>
 
-            <article>
+            {{-- lang="id" agar pemenggalan kata otomatis (hyphens) memakai aturan bahasa Indonesia --}}
+            <article lang="id">
                 <p class="bd-lead">{{ $berita->deskripsi_singkat }}</p>
 
                 {{-- Isi lengkap dari editor (sudah dibersihkan saat disimpan) --}}

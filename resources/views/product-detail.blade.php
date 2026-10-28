@@ -12,6 +12,11 @@
     $gambarUtama   = $product->image ? asset('storage/' . $product->image) : null;
     $mediaGambar   = $product->media->firstWhere('type', 'image');
     $gambarManfaat = $mediaGambar ? asset('storage/' . $mediaGambar->file_path) : $gambarUtama;
+
+    // Galeri = semua media KECUALI foto yang sudah dipakai di bagian Manfaat (supaya tidak tampil dua kali).
+    $mediaGaleri = $product->media
+        ->reject(fn ($m) => $mediaGambar && $m->id === $mediaGambar->id)
+        ->values();
 @endphp
 
 <style>
@@ -190,13 +195,13 @@
     </section>
     @endif
 
-    {{-- GALERI FOTO & VIDEO (dari tabel product_media, diinput admin) --}}
-    @if($product->media->isNotEmpty())
+    {{-- GALERI FOTO & VIDEO (dari tabel product_media, diinput admin) — tanpa foto yang sudah dipakai di Manfaat --}}
+    @if($mediaGaleri->isNotEmpty())
     <section class="pd-sec">
         <p class="pd-label">Dokumentasi</p>
         <h2 class="pd-h2">Galeri {{ $product->name }}</h2>
         <div class="pd-gallery">
-            @foreach($product->media as $item)
+            @foreach($mediaGaleri as $item)
                 @if($item->type === 'image')
                 <button type="button" class="pd-gitem" data-pd-zoom="{{ asset('storage/' . $item->file_path) }}" data-alt="{{ $product->name }}" aria-label="Perbesar foto galeri {{ $product->name }}">
                     <img src="{{ asset('storage/' . $item->file_path) }}" alt="" loading="lazy" onerror="this.style.display='none'">

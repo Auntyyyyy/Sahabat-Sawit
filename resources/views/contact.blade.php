@@ -70,11 +70,12 @@
     .ct-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); }
 
     /* Kanal kontak */
-    .ct-channels { display: grid; grid-template-columns: 1fr; gap: 2rem 3rem; }
-    @media (min-width: 900px) { .ct-channels { grid-template-columns: repeat(3, 1fr); } }
-    .ct-channel { display: block; padding-top: 1.25rem; border-top: 1px solid rgba(242,244,236,.2); }
+    .ct-channels { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem 3rem; }
+    /* Kolom email dibuat sedikit lebih lebar agar alamat email muat rapi */
+    @media (min-width: 900px) { .ct-channels { grid-template-columns: minmax(0, 1fr) minmax(0, 1.3fr) minmax(0, 1fr); } }
+    .ct-channel { display: block; min-width: 0; padding-top: 1.25rem; border-top: 1px solid rgba(242,244,236,.2); }
     .ct-channel-label { font-size: .95rem; color: rgba(242,244,236,.6); }
-    .ct-channel-value { margin-top: .4rem; font-size: clamp(1.25rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; overflow-wrap: anywhere; transition: color .25s; }
+    .ct-channel-value { margin-top: .4rem; font-size: clamp(1.25rem, 2.2vw, 1.7rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; overflow-wrap: break-word; transition: color .25s; }
     .ct-channel-hint { margin-top: .4rem; font-size: .9rem; color: rgba(242,244,236,.65); }
     a.ct-channel:hover .ct-channel-value { color: var(--emas); }
 
@@ -83,8 +84,12 @@
     .ct-light .ct-channel { border-top-color: rgba(22,50,31,.25); }
     .ct-light .ct-channel-label { color: rgba(22,50,31,.6); }
     .ct-light .ct-channel-hint { color: rgba(22,50,31,.72); }
-    .ct-light .ct-channel-value { font-size: clamp(1.5rem, 3vw, 2.4rem); }
+    .ct-light .ct-channel-value { font-size: clamp(1.4rem, 2.1vw, 1.85rem); }
     .ct-light a.ct-channel:hover .ct-channel-value { color: var(--hijau-muda); }
+
+    /* Alamat email: lebih kecil dan tidak pernah dipotong di tengah kata (bila sempit, turun baris sebelum "@") */
+    .ct-light .ct-channel-value.is-email { font-size: clamp(1rem, 4.2vw, 1.35rem); letter-spacing: -.015em; line-height: 1.3; }
+    @media (min-width: 900px) { .ct-light .ct-channel-value.is-email { font-size: clamp(.95rem, 1.6vw, 1.35rem); } }
 
     /* Lokasi di latar paling pekat */
     .ct-deep { background: #0f2417; }
@@ -158,7 +163,7 @@
             </a>
             <a class="ct-channel" href="mailto:ptsahabatsawitrokansejahtera@gmail.com">
                 <p class="ct-channel-label">Email</p>
-                <p class="ct-channel-value">ptsahabatsawitrokansejahtera@gmail.com</p>
+                <p class="ct-channel-value is-email">ptsahabatsawitrokansejahtera<wbr>@gmail.com</p>
                 <p class="ct-channel-hint">Untuk surat resmi, proposal, dan dokumen kerja sama</p>
             </a>
             <div class="ct-channel">

@@ -156,14 +156,13 @@ class ProductController extends Controller
         return $slug;
     }
 
-    // Simpan/replace 1 gambar galeri di slot tertentu (order tetap: 1 = image_2, 2 = image_3)
-    private function syncGalleryImage(Request $request, Product $product, string $field, int $order): void
-    {
-        if (!$request->hasFile($field)) {
-            return;
-        }
+// Simpan/replace/hapus 1 gambar galeri di slot tertentu (order tetap: 1 = image_2, 2 = image_3)
+private function syncGalleryImage(Request $request, Product $product, string $field, int $order): void
+{
+    $existing = $product->media()->where('order', $order)->first();
 
-        $existing = $product->media()->where('order', $order)->first();
+    // 1) Ada file baru -> ganti (atau buat baru)
+    if ($request->hasFile($field)) {
         $path = $request->file($field)->store('products/media', 'public');
 
         if ($existing) {
@@ -177,5 +176,14 @@ class ProductController extends Controller
                 'order' => $order,
             ]);
         }
+
+        return;
     }
+
+    // 2) Tidak ada file baru, tapi admin menekan X -> hapus file dan barisnya
+    if ($existing && $request->boolean('remove_' . $field)) {
+        Storage::disk('public')->delete($existing->file_path);
+        $existing->delete();
+    }
+}
 }

@@ -59,6 +59,13 @@
 
     .pk-prose { font-size: 1.1rem; line-height: 1.8; color: rgba(22,50,31,.9); overflow-wrap: anywhere; }
     .pk-prose > * + * { margin-top: 1.25rem; }
+    /* Paragraf rata kiri-kanan (justify) */
+    .pk-prose p { text-align: justify; }
+    /* Perataan dari editor Quill (bila admin memilihnya) — menimpa justify bawaan di atas */
+    .pk-prose .ql-align-left    { text-align: left; }
+    .pk-prose .ql-align-center  { text-align: center; }
+    .pk-prose .ql-align-right   { text-align: right; }
+    .pk-prose .ql-align-justify { text-align: justify; }
     .pk-prose h2, .pk-prose h3 { scroll-margin-top: 7rem; color: var(--hijau); }
     .pk-prose h2 { margin-top: 2.5rem; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.15; }
     .pk-prose h3 { margin-top: 2rem; font-size: 1.35rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.25; }

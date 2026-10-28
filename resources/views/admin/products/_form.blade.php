@@ -114,6 +114,7 @@
     <h6 class="form-section-title"><i class="bi bi-images"></i> Gambar Produk (3 gambar)</h6>
 
     <div class="row g-3">
+        {{-- Gambar utama: wajib, hanya bisa diganti (tidak ada tanda hapus) --}}
         <div class="col-md-4">
             <label class="form-label">Gambar Utama <span class="text-danger">*</span></label>
             <small class="d-block text-muted mb-1">Tampil di daftar produk (halaman Produk)</small>
@@ -131,11 +132,13 @@
             @error('image') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
         </div>
 
+        {{-- Gambar tambahan 1: tombol X mengisi remove_image_2 = 1 --}}
         <div class="col-md-4">
             <label class="form-label">Gambar Tambahan 1</label>
             <small class="d-block text-muted mb-1">Tampil di halaman detail produk</small>
             <div class="image-upload-box" data-name="image_2">
                 <input type="file" name="image_2" class="d-none image-input" accept="image/*">
+                <input type="hidden" name="remove_image_2" value="{{ old('remove_image_2', 0) }}" class="remove-flag">
                 <div class="upload-placeholder">
                     <i class="bi bi-cloud-arrow-up"></i>
                     <p class="mb-0 fw-semibold small">Klik untuk unggah</p>
@@ -148,11 +151,13 @@
             @error('image_2') <div class="text-danger small mt-1">{{ $message }}</div> @enderror
         </div>
 
+        {{-- Gambar tambahan 2: tombol X mengisi remove_image_3 = 1 --}}
         <div class="col-md-4">
             <label class="form-label">Gambar Tambahan 2</label>
             <small class="d-block text-muted mb-1">Tampil di halaman detail produk</small>
             <div class="image-upload-box" data-name="image_3">
                 <input type="file" name="image_3" class="d-none image-input" accept="image/*">
+                <input type="hidden" name="remove_image_3" value="{{ old('remove_image_3', 0) }}" class="remove-flag">
                 <div class="upload-placeholder">
                     <i class="bi bi-cloud-arrow-up"></i>
                     <p class="mb-0 fw-semibold small">Klik untuk unggah</p>
@@ -183,10 +188,28 @@
             const previewWrap = box.querySelector('.image-preview-wrap');
             const previewImg = box.querySelector('.image-preview');
             const removeBtn = box.querySelector('.image-remove-btn');
+            const flag = box.querySelector('.remove-flag');   // hanya ada di gambar tambahan
+            const isMain = !flag;                             // gambar utama wajib: hanya bisa diganti
+            const original = previewImg.getAttribute('src') || '';   // gambar yang sudah tersimpan di server
 
-            if (previewImg && previewImg.getAttribute('src')) {
+            function showPreview(src, canRemove) {
+                previewImg.src = src;
                 placeholder.classList.add('d-none');
                 previewWrap.classList.remove('d-none');
+                removeBtn.classList.toggle('d-none', !canRemove);
+            }
+
+            function showEmpty() {
+                previewImg.src = '';
+                placeholder.classList.remove('d-none');
+                previewWrap.classList.add('d-none');
+            }
+
+            // Kondisi awal (hormati tanda hapus yang tersisa bila form kembali karena error validasi)
+            if (original && !(flag && flag.value === '1')) {
+                showPreview(original, !isMain);
+            } else {
+                showEmpty();
             }
 
             placeholder.addEventListener('click', () => input.click());
@@ -196,18 +219,24 @@
                 if (!file) return;
                 const reader = new FileReader();
                 reader.onload = function (ev) {
-                    previewImg.src = ev.target.result;
-                    placeholder.classList.add('d-none');
-                    previewWrap.classList.remove('d-none');
+                    if (flag) flag.value = '0';          // ada gambar baru -> bukan penghapusan
+                    showPreview(ev.target.result, true);
                 };
                 reader.readAsDataURL(file);
             });
 
             removeBtn.addEventListener('click', function () {
                 input.value = '';
-                previewImg.src = '';
-                placeholder.classList.remove('d-none');
-                previewWrap.classList.add('d-none');
+
+                if (isMain) {
+                    // Gambar utama tidak bisa dihapus: batalkan pilihan baru, kembali ke gambar tersimpan
+                    if (original) { showPreview(original, false); } else { showEmpty(); }
+                    return;
+                }
+
+                // Gambar tambahan: tandai untuk dihapus di server bila sebelumnya sudah tersimpan
+                if (original) flag.value = '1';
+                showEmpty();
             });
         });
 
