@@ -15,8 +15,9 @@ class AdminAuthController extends Controller
     /**
      * Role yang diizinkan mengakses panel ini.
      * BARU: 'k3' ditambahkan untuk dashboard K3 (Keselamatan & Kesehatan Kerja).
+     * BARU: 'personalia' ditambahkan untuk dashboard Personalia.
      */
-    protected array $allowedRoles = ['admin', 'general_officer', 'hr', 'k3'];
+    protected array $allowedRoles = ['admin', 'general_officer', 'hr', 'k3', 'personalia'];
 
     /**
      * FIX: kalau sudah login, jangan tampilkan form login lagi — langsung lempar ke
@@ -83,6 +84,7 @@ class AdminAuthController extends Controller
             // Sengaja TIDAK mengizinkan 'admin' dipilih sendiri saat register.
             // 'k3' juga sengaja tidak bisa daftar sendiri: dashboard K3 memuat data
             // kesehatan karyawan (MCU), jadi akun K3 dibuat oleh admin, bukan lewat form publik.
+            // 'personalia' juga sengaja tidak ada di sini: akunnya dibuat lewat seeder / oleh admin.
             'role' => ['required', 'in:general_officer,hr'],
         ]);
 
@@ -100,7 +102,7 @@ class AdminAuthController extends Controller
     }
 
     /**
-     * Logout untuk semua role (admin, hr, general_officer, k3).
+     * Logout untuk semua role (admin, hr, general_officer, k3, personalia).
      * Setelah keluar, pengunjung diarahkan ke halaman Beranda website.
      */
     public function logout(Request $request): RedirectResponse
@@ -122,6 +124,7 @@ class AdminAuthController extends Controller
             'general_officer' => redirect()->intended(route('go.dashboard')),
             'hr' => redirect()->intended(route('hr.dashboard')),
             'k3' => redirect()->intended(route('k3.dashboard')),
+            'personalia' => redirect()->intended(route('personalia.dashboard')),
             default => redirect()->route('admin.login'),
         };
     }

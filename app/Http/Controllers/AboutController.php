@@ -34,11 +34,20 @@ class AboutController extends Controller
             ['nama' => 'Dahril',                    'jabatan' => 'Maintenance Supervisor ',             'photo' => 'manajer-keu.jpg',   'level' => 4],
 
             // Level 5 — Officer & Staf
+            ['nama' => 'Ilham Saleh',             'jabatan' => 'Grading Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'M. Irsyad Asnan',             'jabatan' => 'Process 1 Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'Subriadi Nasution',             'jabatan' => 'Process 2 Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'Rudianto Syam',             'jabatan' => 'Laboratory Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'Asro Nafis Maldini',             'jabatan' => 'Store Officer',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'Heri Munthe',             'jabatan' => 'Maintenance Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'Joni Harahap',             'jabatan' => 'Electrical Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
+            ['nama' => 'MHD. Guntur NST',             'jabatan' => 'Production Transport Foreman',      'photo' => 'manajer-keu.jpg',   'level' => 5],
             ['nama' => 'Elisa Mutiara',             'jabatan' => 'Human Resources & ISPO Officer',      'photo' => 'manajer-keu.jpg',   'level' => 5],
-            ['nama' => 'Sintia Talesta Pakpahan',   'jabatan' => 'Personnel Officer',                   'photo' => 'kepala-kebun.jpg',  'level' => 5],
-            ['nama' => 'Fadlan Rahim',              'jabatan' => 'HSE Officer',                         'photo' => 'kepala-kebun.jpg',  'level' => 5],
-            ['nama' => 'Dwi Jasri Agustin',         'jabatan' => 'General Affair Officer',              'photo' => 'kepala-kebun.jpg',  'level' => 5],
             ['nama' => 'Ihsanul Ramadhan Rasyid',   'jabatan' => 'Civil & IT Support Officer',          'photo' => 'kepala-kebun.jpg',  'level' => 5],
+            ['nama' => 'Tia Mandasari',   'jabatan' => 'Cashier',          'photo' => 'kepala-kebun.jpg',  'level' => 5],
+            ['nama' => 'Rini Handia Kusuma',   'jabatan' => 'Purchasing Officer',          'photo' => 'kepala-kebun.jpg',  'level' => 5],
+            ['nama' => 'Kevin Jordi Matondang',   'jabatan' => 'Logistic Officer',          'photo' => 'kepala-kebun.jpg',  'level' => 5],
+            ['nama' => 'Marco Susanto',   'jabatan' => 'Trading Officer',          'photo' => 'kepala-kebun.jpg',  'level' => 5],
             // tambahkan sesuai jumlah anggota tim — jangan lupa isi 'level'
         ];
     }

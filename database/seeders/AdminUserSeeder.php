@@ -18,5 +18,14 @@ class AdminUserSeeder extends Seeder
                 'role' => 'admin',
             ]
         );
+
+        User::updateOrCreate(
+            ['email' => 'personalia@sahabatsawit.com'],
+            [
+                'name' => 'Sintia Talesta Pakpahan, S.P',
+                'password' => Hash::make('Personalia2026'),
+                'role' => 'personalia',
+            ]
+        );
     }
 }

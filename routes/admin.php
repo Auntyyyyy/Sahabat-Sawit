@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\K3DashboardController;
 use App\Http\Controllers\Admin\AtkItemController;
 use App\Http\Controllers\Admin\AtkStockInController;
 use App\Http\Controllers\Admin\AtkRequestController;
+use App\Http\Controllers\Admin\PersonaliaDashboardController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -118,4 +119,12 @@ Route::middleware(['auth', 'admin:k3'])
         Route::resource('dokumen', \App\Http\Controllers\Admin\K3DokumenController::class)
             ->except(['show'])
             ->parameters(['dokumen' => 'dokumen']);
+    });
+
+
+// Dashboard Personalia
+Route::middleware(['auth', 'admin:personalia'])
+    ->prefix('personalia')->name('personalia.')
+    ->group(function () {
+        Route::get('dashboard', [PersonaliaDashboardController::class, 'index'])->name('dashboard');
     });
