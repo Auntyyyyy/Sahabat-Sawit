@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
+use Laravel\Socialite\Facades\Socialite;
 
 class AdminAuthController extends Controller
 {
@@ -62,6 +63,46 @@ class AdminAuthController extends Controller
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
+
+    /**
+ * Arahkan ke halaman login Google.
+ */
+public function redirectToGoogle(): RedirectResponse
+{
+    return Socialite::driver('google')->redirect();
+}
+
+/**
+ * Terima hasil login Google. Hanya email yang SUDAH terdaftar di tabel users
+ * (dan punya role panel yang valid) yang boleh masuk. Akun tidak pernah dibuat di sini.
+ */
+public function handleGoogleCallback(Request $request): RedirectResponse
+{
+    $gagal = fn (string $pesan) => redirect()->route('admin.login')->withErrors(['email' => $pesan]);
+
+    try {
+        $google = Socialite::driver('google')->user();
+    } catch (\Throwable $e) {
+        return $gagal('Login dengan Google dibatalkan atau gagal. Silakan coba lagi.');
+    }
+
+    $email = strtolower((string) $google->getEmail());
+    $terverifikasi = filter_var($google->user['email_verified'] ?? false, FILTER_VALIDATE_BOOLEAN);
+
+    $user = $email !== ''
+        ? User::whereRaw('LOWER(email) = ?', [$email])->first()
+        : null;
+
+    // Satu pesan untuk semua penolakan, supaya tidak membocorkan email mana yang terdaftar.
+    if (! $terverifikasi || ! $user || ! in_array($user->role, $this->allowedRoles, true)) {
+        return $gagal('Akun Google ini tidak memiliki akses ke panel. Hubungi admin untuk mendaftarkan email Anda.');
+    }
+
+    Auth::login($user);
+    $request->session()->regenerate();
+
+    return $this->redirectByRole($user);
+}
 
     /**
      * FIX: sama seperti showLoginForm() — cek dulu apakah sudah login.

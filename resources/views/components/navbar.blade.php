@@ -19,11 +19,11 @@
                 <a href="{{ route('career') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('career*') ? 'nav-link-active font-semibold' : '' }}">{{ app()->getLocale() == 'en' ? 'Careers' : 'Karir' }}</a>
                 <a href="{{ route('contact') }}" class="nav-link transition-colors duration-300 {{ request()->routeIs('contact') ? 'nav-link-active font-semibold' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
-                <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
+                <!-- Menu Media (Desktop) — dropdown: Berita & Galeri Kegiatan, Pengetahuan -->
                 <!-- Terbuka otomatis saat kursor diarahkan / disentuh, tidak perlu klik panah -->
                 <div id="media-menu-wrap" class="relative">
                     <button id="media-menu-btn" type="button"
-                            class="media-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'nav-link-active font-semibold' : '' }}"
+                            class="media-menu-btn nav-link flex items-center gap-1 transition-colors duration-300 {{ request()->routeIs('media.*') ? 'nav-link-active font-semibold' : '' }}"
                             aria-haspopup="true" aria-expanded="false">
                         <span>Media</span>
                         <svg class="w-3.5 h-3.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -40,9 +40,6 @@
                             </a>
                             <a href="{{ route('media.pengetahuan') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
                                 Pengetahuan
-                            </a>
-                            <a href="{{ route('admin.login') }}" class="block px-4 py-3 text-sm hover:bg-cream border-t border-gray-100 {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold' : 'text-dark-text' }}">
-                                Masuk Admin
                             </a>
                         </div>
                     </div>
@@ -86,11 +83,11 @@
                  <a href="{{ route('career') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('career*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ app()->getLocale() == 'en' ? 'Careers' : 'Karir' }}</a>
                 <a href="{{ route('contact') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('contact') ? 'text-primary-green font-semibold bg-gray-50' : '' }}">{{ __('messages.nav_kontak') }}</a>
 
-                <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Pengetahuan, Masuk Admin -->
+                <!-- Menu Media (Mobile) — accordion: Berita & Galeri Kegiatan, Pengetahuan -->
                 <!-- Seluruh baris "Media" bisa disentuh untuk membuka/menutup submenu -->
                 <div class="border-t border-gray-100 pt-3">
                     <button id="media-accordion-btn" type="button"
-                            class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('media.*') || request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
+                            class="w-full flex items-center justify-between px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors text-dark-text {{ request()->routeIs('media.*') ? 'text-primary-green font-semibold bg-gray-50' : '' }}"
                             aria-expanded="false">
                         <span>Media</span>
                         <svg id="media-accordion-icon" class="w-4 h-4 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
@@ -103,9 +100,6 @@
                         </a>
                         <a href="{{ route('media.pengetahuan') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('media.pengetahuan') || request()->routeIs('media.pengetahuan.show') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
                             Pengetahuan
-                        </a>
-                        <a href="{{ route('admin.login') }}" class="px-2 py-1.5 rounded-md hover:bg-gray-50 hover:text-primary-green transition-colors {{ request()->routeIs('admin.login') ? 'text-primary-green font-semibold bg-gray-50' : 'text-dark-text' }}">
-                            Masuk Admin
                         </a>
                     </div>
                 </div>
@@ -129,17 +123,75 @@
 {{-- <body class="navbar-force-solid"> — supaya navbar langsung solid & tidak transparan. --}}
 
 <style>
+    /* Navbar — gaya tegas dengan latar putih: bar putih solid + garis emas saat digulir, sudut tegas, huruf tebal.
+       Hanya gaya yang diubah; komponen (HTML) dan skrip tidak berubah. */
+    @import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&display=swap');
+
     :root{
         --nv-dark-green:#164A2E;
         --nv-primary-green:#2F6B3F;
         --nv-gold:#C9A227;
         --nv-dark-text:#1F2933;
         --nv-gray-text:#6b7280;
+
+        --nv-hijau:#16321f;
+        --nv-hijau-muda:#2f5a3a;
+        --nv-emas:#e3a72f;
+        --nv-krem:#f2f4ec;
     }
 
+    /* Huruf */
+    .site-navbar,
+    .site-navbar .font-heading,
+    .site-navbar a,
+    .site-navbar button{
+        font-family: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+    }
+
+    /* Warna teks bar: terang di atas hero (transparan), gelap setelah digulir / pada halaman navbar-force-solid (bar putih) */
+    .site-navbar{
+        --nv-txt: var(--nv-krem);
+        --nv-txt-hover: var(--nv-emas);
+        --nv-txt-active: var(--nv-emas);
+        --nv-brand: #fff;
+        --nv-brand-sub: rgba(255,255,255,.75);
+        --nv-line: rgba(242,244,236,.55);
+    }
+    .site-navbar.is-scrolled,
+    body.navbar-force-solid .site-navbar{
+        --nv-txt: var(--nv-hijau);
+        --nv-txt-hover: var(--nv-hijau-muda);
+        --nv-txt-active: var(--nv-hijau);
+        --nv-brand: var(--nv-hijau);
+        --nv-brand-sub: var(--nv-gray-text);
+        --nv-line: rgba(22,50,31,.35);
+    }
+
+    /* Bar: transparan di atas hero (dengan bayangan gelap tipis agar teks terbaca), putih solid + garis emas saat digulir */
     .site-navbar{
         padding-top: 0;
-        transition: padding-top .35s ease;
+        background: transparent;
+        border-bottom: 3px solid transparent;
+        transition: background-color .3s ease, border-color .3s ease;
+    }
+    .site-navbar::before{
+        content: '';
+        position: absolute;
+        left: 0; right: 0; top: 0;
+        height: 8rem;
+        z-index: -1;
+        pointer-events: none;
+        background: linear-gradient(180deg, rgba(15,36,23,.78) 0%, rgba(15,36,23,0) 100%);
+        transition: opacity .3s ease;
+    }
+    .site-navbar.is-scrolled,
+    body.navbar-force-solid .site-navbar{
+        background: #fff;
+        border-bottom-color: var(--nv-emas);
+    }
+    .site-navbar.is-scrolled::before,
+    body.navbar-force-solid .site-navbar::before{
+        opacity: 0;
     }
 
     .navbar-shell{
@@ -149,103 +201,170 @@
         margin: 0 auto;
         padding-left: 0;
         padding-right: 0;
-        transition: padding .35s ease, max-width .35s ease, height .35s ease;
+        transition: height .3s ease;
+    }
+    .site-navbar .navbar-shell-bg{ display: none; }
+    .site-navbar.is-scrolled .navbar-shell,
+    body.navbar-force-solid .site-navbar .navbar-shell{
+        height: 68px !important;
     }
 
-    .navbar-shell-bg{
+    /* Merek */
+    .site-navbar .brand-title{ color: var(--nv-brand); font-weight: 800; letter-spacing: -.01em; }
+    .site-navbar .brand-subtitle{ color: var(--nv-brand-sub); font-weight: 600; letter-spacing: .04em; }
+
+    /* Tautan menu: huruf tebal, garis emas tebal muncul saat disorot / aktif */
+    .site-navbar .nav-link{
+        position: relative;
+        padding: .5rem 0;
+        border-radius: 0;
+        color: var(--nv-txt);
+        font-weight: 700;
+        font-size: .92rem;
+    }
+    .site-navbar .nav-link::after{
+        content: '';
         position: absolute;
-        inset: 0;
-        z-index: -1;
+        left: 0; right: 0; bottom: -.1rem;
+        height: 3px;
+        background: var(--nv-emas);
+        transform: scaleX(0);
+        transform-origin: left;
+        transition: transform .25s ease;
+    }
+    .site-navbar .nav-link:hover{ color: var(--nv-txt-hover); }
+    .site-navbar .nav-link-active{ color: var(--nv-txt-active) !important; }
+    .site-navbar .nav-link:hover::after,
+    .site-navbar .nav-link-active::after,
+    .site-navbar .media-menu-btn[aria-expanded="true"]::after{
+        transform: scaleX(1);
+    }
+
+    .media-menu-btn{ cursor: pointer; background: none; border: none; font: inherit; }
+    .media-menu-btn[aria-expanded="true"] svg{ transform: rotate(180deg); }
+    .site-navbar .media-menu-btn[aria-expanded="true"]{ color: var(--nv-txt-active); }
+
+    /* Tombol bahasa: kotak bergaris tebal */
+    .site-navbar .lang-switch-btn{
+        padding: .35rem .8rem;
+        border: 2px solid var(--nv-line);
         border-radius: 0;
         background: transparent;
+        color: var(--nv-txt);
+        font-weight: 700;
+    }
+    .site-navbar .lang-switch-btn:hover,
+    .site-navbar .lang-switch-btn[aria-expanded="true"]{
+        background: var(--nv-emas);
+        border-color: var(--nv-emas);
+        color: var(--nv-hijau);
+    }
+
+    /* Dropdown (Media & bahasa): panel putih, garis emas di atas, sudut tegas */
+    .site-navbar #media-menu-dropdown > div,
+    .site-navbar #lang-switch-dropdown{
+        background: #fff;
+        border: 0;
+        border-top: 3px solid var(--nv-emas);
+        border-radius: 0;
+        box-shadow: 0 24px 48px rgba(0,0,0,.22);
+    }
+    .site-navbar #media-menu-dropdown a,
+    .site-navbar #lang-switch-dropdown a{
+        color: var(--nv-hijau);
+        font-weight: 600;
+        border-color: rgba(22,50,31,.1);
+        transition: background-color .2s ease, box-shadow .2s ease, color .2s ease;
+    }
+    .site-navbar #media-menu-dropdown a:hover,
+    .site-navbar #lang-switch-dropdown a:hover{
+        background: var(--nv-krem);
+        box-shadow: inset 3px 0 0 var(--nv-emas);
+        color: var(--nv-hijau);
+    }
+    .site-navbar #media-menu-dropdown a.font-semibold,
+    .site-navbar #lang-switch-dropdown a.font-semibold{
+        color: var(--nv-hijau);
+        font-weight: 800;
+        box-shadow: inset 3px 0 0 var(--nv-emas);
+    }
+
+    /* Tombol menu (mobile): kotak bergaris */
+    .site-navbar .mobile-menu-btn{
+        color: var(--nv-txt);
+        border: 2px solid var(--nv-line);
+        border-radius: 0;
+    }
+    .site-navbar .mobile-menu-btn:hover{
+        background: var(--nv-emas);
+        border-color: var(--nv-emas);
+        color: var(--nv-hijau);
+    }
+
+    /* Panel menu mobile: putih, garis emas, teks hijau tua tebal */
+    .site-navbar .mobile-menu-panel{
+        background: #fff;
+        border-radius: 0;
+        border-top: 3px solid var(--nv-emas);
+        box-shadow: 0 24px 48px rgba(0,0,0,.22);
+        margin-top: 0;
+        padding-left: 1rem;
+        padding-right: 1rem;
+    }
+    /* Setelah digulir, bar sudah putih: pemisah dengan panel cukup garis tipis */
+    .site-navbar.is-scrolled .mobile-menu-panel,
+    body.navbar-force-solid .site-navbar .mobile-menu-panel{
+        border-top: 1px solid rgba(22,50,31,.12);
         box-shadow: none;
-        isolation: isolate;
-        pointer-events: none;
-        transition:
-            background-color .35s ease,
-            box-shadow .35s ease,
-            border-radius .35s ease,
-            backdrop-filter .35s ease;
     }
-
-    .site-navbar.is-scrolled{
-        padding-top: 14px;
+    .site-navbar .mobile-menu-panel a:not(.rounded-full),
+    .site-navbar .mobile-menu-panel #media-accordion-btn{
+        padding: .65rem .75rem;
+        border-radius: 0;
+        color: var(--nv-hijau);
+        font-weight: 700;
+        background: transparent;
+        transition: background-color .2s ease, box-shadow .2s ease, color .2s ease;
     }
-    .site-navbar.is-scrolled .navbar-shell{
-        max-width: 1100px;
-        height: 68px !important;
-        padding-left: 24px;
-        padding-right: 24px;
+    .site-navbar .mobile-menu-panel a:not(.rounded-full):hover,
+    .site-navbar .mobile-menu-panel #media-accordion-btn:hover{
+        background: var(--nv-krem);
+        box-shadow: inset 3px 0 0 var(--nv-emas);
+        color: var(--nv-hijau);
     }
-    .site-navbar.is-scrolled .navbar-shell-bg{
-        background: rgba(255,255,255,0.88);
-        backdrop-filter: blur(12px);
-        -webkit-backdrop-filter: blur(12px);
-        box-shadow: 0 12px 30px rgba(22,74,46,0.16);
-        border-radius: 9999px;
+    .site-navbar .mobile-menu-panel a.font-semibold:not(.rounded-full),
+    .site-navbar .mobile-menu-panel #media-accordion-btn.font-semibold{
+        background: var(--nv-krem);
+        box-shadow: inset 3px 0 0 var(--nv-emas);
+        color: var(--nv-hijau);
+        font-weight: 800;
     }
-
-    .site-navbar .brand-title{ color:#fff; transition: color .3s ease; }
-    .site-navbar .brand-subtitle{ color: rgba(255,255,255,0.75); transition: color .3s ease; }
-    .site-navbar .nav-link{ color:#fff; }
-    .site-navbar .nav-link:hover{ color: var(--nv-gold); }
-    .site-navbar .nav-link-active{ color: var(--nv-gold) !important; }
-    .site-navbar .lang-switch-btn{
-        color:#fff;
-        border-color: rgba(255,255,255,0.4);
+    .site-navbar .mobile-menu-panel .border-t{ border-color: rgba(22,50,31,.12); }
+    .site-navbar .mobile-menu-panel p{ color: rgba(22,50,31,.55); }
+    .site-navbar .mobile-menu-panel a.rounded-full{
+        border: 2px solid rgba(22,50,31,.3);
+        border-radius: 0;
+        background: transparent;
+        color: var(--nv-hijau);
+        font-weight: 700;
     }
-    .site-navbar .lang-switch-btn:hover{
-        border-color: #fff;
-    }
-    .site-navbar .mobile-menu-btn{ color:#fff; }
-    .site-navbar .mobile-menu-btn:hover{ background: rgba(255,255,255,0.15); }
-
-    .site-navbar.is-scrolled .brand-title{ color: var(--nv-dark-green); }
-    .site-navbar.is-scrolled .brand-subtitle{ color: var(--nv-gray-text); }
-    .site-navbar.is-scrolled .nav-link{ color: var(--nv-dark-text); }
-    .site-navbar.is-scrolled .nav-link:hover{ color: var(--nv-primary-green); }
-    .site-navbar.is-scrolled .nav-link-active{ color: var(--nv-primary-green) !important; }
-    .site-navbar.is-scrolled .lang-switch-btn{
-        color: var(--nv-dark-text);
-        border-color: #e5e7eb;
-    }
-    .site-navbar.is-scrolled .lang-switch-btn:hover{
-        border-color: var(--nv-primary-green);
-        color: var(--nv-primary-green);
-    }
-    .site-navbar.is-scrolled .mobile-menu-btn{ color: var(--nv-dark-green); }
-    .site-navbar.is-scrolled .mobile-menu-btn:hover{ background: rgba(0,0,0,0.05); }
-
-    .media-menu-btn{ cursor: pointer; background: none; border: none; padding: 0; font: inherit; }
-    .media-menu-btn[aria-expanded="true"] svg{ transform: rotate(180deg); }
-
-    .mobile-menu-panel{
-        background:#fff;
-        border-radius: 16px;
-        box-shadow: 0 12px 30px rgba(0,0,0,0.12);
-        margin-top: 8px;
-        padding-left: 8px;
-        padding-right: 8px;
+    .site-navbar .mobile-menu-panel a.rounded-full.bg-primary-green{
+        background: var(--nv-hijau);
+        border-color: var(--nv-hijau);
+        color: var(--nv-krem);
     }
     #media-accordion-btn[aria-expanded="true"] #media-accordion-icon{ transform: rotate(180deg); }
 
-    body.navbar-force-solid .site-navbar{ padding-top: 14px; }
-    body.navbar-force-solid .site-navbar .navbar-shell{
-        max-width: 1100px;
-        height: 68px !important;
-        padding-left: 24px;
-        padding-right: 24px;
+    /* Fokus keyboard yang jelas */
+    .site-navbar a:focus-visible,
+    .site-navbar button:focus-visible{
+        outline: 3px solid var(--nv-emas);
+        outline-offset: 3px;
     }
-    body.navbar-force-solid .site-navbar .navbar-shell-bg{
-        background: rgba(255,255,255,0.95);
-        box-shadow: 0 6px 20px rgba(22,74,46,0.1);
-        border-radius: 9999px;
+
+    @media (prefers-reduced-motion: reduce){
+        .site-navbar, .site-navbar::before, .site-navbar .nav-link::after, .navbar-shell{ transition: none !important; }
     }
-    body.navbar-force-solid .site-navbar .brand-title{ color: var(--nv-dark-green); }
-    body.navbar-force-solid .site-navbar .brand-subtitle{ color: var(--nv-gray-text); }
-    body.navbar-force-solid .site-navbar .nav-link{ color: var(--nv-dark-text); }
-    body.navbar-force-solid .site-navbar .lang-switch-btn{ color: var(--nv-dark-text); border-color:#e5e7eb; }
-    body.navbar-force-solid .site-navbar .mobile-menu-btn{ color: var(--nv-dark-green); }
 </style>
 
 <script>

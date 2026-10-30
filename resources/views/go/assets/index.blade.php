@@ -77,9 +77,7 @@
             </tbody>
         </table>
 
-        <div style="padding: 1.25rem 1.5rem;">
-            {{ $assets->links() }}
-        </div>
+        {{ $assets->links('go.pagination') }}
     @endif
 </div>
 

@@ -232,7 +232,7 @@
                 </a>
                 <a href="{{ Route::has('personalia.payroll.index') ? route('personalia.payroll.index') : '#' }}" class="nav-item {{ request()->routeIs('personalia.payroll.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><circle cx="12" cy="12" r="2"/><path d="M6 12h.01M18 12h.01"/></svg>
-                    Payroll
+                    Payroll &amp; Gaji
                 </a>
                 <p class="nav-label">SDM</p>
                 <a href="{{ Route::has('personalia.rekrutmen.index') ? route('personalia.rekrutmen.index') : '#' }}" class="nav-item {{ request()->routeIs('personalia.rekrutmen.*') ? 'active' : '' }}">
@@ -251,10 +251,6 @@
                 <a href="{{ Route::has('personalia.dokumen.index') ? route('personalia.dokumen.index') : '#' }}" class="nav-item {{ request()->routeIs('personalia.dokumen.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
                     Dokumen
-                </a>
-                <a href="{{ Route::has('personalia.gaji.index') ? route('personalia.gaji.index') : '#' }}" class="nav-item {{ request()->routeIs('personalia.gaji.*') ? 'active' : '' }}">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1v22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Gaji
                 </a>
                 <a href="{{ Route::has('personalia.setup.index') ? route('personalia.setup.index') : '#' }}" class="nav-item {{ request()->routeIs('personalia.setup.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7M4 10V3M12 21v-9M12 8V3M20 21v-5M20 12V3M1 14h6M9 8h6M17 16h6"/></svg>
@@ -286,7 +282,7 @@
                 </div>
                 <div class="user-chip">
                     <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}</div>
-                    <span>{{ auth()->user()->name ?? 'Sintia Talesta Pakpahan, S.P' }}</span>
+                    <span>{{ auth()->user()->name ?? 'Staff Personalia' }}</span>
                 </div>
             </div>
 

@@ -13,16 +13,25 @@ use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
 use App\Http\Controllers\Admin\PengetahuanController;
 use App\Http\Controllers\Admin\PerformaController; 
+use App\Http\Controllers\Admin\PengetahuanKategoriController;
+
 // FIX: class ini dipakai di grup route 'go' di bawah tapi sebelumnya belum
 // di-import sama sekali — bakal error "Class not found" begitu dipanggil.
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
 use App\Http\Controllers\Admin\AssetController;
-use App\Http\Controllers\Admin\PengetahuanKategoriController;
-use App\Http\Controllers\Admin\K3DashboardController;
 use App\Http\Controllers\Admin\AtkItemController;
 use App\Http\Controllers\Admin\AtkStockInController;
 use App\Http\Controllers\Admin\AtkRequestController;
+
+// route K3
+use App\Http\Controllers\Admin\K3DashboardController;
+
+// Personalia
 use App\Http\Controllers\Admin\PersonaliaDashboardController;
+use App\Http\Controllers\Admin\PersonaliaKaryawanController;
+use App\Http\Controllers\Admin\PersonaliaAbsensiController;
+use App\Http\Controllers\Admin\PersonaliaCutiController;
+
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -35,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::post('login', [AdminAuthController::class, 'login'])->middleware('throttle:5,1');
         Route::get('register', [AdminAuthController::class, 'showRegisterForm'])->name('register');
         Route::post('register', [AdminAuthController::class, 'register'])->name('register.store');
+        Route::get('auth/google', [AdminAuthController::class, 'redirectToGoogle'])->name('google.redirect');
+Route::get('auth/google/callback', [AdminAuthController::class, 'handleGoogleCallback'])->middleware('throttle:10,1')->name('google.callback');
     });
 
     // Logout sengaja TANPA middleware 'auth' dan 'admin': semua role (admin, hr, general_officer)
@@ -127,4 +138,17 @@ Route::middleware(['auth', 'admin:personalia'])
     ->prefix('personalia')->name('personalia.')
     ->group(function () {
         Route::get('dashboard', [PersonaliaDashboardController::class, 'index'])->name('dashboard');
+
+        // Halaman menu (sementara kosong, nanti diganti controller)
+        Route::get('karyawan', [PersonaliaKaryawanController::class, 'index'])->name('karyawan.index');
+        Route::get('karyawan/{karyawan}', [PersonaliaKaryawanController::class, 'show'])->name('karyawan.show');        
+        Route::resource('absensi', PersonaliaAbsensiController::class)
+            ->except(['show'])
+            ->parameters(['absensi' => 'kehadiran']);        
+        Route::get('cuti', [PersonaliaCutiController::class, 'index'])->name('cuti.index');        Route::get('payroll', [PersonaliaPayrollController::class, 'index'])->name('payroll.index');
+        Route::get('rekrutmen', [PersonaliaRekrutmenController::class, 'index'])->name('rekrutmen.index');
+        Route::get('performance', [PersonaliaPerformanceController::class, 'index'])->name('performance.index');
+        Route::get('training', [PersonaliaTrainingController::class, 'index'])->name('training.index');
+        Route::get('dokumen', [PersonaliaDokumenController::class, 'index'])->name('dokumen.index');
+        Route::get('setup', [PersonaliaSetupController::class, 'index'])->name('setup.index');
     });

@@ -31,8 +31,7 @@
     .sb-bg { position: absolute; inset: 0; z-index: -2; width: 100%; height: 100%; object-fit: cover; }
     .sb-crumb { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; font-size: .9rem; color: rgba(242,244,236,.6); }
     .sb-crumb a:hover { color: var(--krem); }
-    .sb-crumb [a
-    ria-current] { color: var(--krem); }
+    .sb-crumb [aria-current] { color: var(--krem); }
     .sb-title { margin-top: 1.5rem; max-width: 14ch; font-size: clamp(2.6rem, 8vw, 6.5rem); font-weight: 800; line-height: 1.02; letter-spacing: -.04em; }
     .sb-lead { margin-top: 1.5rem; max-width: 38rem; color: rgba(242,244,236,.75); }
 
@@ -69,42 +68,66 @@
     .sb-stat-value { font-size: clamp(3rem, 8vw, 6.5rem); font-weight: 800; letter-spacing: -.05em; line-height: 1; color: var(--emas); }
     .sb-stat-label { margin-top: .75rem; font-size: 1rem; color: rgba(242,244,236,.8); }
 
-    /* Program CSR */
-    .sb-bar { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1rem 2rem; }
-    .sb-tabs { display: flex; flex-wrap: wrap; gap: .75rem 1.75rem; }
-    .sb-tab { padding: 0 0 .2rem; border: 0; border-bottom: 2px solid transparent; background: none; font: inherit; font-weight: 600; font-size: .95rem; color: rgba(242,244,236,.6); cursor: pointer; transition: color .2s, border-color .2s; }
-    .sb-tab:hover { color: var(--krem); }
-    .sb-tab[aria-selected="true"] { color: var(--krem); border-bottom-color: var(--emas); }
-    .sb-tab span { margin-right: .4rem; }
-    .sb-arrows { display: flex; gap: .6rem; }
+    /* ===== Program CSR ===== */
+
+    /* Bar: tab kategori berupa chip (digeser ke samping di layar sempit) + panah dengan penghitung */
+    .sb-bar { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.25rem 2rem; }
+    .sb-tabs { flex: 1 1 100%; min-width: 0; display: flex; gap: .6rem; padding: .2rem 0 .5rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+    .sb-tabs::-webkit-scrollbar { display: none; }
+    @media (min-width: 900px) { .sb-tabs { flex: 1 1 0; flex-wrap: wrap; overflow: visible; padding-bottom: 0; } }
+    .sb-tab { flex: none; scroll-snap-align: start; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1.05rem; border: 1px solid rgba(242,244,236,.22); border-radius: 99px; background: transparent; font: inherit; font-weight: 600; font-size: .92rem; line-height: 1.2; color: rgba(242,244,236,.78); white-space: nowrap; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .sb-tab:hover { border-color: rgba(242,244,236,.55); color: var(--krem); }
+    .sb-tab[aria-selected="true"] { background: var(--emas); border-color: var(--emas); color: var(--hijau); font-weight: 700; }
+    .sb-tab span { font-size: 1.05rem; line-height: 1; }
+
+    .sb-arrows { flex: none; margin-left: auto; display: flex; align-items: center; gap: .6rem; }
+    .sb-count { min-width: 4.4rem; text-align: center; font-size: .85rem; font-weight: 600; letter-spacing: .04em; color: rgba(242,244,236,.7); }
     .sb-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(242,244,236,.4); background: transparent; color: var(--krem); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
     .sb-btn:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
     .sb-btn svg { width: 20px; height: 20px; }
+
+    /* Panel: kepala kategori (ikon, judul, deskripsi, jumlah kegiatan) */
     .sb-panel[hidden] { display: none; }
-    .sb-panel-desc { margin-top: 2.5rem; max-width: 40rem; }
-    .sb-panel-desc h3 { font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 700; letter-spacing: -.02em; }
-    .sb-panel-desc p { margin-top: .75rem; color: rgba(242,244,236,.75); }
-    .sb-acts { margin-top: 2.5rem; display: grid; grid-template-columns: 1fr; gap: 2.5rem 1.5rem; }
-    @media (min-width: 700px)  { .sb-acts { grid-template-columns: repeat(2, 1fr); } }
-    @media (min-width: 1100px) { .sb-acts { grid-template-columns: repeat(3, 1fr); } }
-    .sb-act-img { display: block; width: 100%; padding: 0; border: 0; aspect-ratio: 4 / 3; overflow: hidden; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); cursor: pointer; }
+    .sb-panel { margin-top: 1.5rem; }
+    @media (prefers-reduced-motion: no-preference) { .sb-panel:not([hidden]) { animation: sbIn .35s ease both; } }
+    @keyframes sbIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+    .sb-panel-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem 1.5rem; align-items: start; padding: 1.75rem; border: 1px solid rgba(242,244,236,.12); border-left: 3px solid var(--emas); border-radius: .5rem; background: rgba(242,244,236,.05); }
+    .sb-panel-head.has-icon { grid-template-columns: auto minmax(0, 1fr); }
+    .sb-panel-icon { display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; border: 1px solid rgba(227,167,47,.4); border-radius: .5rem; background: rgba(227,167,47,.12); font-size: 1.9rem; line-height: 1; }
+    .sb-panel-head h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+    .sb-panel-head p { margin-top: .75rem; max-width: 44rem; color: rgba(242,244,236,.78); }
+    .sb-pill { display: inline-block; margin-top: 1rem; padding: .15rem .8rem; border: 1px solid rgba(242,244,236,.3); border-radius: 99px; font-size: .8rem; font-weight: 600; color: rgba(242,244,236,.8); }
+
+    /* Kartu kegiatan */
+    .sb-acts { margin-top: 1.5rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    @media (min-width: 700px)  { .sb-acts { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (min-width: 1100px) { .sb-acts { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .sb-act { display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(242,244,236,.12); border-radius: .5rem; background: rgba(242,244,236,.045); transition: transform .3s, border-color .3s, background .3s; }
+    .sb-act-img { display: block; width: 100%; padding: 0; border: 0; aspect-ratio: 16 / 10; overflow: hidden; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); cursor: pointer; }
     .sb-act-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
-    .sb-act-img:hover img { transform: scale(1.04); }
-    .sb-act-meta { margin-top: 1rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; font-size: .85rem; color: rgba(242,244,236,.6); }
-    .sb-act h4 { margin-top: .35rem; font-size: 1.25rem; font-weight: 600; line-height: 1.3; }
+    .sb-act-body { display: flex; flex: 1; flex-direction: column; padding: 1.25rem 1.25rem 1.4rem; }
+    .sb-act-meta { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .25rem .75rem; font-size: .85rem; color: rgba(242,244,236,.6); }
+    .sb-act-body .sb-act-meta span:first-child { font-weight: 600; color: var(--emas); }
+    .sb-act h4 { margin-top: .6rem; font-size: 1.25rem; font-weight: 700; letter-spacing: -.01em; line-height: 1.3; }
     .sb-act-story { margin-top: .5rem; font-size: .95rem; color: rgba(242,244,236,.7); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-    .sb-act-more { margin-top: 1rem; padding: 0 0 .15rem; border: 0; border-bottom: 2px solid var(--emas); background: none; color: var(--krem); font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; }
+    .sb-act-more { align-self: flex-start; margin-top: auto; padding: .9rem 0 .15rem; border: 0; background: none; color: var(--krem); font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; display: inline-flex; align-items: center; gap: .45rem; }
+    .sb-act-more::after { content: ''; width: .9rem; height: 2px; background: var(--emas); transition: width .25s ease; }
     .sb-act-more:hover { color: var(--emas); }
-    .sb-empty { margin-top: 2.5rem; padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; }
+    .sb-act-more:hover::after { width: 1.5rem; }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .sb-act:hover { transform: translateY(-4px); border-color: rgba(227,167,47,.5); background: rgba(242,244,236,.08); }
+        .sb-act:hover .sb-act-img img { transform: scale(1.04); }
+    }
+    .sb-empty { margin-top: 1.5rem; padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .5rem; }
 
     /* Popup cerita kegiatan */
-    .sb-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,8,5,.9); overflow-y: auto; text-align: justify; }
+    .sb-modal { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 1.5rem; background: rgba(5,8,5,.9); overflow-y: auto; }
     .sb-modal[hidden] { display: none; }
     .sb-dialog { position: relative; width: min(100%, 44rem); max-height: 90vh; overflow-y: auto; border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; background: #102a1a; }
     .sb-dialog img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
     .sb-dialog-body { padding: 1.5rem; }
     .sb-dialog h3 { margin-top: .5rem; font-size: clamp(1.4rem, 3vw, 2rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
-    .sb-dialog-story { margin-top: 1rem; color: rgba(242,244,236,.8); white-space: pre-line; }
+    .sb-dialog-story { margin-top: 1rem; color: rgba(242,244,236,.8); white-space: pre-line; text-align: justify; text-justify: inter-word; hyphens: auto; }
     .sb-close { position: absolute; top: .75rem; right: .75rem; }
     .sb-close.sb-btn { background: rgba(16,42,26,.8); }
 </style>
@@ -179,7 +202,8 @@
         <div class="sb-bar">
             <div class="sb-tabs" role="tablist" aria-label="Kategori program CSR">
                 @foreach($csrCategories as $index => $category)
-                <button type="button" class="sb-tab" role="tab" data-sb-tab aria-selected="{{ $index === 0 ? 'true' : 'false' }}">
+                <button type="button" class="sb-tab" role="tab" data-sb-tab
+                        aria-selected="{{ $index === 0 ? 'true' : 'false' }}" tabindex="{{ $index === 0 ? '0' : '-1' }}">
                     @if($category->icon)<span aria-hidden="true">{{ $category->icon }}</span>@endif{{ $category->title }}
                 </button>
                 @endforeach
@@ -189,6 +213,7 @@
                 <button type="button" class="sb-btn" data-sb-nav="-1" aria-label="Program CSR sebelumnya">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
                 </button>
+                <span class="sb-count" id="sbCount" aria-live="polite">{{ str_pad(1, 2, '0', STR_PAD_LEFT) }} / {{ str_pad($csrCategories->count(), 2, '0', STR_PAD_LEFT) }}</span>
                 <button type="button" class="sb-btn" data-sb-nav="1" aria-label="Program CSR selanjutnya">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
                 </button>
@@ -198,9 +223,15 @@
 
         @foreach($csrCategories as $index => $category)
         <div class="sb-panel" data-sb-panel role="tabpanel" @unless($index === 0) hidden @endunless>
-            <div class="sb-panel-desc">
-                <h3>{{ $category->title }}</h3>
-                <p>{{ $category->description }}</p>
+            <div class="sb-panel-head {{ $category->icon ? 'has-icon' : '' }}">
+                @if($category->icon)
+                    <span class="sb-panel-icon" aria-hidden="true">{{ $category->icon }}</span>
+                @endif
+                <div>
+                    <h3>{{ $category->title }}</h3>
+                    <p>{{ $category->description }}</p>
+                    <span class="sb-pill">{{ $category->activities->count() }} kegiatan</span>
+                </div>
             </div>
 
             @if($category->activities->isNotEmpty())
@@ -216,13 +247,15 @@
                             <img src="{{ $imageUrl }}" alt="" loading="lazy" onerror="this.style.display='none'">
                         @endif
                     </button>
-                    <div class="sb-act-meta">
-                        <span>{{ $activity->date }}</span>
-                        <span>{{ $activity->location }}</span>
+                    <div class="sb-act-body">
+                        <div class="sb-act-meta">
+                            <span>{{ $activity->date }}</span>
+                            <span>{{ $activity->location }}</span>
+                        </div>
+                        <h4>{{ $activity->title }}</h4>
+                        <p class="sb-act-story">{{ $activity->story }}</p>
+                        <button type="button" class="sb-act-more" data-sb-open>Baca selengkapnya</button>
                     </div>
-                    <h4>{{ $activity->title }}</h4>
-                    <p class="sb-act-story">{{ $activity->story }}</p>
-                    <button type="button" class="sb-act-more" data-sb-open>Baca selengkapnya</button>
                 </article>
                 @endforeach
             </div>
@@ -246,7 +279,7 @@
 
     {{-- POPUP: satu popup dipakai semua kartu kegiatan --}}
     <div class="sb-modal" id="sbModal" role="dialog" aria-modal="true" aria-labelledby="sbModalTitle" hidden>
-        <div class="sb-dialog">
+        <div class="sb-dialog" lang="id">
             <button type="button" class="sb-btn sb-close" id="sbClose" aria-label="Tutup">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
             </button>
@@ -258,22 +291,37 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
-    // Tab kategori CSR + tombol panah
+    // Tab kategori CSR + tombol panah + penghitung (tab aktif ikut tergeser ke area terlihat di layar sempit)
     (function () {
         const tabs = [...document.querySelectorAll('[data-sb-tab]')];
         const panels = [...document.querySelectorAll('[data-sb-panel]')];
+        const count = document.getElementById('sbCount');
         if (!tabs.length) return;
         let cur = 0;
+        const pad = function (n) { return String(n).padStart(2, '0'); };
+
         function show(i) {
             cur = (i + tabs.length) % tabs.length;
-            tabs.forEach(function (t, k) { t.setAttribute('aria-selected', k === cur ? 'true' : 'false'); });
+            tabs.forEach(function (t, k) {
+                t.setAttribute('aria-selected', k === cur ? 'true' : 'false');
+                t.tabIndex = k === cur ? 0 : -1;
+            });
             panels.forEach(function (p, k) { p.hidden = k !== cur; });
+            if (count) count.textContent = pad(cur + 1) + ' / ' + pad(tabs.length);
+            tabs[cur].scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
         }
-        tabs.forEach(function (t, k) { t.addEventListener('click', function () { show(k); }); });
+
+        tabs.forEach(function (t, k) {
+            t.addEventListener('click', function () { show(k); });
+            // Panah kiri/kanan di keyboard berpindah antar tab
+            t.addEventListener('keydown', function (e) {
+                if (e.key === 'ArrowRight') { e.preventDefault(); show(cur + 1); tabs[cur].focus(); }
+                if (e.key === 'ArrowLeft')  { e.preventDefault(); show(cur - 1); tabs[cur].focus(); }
+            });
+        });
         document.querySelectorAll('[data-sb-nav]').forEach(function (b) {
             b.addEventListener('click', function () { show(cur + Number(b.dataset.sbNav)); });
         });
