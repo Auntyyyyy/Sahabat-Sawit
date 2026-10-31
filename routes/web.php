@@ -48,6 +48,7 @@ Route::get('/keberlanjutan', [SustainabilityController::class, 'index'])->name('
 Route::get('/kontak', [ContactController::class, 'index'])->name('contact');
 Route::post('/kontak', [ContactController::class, 'store'])->name('contact.store');
 Route::get('/karier', [CareerController::class, 'index'])->name('career');
+Route::get('/karier/{lowongan:slug}', [CareerController::class, 'show'])->name('career.show');
 Route::get('/perkebunan', [PlantationController::class, 'index'])->name('plantation');
 Route::get('/perkebunan', [PlantationController::class, 'index'])->name('plantation');
 

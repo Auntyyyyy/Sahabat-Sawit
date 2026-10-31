@@ -15,7 +15,13 @@ class CareerController extends Controller
 
     public function show(Lowongan $lowongan)
     {
-        abort_unless($lowongan->is_active, 404);
+        // Hanya lowongan yang tayang (aktif dan belum lewat batas waktu) yang boleh dibuka,
+        // sama seperti aturan di daftar lowongan.
+        abort_unless(
+            $lowongan->is_active
+                && (! $lowongan->batas_waktu || $lowongan->batas_waktu->gte(today())),
+            404
+        );
 
         return view('career.show', compact('lowongan'));
     }

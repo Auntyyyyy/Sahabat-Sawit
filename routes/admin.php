@@ -31,6 +31,7 @@ use App\Http\Controllers\Admin\PersonaliaDashboardController;
 use App\Http\Controllers\Admin\PersonaliaKaryawanController;
 use App\Http\Controllers\Admin\PersonaliaAbsensiController;
 use App\Http\Controllers\Admin\PersonaliaCutiController;
+use App\Http\Controllers\Admin\PersonaliaRekrutmenController;
 
 
 Route::prefix('admin')->name('admin.')->group(function () {
@@ -139,16 +140,28 @@ Route::middleware(['auth', 'admin:personalia'])
     ->group(function () {
         Route::get('dashboard', [PersonaliaDashboardController::class, 'index'])->name('dashboard');
 
-        // Halaman menu (sementara kosong, nanti diganti controller)
+        // Karyawan
         Route::get('karyawan', [PersonaliaKaryawanController::class, 'index'])->name('karyawan.index');
-        Route::get('karyawan/{karyawan}', [PersonaliaKaryawanController::class, 'show'])->name('karyawan.show');        
+        Route::get('karyawan/{karyawan}', [PersonaliaKaryawanController::class, 'show'])->name('karyawan.show');
+
+        // Absensi
         Route::resource('absensi', PersonaliaAbsensiController::class)
             ->except(['show'])
-            ->parameters(['absensi' => 'kehadiran']);        
-        Route::get('cuti', [PersonaliaCutiController::class, 'index'])->name('cuti.index');        Route::get('payroll', [PersonaliaPayrollController::class, 'index'])->name('payroll.index');
-        Route::get('rekrutmen', [PersonaliaRekrutmenController::class, 'index'])->name('rekrutmen.index');
-        Route::get('performance', [PersonaliaPerformanceController::class, 'index'])->name('performance.index');
-        Route::get('training', [PersonaliaTrainingController::class, 'index'])->name('training.index');
-        Route::get('dokumen', [PersonaliaDokumenController::class, 'index'])->name('dokumen.index');
-        Route::get('setup', [PersonaliaSetupController::class, 'index'])->name('setup.index');
+            ->parameters(['absensi' => 'kehadiran']);
+
+        // Cuti
+        Route::get('cuti', [PersonaliaCutiController::class, 'index'])->name('cuti.index');
+
+        // Rekrutmen
+        Route::patch('rekrutmen/{lowongan}/status', [PersonaliaRekrutmenController::class, 'toggle'])->name('rekrutmen.status');
+        Route::resource('rekrutmen', PersonaliaRekrutmenController::class)
+            ->except(['show'])
+            ->parameters(['rekrutmen' => 'lowongan']);
+
+        // Menu yang belum dirancang (halaman sementara)
+        Route::view('payroll', 'admin.personalia.payroll.index')->name('payroll.index');
+        Route::view('performance', 'admin.personalia.performance.index')->name('performance.index');
+        Route::view('training', 'admin.personalia.training.index')->name('training.index');
+        Route::view('dokumen', 'admin.personalia.dokumen.index')->name('dokumen.index');
+        Route::view('setup', 'admin.personalia.setup.index')->name('setup.index');
     });

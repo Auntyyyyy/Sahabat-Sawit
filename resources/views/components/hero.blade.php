@@ -9,7 +9,7 @@
         muted
         loop
         playsinline
-        poster="{{ asset('images/tangki.png') }}"
+        poster="{{ asset('images/profil.mp4') }}"
         onerror="this.style.display='none'">
         <source src="{{ asset('images/profil.mp4') }}" type="video/mp4">
         Browser Anda tidak mendukung tag video.

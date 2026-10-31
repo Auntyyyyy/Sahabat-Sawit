@@ -6,7 +6,7 @@
 
 @php
     // Foto tetap untuk hero & penutup (ganti nama file di sini; file ada di public/images).
-    $fotoHero = 'sawittangan.jpg';
+    $fotoHero = 'sawitnumpuk.jpeg';
     $fotoCta  = 'sawitangkong.jpg';
 
     $gambarUtama   = $product->image ? asset('storage/' . $product->image) : null;
