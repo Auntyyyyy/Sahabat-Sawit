@@ -69,6 +69,34 @@
         .sidebar a.nav-item:hover { background: var(--rose-mid); color: #fff; }
         .sidebar a.nav-item.active { background: var(--pink); color: #fff; }
 
+        /* ================= SUB-MENU SIDEBAR ================= */
+        .sidebar details.nav-group > summary {
+            list-style: none; cursor: pointer;
+            display: flex; align-items: center; gap: .7rem;
+            padding: .62rem .75rem; border-radius: 8px;
+            color: #EFCBDC; font-size: .88rem; font-weight: 500;
+            transition: background .15s, color .15s;
+        }
+        .sidebar details.nav-group > summary::-webkit-details-marker { display: none; }
+        .sidebar details.nav-group > summary .nav-icon { width: 18px; height: 18px; flex-shrink: 0; }
+        .sidebar details.nav-group > summary .chevron { margin-left: auto; width: 14px; height: 14px; flex-shrink: 0; transition: transform .2s; }
+        .sidebar details.nav-group[open] > summary .chevron { transform: rotate(180deg); }
+        .sidebar details.nav-group > summary:hover { background: var(--rose-mid); color: #fff; }
+        .sidebar details.nav-group.active > summary { background: rgba(255,255,255,.08); color: #fff; }
+
+        .sidebar .nav-sub {
+            display: flex; flex-direction: column; gap: .15rem;
+            margin: .25rem 0 .35rem 1.3rem; padding-left: .7rem;
+            border-left: 1px solid rgba(255,255,255,.16);
+        }
+        .sidebar .nav-sub a {
+            display: block; padding: .5rem .75rem; border-radius: 8px;
+            color: #EFCBDC; font-size: .84rem; font-weight: 500;
+            transition: background .15s, color .15s;
+        }
+        .sidebar .nav-sub a:hover { background: var(--rose-mid); color: #fff; }
+        .sidebar .nav-sub a.active { background: var(--pink); color: #fff; }
+
         .sidebar .sidebar-footer { margin-top: auto; padding-top: 1.25rem; border-top: 1px solid rgba(255,255,255,.1); }
         .sidebar form button {
             width: 100%; display: flex; align-items: center; gap: .7rem;
@@ -145,18 +173,38 @@
         }
         table.data-table td { padding: .85rem 1.5rem; font-size: .88rem; border-bottom: 1px solid var(--line); }
         table.data-table tr:last-child td { border-bottom: none; }
-        table.data-table .row-actions { display: flex; gap: .6rem; }
-        table.data-table .row-actions a, table.data-table .row-actions button {
-            font-size: .8rem; font-weight: 600; border: none; background: none; cursor: pointer; padding: 0;
+
+        /* Kolom aksi: tetap sebagai sel tabel supaya garis baris tidak patah */
+        table.data-table td.row-actions { white-space: nowrap; text-align: right; }
+        table.data-table .row-actions form { display: inline-block; margin: 0; }
+        table.data-table .row-actions > * + * { margin-left: .4rem; }
+
+        table.data-table .row-actions a,
+        table.data-table .row-actions button {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: .4rem .85rem; border-radius: 999px; border: 1px solid transparent;
+            font-family: 'Inter', sans-serif; font-size: .78rem; font-weight: 600; line-height: 1;
+            cursor: pointer; transition: background .15s, color .15s, border-color .15s;
         }
-        .action-view { color: var(--pink); }
-        .action-edit { color: var(--amber); }
-        .action-delete { color: var(--red); }
+        table.data-table .row-actions a:focus-visible,
+        table.data-table .row-actions button:focus-visible {
+            outline: none; box-shadow: 0 0 0 3px rgba(214,71,143,.22);
+        }
+
+        .action-view { background: #FBEAF1; color: var(--pink); }
+        .action-view:hover { background: var(--pink); color: #fff; }
+
+        .action-edit { background: #FDF1DF; color: #B9791F; }
+        .action-edit:hover { background: var(--amber); color: #fff; }
+
+        .action-delete { background: #FBE7E8; color: var(--red); }
+        .action-delete:hover { background: var(--red); color: #fff; }
 
         .status-pill { display: inline-block; padding: .25rem .65rem; border-radius: 6px; font-size: .76rem; font-weight: 600; }
         .status-pill.aktif { background: #E4F1EA; color: var(--green); }
         .status-pill.cuti { background: #FDF1DF; color: #B9791F; }
         .status-pill.nonaktif { background: #FBE7E8; color: var(--red); }
+        .status-pill.info { background: #E8F0FB; color: #2B5FB3; }
 
         .empty-note { padding: 2rem 1.5rem; text-align: center; color: var(--muted); font-size: .88rem; }
 
@@ -200,6 +248,91 @@
         .detail-grid dt { color: var(--muted); }
         .detail-grid dd { margin: 0; font-weight: 500; }
 
+        /* ================= HALAMAN DETAIL ================= */
+        .panel-head .head-title { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
+
+        .detail-layout {
+            display: grid; grid-template-columns: 340px 1fr; gap: 1.75rem;
+            padding: 1.5rem; align-items: start;
+        }
+
+        .detail-photo {
+            display: block; aspect-ratio: 4 / 3; overflow: hidden;
+            border-radius: 12px; border: 1px solid var(--line); background: #FBEAF1;
+        }
+        .detail-photo img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .25s ease; }
+        a.detail-photo:hover img { transform: scale(1.03); }
+        .detail-photo.empty { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .5rem; color: var(--pink-light); font-size: .8rem; }
+        .detail-photo.empty svg { width: 52px; height: 52px; }
+
+        .detail-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: .9rem; margin-bottom: 1.5rem; }
+        .detail-stat { border: 1px solid var(--line); border-radius: 10px; padding: .95rem 1.1rem; background: #FFFBFD; }
+        .detail-stat .label { font-size: .74rem; color: var(--muted); margin-bottom: .45rem; }
+        .detail-stat .value { font-family: 'Poppins', sans-serif; font-size: 1.15rem; font-weight: 700; color: var(--rose-dark); line-height: 1.3; }
+        .detail-stat .hint { font-size: .74rem; color: var(--muted); margin-top: .25rem; }
+
+        .detail-layout .detail-grid { padding: 0; grid-template-columns: 150px 1fr; }
+        .detail-actions { display: flex; gap: .75rem; margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--line); flex-wrap: wrap; }
+
+        /* ================= SURAT-MENYURAT ================= */
+        .status-pill.netral { background: #FBEAF1; color: var(--pink); }
+
+        .btn-sm { padding: .45rem .9rem; font-size: .8rem; }
+
+        .file-card { border: 1px solid var(--line); border-radius: 12px; background: #FFFBFD; padding: 1.5rem 1.25rem; text-align: center; }
+        .file-card .file-icon {
+            width: 64px; height: 76px; margin: 0 auto .9rem; border-radius: 10px;
+            background: #FBEAF1; color: var(--pink);
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Poppins', sans-serif; font-weight: 700; font-size: .85rem;
+        }
+        .file-card .file-icon.pdf { background: #FBE7E8; color: var(--red); }
+        .file-card .file-icon.word { background: #E8F0FB; color: #2B5FB3; }
+        .file-card .file-name { font-weight: 600; font-size: .88rem; word-break: break-all; margin-bottom: .2rem; }
+        .file-card .file-hint { font-size: .76rem; color: var(--muted); margin-bottom: 1rem; }
+        .file-card .file-actions { display: flex; gap: .5rem; justify-content: center; flex-wrap: wrap; }
+        .file-card.empty { color: var(--muted); font-size: .85rem; }
+
+        /* ================= KOMPONEN BERSAMA (alur status, peringatan) ================= */
+        .alert-error {
+            background: #FBE7E8; border: 1px solid #F1C4C6; color: var(--red);
+            border-radius: 10px; padding: .85rem 1.25rem; font-size: .85rem; margin-bottom: 1.5rem;
+        }
+        .alert-warning {
+            background: #FDF1DF; border: 1px solid #F1D9AE; color: #8A5A12;
+            border-radius: 10px; padding: .8rem 1.1rem; font-size: .84rem; margin-bottom: 1.1rem;
+        }
+        .alert-warning a { color: inherit; font-weight: 600; text-decoration: underline; }
+
+        .btn-danger-soft { background: #FBE7E8; color: var(--red); border: 1px solid #F1C4C6; }
+        .btn-danger-soft:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
+        .steps { display: flex; align-items: center; padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--line); }
+        .step { display: flex; align-items: center; gap: .55rem; flex: 1; color: var(--muted); font-size: .84rem; font-weight: 500; }
+        .step:last-child { flex: 0 0 auto; }
+        .step:not(:last-child)::after { content: ''; flex: 1; height: 2px; margin: 0 .9rem; border-radius: 2px; background: var(--line); }
+        .step-dot {
+            width: 26px; height: 26px; border-radius: 50%; flex-shrink: 0;
+            display: inline-flex; align-items: center; justify-content: center;
+            background: #FBEAF1; color: var(--muted); font-size: .75rem; font-weight: 700;
+        }
+        .step.current { color: var(--rose-dark); font-weight: 600; }
+        .step.current .step-dot { background: var(--pink); color: #fff; }
+        .step.done { color: var(--green); }
+        .step.done .step-dot { background: var(--green); color: #fff; }
+        .step.done:not(:last-child)::after { background: var(--green); }
+
+        .step-note { padding: 1rem 1.5rem; border-bottom: 1px solid var(--line); background: #FFF8F8; color: var(--red); font-size: .85rem; font-weight: 500; }
+
+        .stage-hint { margin: 0 0 1.1rem; color: var(--muted); font-size: .86rem; }
+
+        .danger-zone {
+            display: flex; align-items: center; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+            margin-top: 1.25rem; padding-top: 1.1rem; border-top: 1px solid var(--line);
+        }
+        .danger-zone .danger-text { font-size: .84rem; color: var(--muted); }
+        .danger-zone .danger-text strong { display: block; color: var(--ink); font-size: .86rem; margin-bottom: .15rem; }
+
         @media (max-width: 960px) {
             .menu-toggle { display: inline-flex; }
             .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; transform: translateX(-100%); transition: transform .25s ease; }
@@ -209,6 +342,13 @@
             .summary-item:nth-child(2) { border-right: none; }
             .two-col { grid-template-columns: 1fr; }
             .form-grid { grid-template-columns: 1fr; }
+            .detail-layout { grid-template-columns: 1fr; }
+            .detail-stats { grid-template-columns: 1fr; }
+        }
+
+        @media (max-width: 640px) {
+            .step-label { display: none; }
+            .step.current .step-label { display: inline; }
         }
 
         @yield('extra-style')
@@ -237,15 +377,35 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.27 6.96L12 12.01l8.73-5.05"/><path d="M12 22.08V12"/></svg>
                     Aset / Inventaris
                 </a>
-                <a href="#" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
-                    ATK & Permintaan
-                </a>
-                <a href="#" class="nav-item">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>
-                    Fasilitas
-                </a>
-                <a href="#" class="nav-item">
+
+                @php $atkActive = request()->routeIs('go.atk-*'); @endphp
+                <details class="nav-group {{ $atkActive ? 'active' : '' }}" @if($atkActive) open @endif>
+                    <summary>
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>
+                        ATK
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <div class="nav-sub">
+                        <a href="{{ route('go.atk-requests.index') }}" class="{{ request()->routeIs('go.atk-requests.*') ? 'active' : '' }}">Permintaan</a>
+                        <a href="{{ route('go.atk-items.index') }}" class="{{ request()->routeIs('go.atk-items.*') ? 'active' : '' }}">Barang ATK</a>
+                        <a href="{{ route('go.atk-stock-ins.index') }}" class="{{ request()->routeIs('go.atk-stock-ins.*') ? 'active' : '' }}">Barang Masuk</a>
+                    </div>
+                </details>
+
+                @php $fasilitasActive = request()->routeIs('go.facilities.*', 'go.facility-loans.*'); @endphp
+                <details class="nav-group {{ $fasilitasActive ? 'active' : '' }}" @if($fasilitasActive) open @endif>
+                    <summary>
+                        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01M9 12v.01M9 15v.01M9 18v.01"/></svg>
+                        Fasilitas
+                        <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="m6 9 6 6 6-6"/></svg>
+                    </summary>
+                    <div class="nav-sub">
+                        <a href="{{ route('go.facilities.index') }}" class="{{ request()->routeIs('go.facilities.*') ? 'active' : '' }}">Daftar Fasilitas</a>
+                        <a href="{{ route('go.facility-loans.index') }}" class="{{ request()->routeIs('go.facility-loans.*') ? 'active' : '' }}">Peminjaman</a>
+                    </div>
+                </details>
+
+                <a href="{{ route('go.letters.index') }}" class="nav-item {{ request()->routeIs('go.letters.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m4 6 8 7 8-7"/></svg>
                     Surat-Menyurat
                 </a>
@@ -288,6 +448,10 @@
             <div class="content">
                 @if (session('success'))
                     <div class="alert-success">{{ session('success') }}</div>
+                @endif
+
+                @if (session('error'))
+                    <div class="alert-error">{{ session('error') }}</div>
                 @endif
 
                 @yield('content')

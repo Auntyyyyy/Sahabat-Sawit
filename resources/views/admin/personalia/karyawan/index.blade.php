@@ -34,8 +34,8 @@
     {{-- ================= DAFTAR KARYAWAN ================= --}}
     <div class="panel">
         <div class="panel-head">
-            <h2>Daftar Karyawan</h2>
-            <span class="count-badge">{{ $karyawans->total() }}</span>
+            <h2>Daftar Karyawan <span class="count-badge">{{ $karyawans->total() }}</span></h2>
+            <a href="{{ route('personalia.karyawan.create') }}" class="btn btn-primary">+ Tambah karyawan</a>
         </div>
 
         <form method="GET" action="{{ route('personalia.karyawan.index') }}" class="filter-bar">
@@ -90,7 +90,11 @@
                             <tr>
                                 <td>
                                     <div class="person">
-                                        <div class="avatar-mini">{{ $inisial($k->name) }}</div>
+                                        @if ($k->photo)
+                                            <img class="avatar-mini avatar-img" src="{{ asset('storage/' . $k->photo) }}" alt="">
+                                        @else
+                                            <div class="avatar-mini">{{ $inisial($k->name) }}</div>
+                                        @endif
                                         <div>
                                             <div class="person-name">{{ $k->name }}</div>
                                             <div class="person-sub">{{ $k->email }}</div>
@@ -106,7 +110,22 @@
                                 <td><span class="status-pill {{ $k->status }}">{{ ucfirst($k->status) }}</span></td>
                                 <td>
                                     <div class="row-actions">
-                                        <a href="{{ route('personalia.karyawan.show', $k) }}" class="action-view">Detail</a>
+                                        <a href="{{ route('personalia.karyawan.show', $k) }}" class="btn-aksi btn-aksi-lihat" title="Lihat detail karyawan">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                            Detail
+                                        </a>
+                                        <a href="{{ route('personalia.karyawan.edit', $k) }}" class="btn-aksi btn-aksi-edit" title="Ubah data karyawan">
+                                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                                            Edit
+                                        </a>
+                                        <form method="POST" action="{{ route('personalia.karyawan.destroy', $k) }}" onsubmit="return confirm('Hapus karyawan ini? Seluruh catatan kehadiran dan penilaian kinerjanya juga ikut terhapus permanen. Kalau karyawan sudah keluar, lebih baik ubah statusnya menjadi Resign.');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn-aksi btn-aksi-hapus" title="Hapus karyawan ini">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                                                Hapus
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -149,6 +168,25 @@
     .avatar-mini { width: 34px; height: 34px; border-radius: 50%; background: #E4E9F3; color: var(--blue); display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: .82rem; flex-shrink: 0; }
 
     /* Label status tambahan */
+    .avatar-img { object-fit: cover; }
+
+    /* ===== Tombol aksi ===== */
+    table.data-table .row-actions { align-items: center; gap: .5rem; }
+    table.data-table .row-actions form { margin: 0; }
+    table.data-table .row-actions .btn-aksi {
+        display: inline-flex; align-items: center; gap: .4rem;
+        padding: .4rem .75rem; border-radius: 8px; border: 1px solid transparent;
+        font-family: 'Inter', sans-serif; font-size: .78rem; font-weight: 600; line-height: 1;
+        cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+    }
+    table.data-table .row-actions .btn-aksi svg { width: 14px; height: 14px; flex-shrink: 0; }
+    table.data-table .row-actions .btn-aksi-lihat { background: #ECEEF2; color: var(--ink); border-color: #DADDE2; }
+    table.data-table .row-actions .btn-aksi-lihat:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
+    table.data-table .row-actions .btn-aksi-edit { background: #E4E9F3; color: var(--blue); border-color: #D3DBEA; }
+    table.data-table .row-actions .btn-aksi-edit:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    table.data-table .row-actions .btn-aksi-hapus { background: #FBE7E8; color: var(--red); border-color: #F2CFD1; }
+    table.data-table .row-actions .btn-aksi-hapus:hover { background: var(--red); color: #fff; border-color: var(--red); }
+
     .status-pill.kontrak { background: #E4E9F3; color: var(--blue); }
     .status-pill.trainee { background: #EDE8F5; color: #5B3F8C; }
     .status-pill.resign { background: #FBE7E8; color: var(--red); }

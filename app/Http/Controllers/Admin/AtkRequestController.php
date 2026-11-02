@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\AtkItem;
 use App\Models\AtkRequest;
-use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
@@ -37,8 +36,6 @@ class AtkRequestController extends Controller
     public function create()
     {
         return view('go.atk.requests.create', [
-            // hanya karyawan aktif yang bisa jadi pemohon
-            'karyawans' => Karyawan::where('status', 'aktif')->orderBy('name')->get(['id', 'name', 'division', 'position']),
             'items' => AtkItem::orderBy('nama')->get(['id', 'kode', 'nama', 'satuan', 'stok']),
         ]);
     }
@@ -46,15 +43,16 @@ class AtkRequestController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'karyawan_id' => ['required', Rule::exists('karyawans', 'id')->where('status', 'aktif')],
+            'pemohon_nama' => 'required|string|max:150',
+            'pemohon_divisi' => 'required|string|max:150',
             'tanggal' => 'required|date',
             'catatan' => 'nullable|string|max:500',
             'items' => 'required|array|min:1',
             'items.*.atk_item_id' => 'required|distinct|exists:atk_items,id',
             'items.*.jumlah' => 'required|integer|min:1',
         ], [
-            'karyawan_id.required' => 'Pilih pemohon terlebih dahulu.',
-            'karyawan_id.exists' => 'Pemohon harus karyawan yang berstatus aktif.',
+            'pemohon_nama.required' => 'Nama pemohon wajib diisi.',
+            'pemohon_divisi.required' => 'Divisi pemohon wajib diisi.',
             'items.required' => 'Tambahkan minimal satu barang.',
             'items.min' => 'Tambahkan minimal satu barang.',
             'items.*.atk_item_id.required' => 'Ada baris barang yang belum dipilih.',
@@ -63,14 +61,11 @@ class AtkRequestController extends Controller
             'items.*.jumlah.min' => 'Jumlah barang minimal 1.',
         ]);
 
-        $karyawan = Karyawan::findOrFail($data['karyawan_id']);
-
-        $atkRequest = DB::transaction(function () use ($data, $karyawan) {
+        $atkRequest = DB::transaction(function () use ($data) {
             $req = AtkRequest::create([
                 'nomor' => AtkRequest::generateNomor(),
-                'karyawan_id' => $karyawan->id,
-                'pemohon_nama' => $karyawan->name,
-                'pemohon_divisi' => $karyawan->division,
+                'pemohon_nama' => trim($data['pemohon_nama']),
+                'pemohon_divisi' => trim($data['pemohon_divisi']),
                 'tanggal' => $data['tanggal'],
                 'status' => 'Diajukan',
                 'catatan' => $data['catatan'] ?? null,

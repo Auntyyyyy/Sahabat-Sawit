@@ -15,13 +15,16 @@ use App\Http\Controllers\Admin\PengetahuanController;
 use App\Http\Controllers\Admin\PerformaController; 
 use App\Http\Controllers\Admin\PengetahuanKategoriController;
 
-// FIX: class ini dipakai di grup route 'go' di bawah tapi sebelumnya belum
+// Dashboard GA
 // di-import sama sekali — bakal error "Class not found" begitu dipanggil.
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\Admin\AtkItemController;
 use App\Http\Controllers\Admin\AtkStockInController;
 use App\Http\Controllers\Admin\AtkRequestController;
+use App\Http\Controllers\Admin\FacilityController;
+use App\Http\Controllers\Admin\LetterController;
+use App\Http\Controllers\Admin\FacilityLoanController;
 
 // route K3
 use App\Http\Controllers\Admin\K3DashboardController;
@@ -32,7 +35,7 @@ use App\Http\Controllers\Admin\PersonaliaKaryawanController;
 use App\Http\Controllers\Admin\PersonaliaAbsensiController;
 use App\Http\Controllers\Admin\PersonaliaCutiController;
 use App\Http\Controllers\Admin\PersonaliaRekrutmenController;
-
+use App\Http\Controllers\Admin\PersonaliaPerformanceController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -87,26 +90,40 @@ Route::middleware(['auth', 'admin:general_officer'])
 
         // Modul Aset / Inventaris
         Route::resource('assets', AssetController::class)->except(['show']);
-    
+
+        // Modul Fasilitas
+        Route::resource('facilities', FacilityController::class);
+
+        // Peminjaman Fasilitas
+        Route::patch('facility-loans/{facilityLoan}/status', [FacilityLoanController::class, 'updateStatus'])->name('facility-loans.status');
+        Route::patch('facility-loans/{facilityLoan}/return', [FacilityLoanController::class, 'returnLoan'])->name('facility-loans.return');
+        Route::resource('facility-loans', FacilityLoanController::class)
+            ->except(['edit', 'update'])
+            ->parameters(['facility-loans' => 'facilityLoan']);
+
+        // Modul Surat-Menyurat
+        Route::get('letters/{letter}/lampiran', [LetterController::class, 'lampiran'])->name('letters.lampiran');
+        Route::resource('letters', LetterController::class);
+
         // Barang ATK (master barang + stok)
         Route::resource('atk-items', AtkItemController::class)
             ->except(['show'])
             ->parameters(['atk-items' => 'atkItem']);
-        
+
         // Barang masuk (menambah stok)
         Route::resource('atk-stock-ins', AtkStockInController::class)
             ->only(['index', 'create', 'store']);
-        
+
         // Permintaan ATK
         Route::resource('atk-requests', AtkRequestController::class)
             ->except(['edit', 'update'])
             ->parameters(['atk-requests' => 'atkRequest']);
-        
+
         Route::patch('atk-requests/{atkRequest}/status', [AtkRequestController::class, 'updateStatus'])
             ->name('atk-requests.status');
-        });
-
-// Dashboard HR
+    });
+    
+    // Dashboard HR
 Route::middleware(['auth', 'admin:hr'])
     ->prefix('hr')->name('hr.')
     ->group(function () {
@@ -131,7 +148,18 @@ Route::middleware(['auth', 'admin:k3'])
         Route::resource('dokumen', \App\Http\Controllers\Admin\K3DokumenController::class)
             ->except(['show'])
             ->parameters(['dokumen' => 'dokumen']);
-    });
+    
+        // Modul Safety Patrol → URL /k3/patrol, nama route k3.patrol.*
+        Route::patch('patrol/{patrol}/selesai', [\App\Http\Controllers\Admin\K3PatrolController::class, 'selesaikan'])->name('patrol.selesai');
+        Route::resource('patrol', \App\Http\Controllers\Admin\K3PatrolController::class)
+            ->except(['show'])
+            ->parameters(['patrol' => 'patrol']);       
+
+         // Modul Monitoring Kesehatan → URL /k3/kesehatan, nama route k3.kesehatan.*
+        Route::resource('kesehatan', \App\Http\Controllers\Admin\K3KesehatanController::class)
+            ->except(['show'])
+            ->parameters(['kesehatan' => 'kesehatan']);
+        });
 
 
 // Dashboard Personalia
@@ -141,8 +169,7 @@ Route::middleware(['auth', 'admin:personalia'])
         Route::get('dashboard', [PersonaliaDashboardController::class, 'index'])->name('dashboard');
 
         // Karyawan
-        Route::get('karyawan', [PersonaliaKaryawanController::class, 'index'])->name('karyawan.index');
-        Route::get('karyawan/{karyawan}', [PersonaliaKaryawanController::class, 'show'])->name('karyawan.show');
+        Route::resource('karyawan', PersonaliaKaryawanController::class);        Route::get('karyawan/{karyawan}', [PersonaliaKaryawanController::class, 'show'])->name('karyawan.show');
 
         // Absensi
         Route::resource('absensi', PersonaliaAbsensiController::class)
@@ -160,8 +187,10 @@ Route::middleware(['auth', 'admin:personalia'])
 
         // Menu yang belum dirancang (halaman sementara)
         Route::view('payroll', 'admin.personalia.payroll.index')->name('payroll.index');
-        Route::view('performance', 'admin.personalia.performance.index')->name('performance.index');
-        Route::view('training', 'admin.personalia.training.index')->name('training.index');
+        Route::resource('performance', PersonaliaPerformanceController::class)
+            ->except(['show'])
+            ->parameters(['performance' => 'penilaian']);        Route::view('training', 'admin.personalia.training.index')->name('training.index');
         Route::view('dokumen', 'admin.personalia.dokumen.index')->name('dokumen.index');
         Route::view('setup', 'admin.personalia.setup.index')->name('setup.index');
     });
+

@@ -245,8 +245,8 @@
     $menu = [
         ['icon' => 'bi-speedometer2',     'label' => 'Dashboard',            'route' => 'k3.dashboard', 'active' => request()->routeIs('k3.dashboard')],
         ['icon' => 'bi-file-earmark-check','label' => 'Dokumen Keselamatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.dokumen.index') ? 'k3.dokumen.index' : null, 'active' => request()->routeIs('k3.dokumen.*')],
-        ['icon' => 'bi-clipboard-check',  'label' => 'Safety Patrol'],
-        ['icon' => 'bi-heart-pulse',      'label' => 'Monitoring Kesehatan'],
+        ['icon' => 'bi-clipboard-check',  'label' => 'Safety Patrol', 'route' => \Illuminate\Support\Facades\Route::has('k3.patrol.index') ? 'k3.patrol.index' : null, 'active' => request()->routeIs('k3.patrol.*')],
+        ['icon' => 'bi-heart-pulse',      'label' => 'Monitoring Kesehatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.kesehatan.index') ? 'k3.kesehatan.index' : null, 'active' => request()->routeIs('k3.kesehatan.*')],
         ['icon' => 'bi-wind',             'label' => 'Pengukuran Lingkungan'],
         ['icon' => 'bi-person-gear',      'label' => 'Ergonomi'],
         ['icon' => 'bi-award',            'label' => 'Sertifikat'],

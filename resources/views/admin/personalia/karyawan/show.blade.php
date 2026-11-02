@@ -15,12 +15,30 @@
 
     {{-- ================= KARTU PROFIL ================= --}}
     <div class="profile-card">
-        <div class="profile-avatar">{{ $inisial($karyawan->name) }}</div>
+        @if ($karyawan->photo)
+            <img class="profile-avatar profile-avatar-img" src="{{ asset('storage/' . $karyawan->photo) }}" alt="Foto {{ $karyawan->name }}">
+        @else
+            <div class="profile-avatar">{{ $inisial($karyawan->name) }}</div>
+        @endif
         <div class="profile-main">
             <h2>{{ $karyawan->name }}</h2>
             <p>{{ $karyawan->position }} &middot; {{ $karyawan->division }}</p>
         </div>
         <span class="status-pill {{ $karyawan->status }}">{{ ucfirst($karyawan->status) }}</span>
+        <div class="profile-actions">
+            <a href="{{ route('personalia.karyawan.edit', $karyawan) }}" class="btn-aksi btn-aksi-edit">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 3a2.83 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"/></svg>
+                Edit
+            </a>
+            <form method="POST" action="{{ route('personalia.karyawan.destroy', $karyawan) }}" onsubmit="return confirm('Hapus karyawan ini? Seluruh catatan kehadiran dan penilaian kinerjanya juga ikut terhapus permanen. Kalau karyawan sudah keluar, lebih baik ubah statusnya menjadi Resign.');">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn-aksi btn-aksi-hapus">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
+                    Hapus
+                </button>
+            </form>
+        </div>
     </div>
 
     {{-- ================= DATA PRIBADI + KEPEGAWAIAN ================= --}}
@@ -171,6 +189,20 @@
     /* ===== Kartu profil ===== */
     .profile-card { display: flex; align-items: center; gap: 1.1rem; background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1.75rem; flex-wrap: wrap; }
     .profile-avatar { width: 64px; height: 64px; border-radius: 50%; background: var(--blue); color: #fff; display: flex; align-items: center; justify-content: center; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.5rem; flex-shrink: 0; }
+    .profile-avatar-img { object-fit: cover; }
+    .profile-actions { display: flex; align-items: center; gap: .5rem; }
+    .profile-actions form { margin: 0; }
+    .btn-aksi {
+        display: inline-flex; align-items: center; gap: .4rem;
+        padding: .45rem .85rem; border-radius: 8px; border: 1px solid transparent;
+        font-family: 'Inter', sans-serif; font-size: .8rem; font-weight: 600; line-height: 1;
+        cursor: pointer; transition: background .15s, color .15s, border-color .15s;
+    }
+    .btn-aksi svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .btn-aksi-edit { background: #E4E9F3; color: var(--blue); border-color: #D3DBEA; }
+    .btn-aksi-edit:hover { background: var(--blue); color: #fff; border-color: var(--blue); }
+    .btn-aksi-hapus { background: #FBE7E8; color: var(--red); border-color: #F2CFD1; }
+    .btn-aksi-hapus:hover { background: var(--red); color: #fff; border-color: var(--red); }
     .profile-main { flex: 1; min-width: 200px; }
     .profile-main h2 { font-size: 1.3rem; color: var(--navy); }
     .profile-main p { margin: .25rem 0 0; font-size: .9rem; color: var(--muted); }
