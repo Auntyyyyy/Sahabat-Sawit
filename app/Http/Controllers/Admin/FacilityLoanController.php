@@ -44,9 +44,10 @@ class FacilityLoanController extends Controller
             'facilities' => Facility::whereNotIn('kondisi', Facility::KONDISI_TIDAK_TERSEDIA)
                 ->orderBy('nama')
                 ->get(['id', 'kode_fasilitas', 'nama', 'kategori', 'kapasitas']),
+            'divisions' => Division::namaList(),
         ]);
     }
-
+    
     public function store(Request $request)
     {
         $data = $request->validate([

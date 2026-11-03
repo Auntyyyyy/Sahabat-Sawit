@@ -7,6 +7,28 @@
 
 @php
     $ext = $letter->lampiranEkstensi();
+    $status = $letter->status;
+    $nextStatuses = $letter->allowedTransitions();
+
+    $flow = ['Baru', 'Diproses', 'Selesai', 'Diarsipkan'];
+    $idx = array_search($status, $flow, true);
+
+    $stageHint = [
+        'Baru'       => 'Surat baru dicatat. Tandai Diproses saat mulai ditindaklanjuti, atau langsung Selesai.',
+        'Diproses'   => 'Surat sedang ditindaklanjuti. Tandai Selesai setelah tuntas.',
+        'Selesai'    => 'Surat sudah selesai. Arsipkan kalau tidak perlu lagi di daftar aktif, atau buka kembali kalau perlu tindak lanjut.',
+        'Diarsipkan' => 'Surat sudah diarsipkan. Buka kembali kalau perlu ditindaklanjuti lagi.',
+    ];
+
+    $actionLabel = function (string $target) use ($status) {
+        return match (true) {
+            $target === 'Diproses' && in_array($status, ['Selesai', 'Diarsipkan'], true) => 'Buka Kembali',
+            $target === 'Diproses'  => 'Tandai Diproses',
+            $target === 'Selesai'   => 'Tandai Selesai',
+            $target === 'Diarsipkan' => 'Arsipkan',
+            default => $target,
+        };
+    };
 @endphp
 
 <div class="panel">
@@ -17,6 +39,17 @@
         </div>
         <a href="{{ route('go.letters.index') }}" class="panel-link">← Kembali</a>
     </div>
+
+    @if($idx !== false)
+        <div class="steps">
+            @foreach($flow as $i => $label)
+                <div class="step {{ ($i < $idx || $status === 'Diarsipkan') ? 'done' : ($i === $idx ? 'current' : '') }}">
+                    <span class="step-dot">{{ ($i < $idx || $status === 'Diarsipkan') ? '✓' : $i + 1 }}</span>
+                    <span class="step-label">{{ $label }}</span>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
     <div class="detail-layout">
         {{-- Kolom kiri: lampiran --}}
@@ -83,6 +116,28 @@
                 <a href="{{ route('go.letters.edit', $letter) }}" class="btn btn-primary">Edit Surat</a>
                 <a href="{{ route('go.letters.index') }}" class="btn btn-secondary">Kembali ke Daftar</a>
             </div>
+        </div>
+    </div>
+</div>
+
+<div class="panel">
+    <div class="panel-head">
+        <h2>Ubah Status</h2>
+    </div>
+    <div class="panel-body">
+        <p class="stage-hint">{{ $stageHint[$status] ?? '' }}</p>
+
+        <div style="display:flex; gap:.6rem; flex-wrap:wrap;">
+            @foreach($nextStatuses as $next)
+            <form action="{{ route('go.letters.status', $letter) }}" method="POST">
+                @csrf
+                @method('PATCH')
+                <input type="hidden" name="status" value="{{ $next }}">
+                <button type="submit" class="btn {{ ($next === 'Selesai' || ($next === 'Diproses' && $status === 'Baru')) ? 'btn-primary' : 'btn-secondary' }}">
+                    {{ $actionLabel($next) }}
+                </button>
+            </form>
+            @endforeach
         </div>
     </div>
 </div>

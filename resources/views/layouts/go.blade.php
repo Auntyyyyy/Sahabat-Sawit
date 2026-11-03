@@ -333,6 +333,28 @@
         .danger-zone .danger-text { font-size: .84rem; color: var(--muted); }
         .danger-zone .danger-text strong { display: block; color: var(--ink); font-size: .86rem; margin-bottom: .15rem; }
 
+        /* ================= PENGATURAN ================= */
+        .settings-layout { display: grid; grid-template-columns: 220px 1fr; gap: 1.5rem; align-items: start; }
+        .settings-menu {
+            background: var(--card); border: 1px solid var(--line); border-radius: 12px;
+            padding: .75rem; display: flex; flex-direction: column; gap: .2rem;
+        }
+        .settings-menu .settings-menu-title { font-size: .7rem; color: var(--muted); font-weight: 600; letter-spacing: .04em; margin: .4rem .6rem .5rem; }
+        .settings-menu a {
+            padding: .58rem .75rem; border-radius: 8px; color: var(--ink);
+            font-size: .86rem; font-weight: 500; transition: background .15s, color .15s;
+        }
+        .settings-menu a:hover { background: #FBEAF1; color: var(--rose-dark); }
+        .settings-menu a.active { background: var(--pink); color: #fff; }
+
+        .inline-form { display: flex; gap: .75rem; padding: 1.25rem 1.5rem; flex-wrap: wrap; align-items: flex-start; }
+        .inline-form input {
+            flex: 1; min-width: 200px; padding: .62rem .85rem; border: 1px solid var(--line); border-radius: 8px;
+            font-size: .88rem; font-family: 'Inter', sans-serif; background: #fff;
+        }
+        .inline-form input:focus { outline: none; border-color: var(--pink); box-shadow: 0 0 0 3px rgba(214,71,143,.14); }
+        .field-hint { font-size: .78rem; color: var(--muted); }
+
         @media (max-width: 960px) {
             .menu-toggle { display: inline-flex; }
             .sidebar { position: fixed; inset: 0 auto 0 0; z-index: 20; transform: translateX(-100%); transition: transform .25s ease; }
@@ -344,6 +366,8 @@
             .form-grid { grid-template-columns: 1fr; }
             .detail-layout { grid-template-columns: 1fr; }
             .detail-stats { grid-template-columns: 1fr; }
+            .settings-layout { grid-template-columns: 1fr; }
+            .settings-menu { flex-direction: row; flex-wrap: wrap; }
         }
 
         @media (max-width: 640px) {
@@ -411,7 +435,7 @@
                 </a>
 
                 <p class="nav-label">LAINNYA</p>
-                <a href="#" class="nav-item">
+                <a href="{{ route('go.settings.index') }}" class="nav-item {{ request()->routeIs('go.settings.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     Pengaturan
                 </a>
@@ -440,8 +464,8 @@
                     </div>
                 </div>
                 <div class="user-chip">
-                    <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'G', 0, 1)) }}</div>
-                    <span>{{ auth()->user()->name ?? 'Staff GA' }}</span>
+                    <div class="avatar">D</div>
+                    <span>Dwi Jasri Agustin, SE</span>
                 </div>
             </div>
 

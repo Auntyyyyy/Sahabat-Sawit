@@ -33,10 +33,11 @@ class AtkRequestController extends Controller
         ]);
     }
 
-    public function create()
+        public function create()
     {
         return view('go.atk.requests.create', [
             'items' => AtkItem::orderBy('nama')->get(['id', 'kode', 'nama', 'satuan', 'stok']),
+            'divisions' => Division::namaList(),
         ]);
     }
 

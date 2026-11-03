@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\K3Dokumen;
+use App\Models\K3Kesehatan;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
@@ -20,6 +21,7 @@ use Illuminate\View\View;
  * Tabel dan kolom yang dibaca dashboard ini:
  *
  *  k3_dokumen     : status ('aktif'/'arsip'), tanggal, judul, kategori, file
+ *  k3_kesehatan   : nama, hasil, tanggal_berikutnya (dihitung dari pemeriksaan terbaru tiap karyawan)
  *  k3_peralatan   : kategori ('APD'/'APAR'/'P3K'), nama, lokasi, jumlah, tanggal_kedaluwarsa
  *  k3_patrol      : tanggal, lokasi, uraian, hasil ('sesuai'/'temuan'), status_tindak ('terbuka'/'selesai')
  *  k3_pengukuran  : tanggal, titik, parameter, nilai
@@ -36,6 +38,7 @@ class K3DashboardController extends Controller
     // Batas hari untuk peringatan "perlu perhatian"
     private const BATAS_APAR_HARI = 90;
     private const BATAS_SERTIFIKAT_HARI = 60;
+    private const BATAS_MCU_HARI = 30;
 
     // Dashboard K3 — GET /k3/dashboard
     public function index(): View
@@ -113,6 +116,23 @@ class K3DashboardController extends Controller
                 ->count();
         }
 
+        // ===== Monitoring Kesehatan (dihitung dari pemeriksaan TERBARU tiap karyawan) =====
+        $karyawanTidakFit = $mcuJatuhTempo = 0;
+
+        if (Schema::hasTable('k3_kesehatan')) {
+            $batasMcu = $hariIni->copy()->addDays(self::BATAS_MCU_HARI)->toDateString();
+
+            $karyawanTidakFit = K3Kesehatan::terbaruPerKaryawan()
+                ->whereIn('hasil', ['tidak_fit_sementara', 'tidak_fit'])
+                ->count();
+
+            // Termasuk yang jadwalnya sudah lewat
+            $mcuJatuhTempo = K3Kesehatan::terbaruPerKaryawan()
+                ->whereNotNull('tanggal_berikutnya')
+                ->whereDate('tanggal_berikutnya', '<=', $batasMcu)
+                ->count();
+        }
+
         // ===== Agenda (3 kegiatan terdekat yang belum lewat) =====
         $agenda = [];
 
@@ -151,6 +171,7 @@ class K3DashboardController extends Controller
             'k3_dokumen'    => 'Dokumen Keselamatan',
             'k3_peralatan'  => 'Peralatan',
             'k3_patrol'     => 'Safety Patrol',
+            'k3_kesehatan'  => 'Monitoring Kesehatan',
             'k3_pengukuran' => 'Pengukuran Lingkungan',
             'k3_program'    => 'Program K3L',
             'k3_sertifikat' => 'Sertifikat',
@@ -191,6 +212,8 @@ class K3DashboardController extends Controller
 
             'temuan_open'       => $temuanOpen,
             'sertifikat_hampir' => $sertifikatHampir,
+            'mcu_jatuh_tempo'   => $mcuJatuhTempo,
+            'karyawan_tidak_fit' => $karyawanTidakFit,
         ];
 
         // Sapaan sesuai jam WIB
@@ -211,6 +234,7 @@ class K3DashboardController extends Controller
             'modulBelumAktif' => $modulBelumAktif,
             // Tombol/tautan ke modul dokumen hanya ditampilkan kalau route-nya sudah ada
             'bisaDokumen'     => Route::has('k3.dokumen.index'),
+            'bisaKesehatan'   => Route::has('k3.kesehatan.index'),
         ]);
     }
 }

@@ -48,6 +48,14 @@ class Letter extends Model
 
     public const STATUS_OPTIONS = ['Baru', 'Diproses', 'Selesai', 'Diarsipkan'];
 
+        /** Perpindahan status yang bisa dilakukan lewat tombol cepat. */
+    public const TRANSITIONS = [
+        'Baru'       => ['Diproses', 'Selesai'],
+        'Diproses'   => ['Selesai'],
+        'Selesai'    => ['Diarsipkan', 'Diproses'],
+        'Diarsipkan' => ['Diproses'],
+    ];
+
     public function pihakLabel(): string
     {
         return $this->arah === 'Keluar' ? 'Tujuan' : 'Pengirim';
@@ -85,5 +93,15 @@ class Letter extends Model
     public function lampiranIsPdf(): bool
     {
         return $this->lampiranEkstensi() === 'pdf';
+    }
+
+        public function allowedTransitions(): array
+    {
+        return self::TRANSITIONS[$this->status] ?? [];
+    }
+
+    public function canTransitionTo(string $newStatus): bool
+    {
+        return in_array($newStatus, $this->allowedTransitions(), true);
     }
 }

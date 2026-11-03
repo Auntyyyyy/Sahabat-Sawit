@@ -14,6 +14,8 @@ use App\Http\Controllers\Admin\CsrActivityController;
 use App\Http\Controllers\Admin\PengetahuanController;
 use App\Http\Controllers\Admin\PerformaController; 
 use App\Http\Controllers\Admin\PengetahuanKategoriController;
+use App\Http\Controllers\Admin\DivisionController;
+use App\Http\Controllers\Admin\SettingController;
 
 // Dashboard GA
 // di-import sama sekali — bakal error "Class not found" begitu dipanggil.
@@ -36,6 +38,7 @@ use App\Http\Controllers\Admin\PersonaliaAbsensiController;
 use App\Http\Controllers\Admin\PersonaliaCutiController;
 use App\Http\Controllers\Admin\PersonaliaRekrutmenController;
 use App\Http\Controllers\Admin\PersonaliaPerformanceController;
+use App\Http\Controllers\Admin\DokumenKepegawaianController;
 
 Route::prefix('admin')->name('admin.')->group(function () {
 
@@ -103,6 +106,7 @@ Route::middleware(['auth', 'admin:general_officer'])
 
         // Modul Surat-Menyurat
         Route::get('letters/{letter}/lampiran', [LetterController::class, 'lampiran'])->name('letters.lampiran');
+        Route::patch('letters/{letter}/status', [LetterController::class, 'updateStatus'])->name('letters.status');
         Route::resource('letters', LetterController::class);
 
         // Barang ATK (master barang + stok)
@@ -121,6 +125,14 @@ Route::middleware(['auth', 'admin:general_officer'])
 
         Route::patch('atk-requests/{atkRequest}/status', [AtkRequestController::class, 'updateStatus'])
             ->name('atk-requests.status');
+
+                // Pengaturan GA
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::redirect('/', '/go/settings/divisions')->name('index');
+            Route::get('dashboard', [SettingController::class, 'dashboard'])->name('dashboard');
+            Route::put('dashboard', [SettingController::class, 'updateDashboard'])->name('dashboard.update');
+            Route::resource('divisions', DivisionController::class)->except(['show', 'create']);
+        });
     });
     
     // Dashboard HR
@@ -135,6 +147,9 @@ Route::middleware(['auth', 'admin:hr'])
 
         // BARU: Dashboard Performa → URL /hr/performa, nama route hr.performa.dashboard
         Route::get('performa', [PerformaController::class, 'index'])->name('performa.dashboard');
+
+        Route::get('dokumen', [DokumenKepegawaianController::class, 'index'])->name('dokumen.index');
+        Route::get('dokumen/{dokumen}/berkas', [DokumenKepegawaianController::class, 'berkas'])->name('dokumen.berkas');
     });
 
     // Dashboard K3 (Keselamatan & Kesehatan Kerja)
@@ -159,7 +174,11 @@ Route::middleware(['auth', 'admin:k3'])
         Route::resource('kesehatan', \App\Http\Controllers\Admin\K3KesehatanController::class)
             ->except(['show'])
             ->parameters(['kesehatan' => 'kesehatan']);
-        });
+                // Modul Peralatan → URL /k3/peralatan, nama route k3.peralatan.*
+        Route::resource('peralatan', \App\Http\Controllers\Admin\K3PeralatanController::class)
+            ->except(['show'])
+            ->parameters(['peralatan' => 'peralatan']);
+            });
 
 
 // Dashboard Personalia
@@ -190,7 +209,7 @@ Route::middleware(['auth', 'admin:personalia'])
         Route::resource('performance', PersonaliaPerformanceController::class)
             ->except(['show'])
             ->parameters(['performance' => 'penilaian']);        Route::view('training', 'admin.personalia.training.index')->name('training.index');
-        Route::view('dokumen', 'admin.personalia.dokumen.index')->name('dokumen.index');
-        Route::view('setup', 'admin.personalia.setup.index')->name('setup.index');
+        Route::get('dokumen/{dokumen}/berkas', [DokumenKepegawaianController::class, 'berkas'])->name('dokumen.berkas');
+        Route::resource('dokumen', DokumenKepegawaianController::class)->except(['show']);        Route::view('setup', 'admin.personalia.setup.index')->name('setup.index');
     });
 

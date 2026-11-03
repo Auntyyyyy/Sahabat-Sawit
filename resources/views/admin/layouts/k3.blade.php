@@ -250,7 +250,7 @@
         ['icon' => 'bi-wind',             'label' => 'Pengukuran Lingkungan'],
         ['icon' => 'bi-person-gear',      'label' => 'Ergonomi'],
         ['icon' => 'bi-award',            'label' => 'Sertifikat'],
-        ['icon' => 'bi-fire',             'label' => 'Peralatan'],
+        ['icon' => 'bi-fire',             'label' => 'Peralatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.peralatan.index') ? 'k3.peralatan.index' : null, 'active' => request()->routeIs('k3.peralatan.*')],
         ['icon' => 'bi-calendar-check',   'label' => 'Program K3L'],
         ['icon' => 'bi-bar-chart-line',   'label' => 'Statistik'],
     ];

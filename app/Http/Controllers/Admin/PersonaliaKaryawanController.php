@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Dokumen;
 use App\Models\Karyawan;
 use App\Models\Kehadiran;
 use Illuminate\Http\Request;
@@ -158,6 +159,9 @@ class PersonaliaKaryawanController extends Controller
     {
         // Catatan kehadiran dan penilaian kinerja karyawan ini ikut terhapus
         // (relasi di database memakai cascade delete).
+        // Dokumen miliknya dihapus lewat Eloquent dulu supaya file fisiknya ikut terhapus.
+        Dokumen::where('karyawan_id', $karyawan->id)->get()->each->delete();
+
         if ($karyawan->photo) {
             Storage::disk('public')->delete($karyawan->photo);
         }

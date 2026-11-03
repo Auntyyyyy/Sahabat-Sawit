@@ -244,9 +244,9 @@
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg>
                     Dashboard Performa
                 </a>
-                <a href="#" class="nav-item">
+                <a href="{{ route('hr.dokumen.index') }}" class="nav-item {{ request()->routeIs('hr.dokumen.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
-                    Dashboard ???
+                    Dashboard Dokumen
                 </a>
                 <p class="nav-label">LAINNYA</p>
                 <a href="#" class="nav-item">

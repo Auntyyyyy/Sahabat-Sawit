@@ -282,7 +282,7 @@
                 </div>
                 <div class="user-chip">
                     <div class="avatar">{{ strtoupper(substr(auth()->user()->name ?? 'P', 0, 1)) }}</div>
-                    <span>{{ auth()->user()->name ?? 'Staff Personalia' }}</span>
+                    <span> Sintia Talesta Pakpahan, S.P</span>
                 </div>
             </div>
 

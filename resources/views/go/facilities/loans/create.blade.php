@@ -43,7 +43,12 @@
 
             <div class="form-field">
                 <label>Divisi</label>
-                <input type="text" name="peminjam_divisi" value="{{ old('peminjam_divisi') }}" placeholder="mis. IT, Keuangan, Kebun">
+                <input type="text" name="peminjam_divisi" value="{{ old('peminjam_divisi') }}" list="divisiList" autocomplete="off" placeholder="Pilih dari saran atau ketik sendiri">
+                <datalist id="divisiList">
+                    @foreach($divisions as $d)
+                    <option value="{{ $d }}"></option>
+                    @endforeach
+                </datalist>
                 @error('peminjam_divisi') <div class="error">{{ $message }}</div> @enderror
             </div>
 

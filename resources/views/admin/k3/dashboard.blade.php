@@ -300,6 +300,36 @@
                         </div>
                         <span class="k3-pill pill-black">{{ $stats['sertifikat_hampir'] }}</span>
                     </div>
+
+                    <div class="k3-equip-row">
+                        <div class="k3-kpi-icon is-red flex-shrink-0"><i class="bi bi-heart-pulse"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">
+                                @if ($bisaKesehatan)
+                                    <a href="{{ route('k3.kesehatan.index', ['tampil' => 'terbaru']) }}" class="text-decoration-none" style="color:inherit">Jadwal MCU dekat atau lewat</a>
+                                @else
+                                    Jadwal MCU dekat atau lewat
+                                @endif
+                            </div>
+                            <div class="small text-muted">Dalam 30 hari ke depan atau sudah lewat</div>
+                        </div>
+                        <span class="k3-pill pill-red">{{ $stats['mcu_jatuh_tempo'] }}</span>
+                    </div>
+
+                    <div class="k3-equip-row">
+                        <div class="k3-kpi-icon is-navy flex-shrink-0"><i class="bi bi-person-x"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">
+                                @if ($bisaKesehatan)
+                                    <a href="{{ route('k3.kesehatan.index', ['tampil' => 'terbaru']) }}" class="text-decoration-none" style="color:inherit">Karyawan berstatus tidak fit</a>
+                                @else
+                                    Karyawan berstatus tidak fit
+                                @endif
+                            </div>
+                            <div class="small text-muted">Berdasarkan pemeriksaan terbaru</div>
+                        </div>
+                        <span class="k3-pill pill-navy">{{ $stats['karyawan_tidak_fit'] }}</span>
+                    </div>
                 </div>
 
                 <div class="k3-card">

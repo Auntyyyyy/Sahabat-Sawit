@@ -12,10 +12,6 @@
 .item-row select:focus, .item-row input:focus {
     outline: none; border-color: var(--pink); box-shadow: 0 0 0 3px rgba(214,71,143,.14);
 }
-.alert-error {
-    background: #FBE7E8; border: 1px solid #F1C4C6; color: var(--red);
-    border-radius: 10px; padding: .85rem 1.25rem; font-size: .85rem; margin-bottom: 1.5rem;
-}
 @media (max-width: 640px) { .item-row { grid-template-columns: 1fr 90px auto; } }
 @endsection
 
@@ -49,7 +45,12 @@
 
             <div class="form-field">
                 <label>Divisi</label>
-                <input type="text" name="pemohon_divisi" value="{{ old('pemohon_divisi') }}" placeholder="mis. Keuangan, Produksi, Kebun">
+                <input type="text" name="pemohon_divisi" value="{{ old('pemohon_divisi') }}" list="divisiList" autocomplete="off" placeholder="Pilih dari saran atau ketik sendiri">
+                <datalist id="divisiList">
+                    @foreach($divisions as $d)
+                    <option value="{{ $d }}"></option>
+                    @endforeach
+                </datalist>
                 @error('pemohon_divisi') <div class="error">{{ $message }}</div> @enderror
             </div>
 

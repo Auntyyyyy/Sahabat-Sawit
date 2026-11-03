@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Letter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class LetterController extends Controller
 {
@@ -100,6 +101,21 @@ class LetterController extends Controller
         $letter->delete();
 
         return redirect()->route('go.letters.index')->with('success', 'Surat berhasil dihapus.');
+    }
+
+        public function updateStatus(Request $request, Letter $letter)
+    {
+        $data = $request->validate([
+            'status' => ['required', Rule::in(Letter::STATUS_OPTIONS)],
+        ]);
+
+        if (! $letter->canTransitionTo($data['status'])) {
+            return back()->with('error', "Status tidak bisa diubah dari {$letter->status} ke {$data['status']}.");
+        }
+
+        $letter->update(['status' => $data['status']]);
+
+        return back()->with('success', "Status surat diubah menjadi {$data['status']}.");
     }
 
     /**
