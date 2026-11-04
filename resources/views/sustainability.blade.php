@@ -6,9 +6,9 @@
 
 {{-- Foto sementara: ganti nama file di sini setelah foto asli terkumpul (file ada di public/images). --}}
 @php
-    $fotoHero  = 'herotentang.png';
-    $fotoPilar = 'sawitangkong.jpg';
-    $fotoAngka = 'prosesnunggu.png';
+    $fotoHero  = '';
+    $fotoPilar = '';
+    $fotoAngka = '';
 @endphp
 
 <style>
@@ -53,12 +53,17 @@
     .sb-split { display: grid; grid-template-columns: 1fr; gap: 3rem; }
     @media (min-width: 900px) { .sb-split { grid-template-columns: 5fr 7fr; gap: 5rem; align-items: start; } .sb-sticky { position: sticky; top: 7rem; } }
     .sb-photo-tall { display: block; width: 100%; margin-top: 2.5rem; aspect-ratio: 4 / 5; object-fit: cover; border-radius: .25rem; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
-    .sb-pillars { list-style: none; margin: 0; padding: 0; }
-    .sb-pil { padding: 1.75rem 0; border-top: 1px solid rgba(22,50,31,.2); }
-    .sb-pil:last-child { border-bottom: 1px solid rgba(22,50,31,.2); }
-    .sb-pil-no { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; letter-spacing: -.04em; line-height: 1; color: rgba(22,50,31,.2); }
-    .sb-pil h3 { margin-top: .75rem; font-size: clamp(1.5rem, 2.8vw, 2.3rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
-    .sb-pil p { margin-top: .6rem; max-width: 34rem; color: rgba(22,50,31,.78); }
+    /* Pilar: kartu bernomor (susunan 2 kolom; pilar terakhir melebar bila jumlahnya ganjil) */
+    .sb-pillars { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+    @media (min-width: 640px) { .sb-pillars { grid-template-columns: repeat(2, minmax(0, 1fr)); } .sb-pil:last-child:nth-child(odd) { grid-column: 1 / -1; } }
+    .sb-pil { position: relative; display: flex; flex-direction: column; padding: 1.75rem 1.5rem; border: 1px solid rgba(22,50,31,.14); border-radius: .5rem; background: #fff; transition: transform .3s, border-color .3s, box-shadow .3s; }
+    .sb-pil::before { content: ''; position: absolute; left: 1.5rem; top: -1px; width: 2.5rem; height: 3px; background: var(--emas); }
+    .sb-pil-no { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; width: 3.25rem; height: 3.25rem; border-radius: .35rem; background: var(--hijau); color: var(--emas); font-size: 1.2rem; font-weight: 800; line-height: 1; }
+    .sb-pil h3 { margin-top: 1.1rem; font-size: clamp(1.25rem, 2vw, 1.6rem); font-weight: 800; letter-spacing: -.025em; line-height: 1.15; }
+    .sb-pil p { margin-top: .6rem; font-size: .95rem; color: rgba(22,50,31,.78); }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) {
+        .sb-pil:hover { transform: translateY(-4px); border-color: var(--hijau-muda); box-shadow: 0 18px 36px rgba(22,50,31,.12); }
+    }
 
     /* Angka: pita lebar berlatar foto, angka raksasa rata tengah */
     .sb-band { position: relative; isolation: isolate; overflow: hidden; text-align: center; background: linear-gradient(145deg, var(--hijau-muda), var(--hijau)); }
@@ -70,32 +75,35 @@
 
     /* ===== Program CSR ===== */
 
-    /* Bar: tab kategori berupa chip (digeser ke samping di layar sempit) + panah dengan penghitung */
-    .sb-bar { margin-top: 2.5rem; display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 1.25rem 2rem; }
-    .sb-tabs { flex: 1 1 100%; min-width: 0; display: flex; gap: .6rem; padding: .2rem 0 .5rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
+    /* Tab kategori: kartu sejajar rata, ikon di tengah di atas judul (digeser ke samping di layar sempit) */
+    .sb-tabs { margin-top: 2.5rem; display: flex; gap: .75rem; padding: .2rem .1rem .6rem; overflow-x: auto; scroll-snap-type: x proximity; scrollbar-width: none; }
     .sb-tabs::-webkit-scrollbar { display: none; }
-    @media (min-width: 900px) { .sb-tabs { flex: 1 1 0; flex-wrap: wrap; overflow: visible; padding-bottom: 0; } }
-    .sb-tab { flex: none; scroll-snap-align: start; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem 1.05rem; border: 1px solid rgba(242,244,236,.22); border-radius: 99px; background: transparent; font: inherit; font-weight: 600; font-size: .92rem; line-height: 1.2; color: rgba(242,244,236,.78); white-space: nowrap; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
-    .sb-tab:hover { border-color: rgba(242,244,236,.55); color: var(--krem); }
-    .sb-tab[aria-selected="true"] { background: var(--emas); border-color: var(--emas); color: var(--hijau); font-weight: 700; }
-    .sb-tab span { font-size: 1.05rem; line-height: 1; }
+    @media (min-width: 700px) { .sb-tabs { display: grid; grid-template-columns: repeat(auto-fit, minmax(9.5rem, 1fr)); overflow: visible; padding-bottom: 0; } }
+    .sb-tab { flex: none; width: 8rem; scroll-snap-align: start; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .7rem; min-height: 8.5rem; padding: 1.1rem .75rem; border: 1px solid rgba(242,244,236,.2); border-radius: .5rem; background: rgba(242,244,236,.04); font: inherit; font-weight: 700; font-size: .92rem; line-height: 1.25; text-align: center; color: rgba(242,244,236,.82); cursor: pointer; transition: background .2s, border-color .2s, color .2s, transform .2s; }
+    @media (min-width: 700px) { .sb-tab { width: auto; } }
+    .sb-tab-ico { display: flex; align-items: center; justify-content: center; width: 3.4rem; height: 3.4rem; border-radius: 50%; background: rgba(242,244,236,.08); font-size: 1.7rem; line-height: 1; transition: background .2s; }
+    .sb-tab:hover { border-color: rgba(242,244,236,.5); background: rgba(242,244,236,.08); color: var(--krem); }
+    .sb-tab[aria-selected="true"] { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .sb-tab[aria-selected="true"] .sb-tab-ico { background: rgba(22,50,31,.14); }
+    @media (hover: hover) and (prefers-reduced-motion: no-preference) { .sb-tab:hover { transform: translateY(-3px); } }
 
-    .sb-arrows { flex: none; margin-left: auto; display: flex; align-items: center; gap: .6rem; }
-    .sb-count { min-width: 4.4rem; text-align: center; font-size: .85rem; font-weight: 600; letter-spacing: .04em; color: rgba(242,244,236,.7); }
+    /* Tombol panah + penghitung (di kepala panel) */
     .sb-btn { width: 44px; height: 44px; border-radius: 50%; border: 1px solid rgba(242,244,236,.4); background: transparent; color: var(--krem); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
     .sb-btn:hover { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
     .sb-btn svg { width: 20px; height: 20px; }
+    .sb-count { min-width: 4.4rem; text-align: center; font-size: .85rem; font-weight: 600; letter-spacing: .04em; color: rgba(242,244,236,.7); }
 
-    /* Panel: kepala kategori (ikon, judul, deskripsi, jumlah kegiatan) */
+    /* Panel: kepala kategori (ikon, judul, deskripsi, jumlah kegiatan, panah) */
     .sb-panel[hidden] { display: none; }
-    .sb-panel { margin-top: 1.5rem; }
+    .sb-panel { margin-top: 1.25rem; }
     @media (prefers-reduced-motion: no-preference) { .sb-panel:not([hidden]) { animation: sbIn .35s ease both; } }
     @keyframes sbIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
-    .sb-panel-head { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.25rem 1.5rem; align-items: start; padding: 1.75rem; border: 1px solid rgba(242,244,236,.12); border-left: 3px solid var(--emas); border-radius: .5rem; background: rgba(242,244,236,.05); }
-    .sb-panel-head.has-icon { grid-template-columns: auto minmax(0, 1fr); }
-    .sb-panel-icon { display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; border: 1px solid rgba(227,167,47,.4); border-radius: .5rem; background: rgba(227,167,47,.12); font-size: 1.9rem; line-height: 1; }
-    .sb-panel-head h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
-    .sb-panel-head p { margin-top: .75rem; max-width: 44rem; color: rgba(242,244,236,.78); }
+    .sb-panel-head { display: flex; flex-wrap: wrap; align-items: center; gap: 1.25rem 1.5rem; padding: 1.75rem; border: 1px solid rgba(242,244,236,.12); border-left: 3px solid var(--emas); border-radius: .5rem; background: rgba(242,244,236,.05); }
+    .sb-panel-icon { flex: none; display: flex; align-items: center; justify-content: center; width: 4rem; height: 4rem; border: 1px solid rgba(227,167,47,.4); border-radius: .5rem; background: rgba(227,167,47,.12); font-size: 1.9rem; line-height: 1; }
+    .sb-panel-text { flex: 1 1 18rem; min-width: 0; }
+    .sb-panel-text h3 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; letter-spacing: -.03em; line-height: 1.1; }
+    .sb-panel-text p { margin-top: .75rem; max-width: 44rem; color: rgba(242,244,236,.78); }
+    .sb-head-nav { margin-left: auto; display: flex; align-items: center; gap: .6rem; }
     .sb-pill { display: inline-block; margin-top: 1rem; padding: .15rem .8rem; border: 1px solid rgba(242,244,236,.3); border-radius: 99px; font-size: .8rem; font-weight: 600; color: rgba(242,244,236,.8); }
 
     /* Kartu kegiatan */
@@ -167,7 +175,7 @@
             <ul class="sb-pillars">
                 @foreach($pillars as $pillar)
                 <li class="sb-pil">
-                    <span class="sb-pil-no">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                    <span class="sb-pil-no" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
                     <h3>{{ $pillar['title'] }}</h3>
                     <p>{{ $pillar['desc'] }}</p>
                 </li>
@@ -199,39 +207,38 @@
         <p class="sb-p">Pilar-pilar utama program tanggung jawab sosial perusahaan yang kami jalankan secara berkelanjutan.</p>
 
         @if($csrCategories->isNotEmpty())
-        <div class="sb-bar">
-            <div class="sb-tabs" role="tablist" aria-label="Kategori program CSR">
-                @foreach($csrCategories as $index => $category)
-                <button type="button" class="sb-tab" role="tab" data-sb-tab
-                        aria-selected="{{ $index === 0 ? 'true' : 'false' }}" tabindex="{{ $index === 0 ? '0' : '-1' }}">
-                    @if($category->icon)<span aria-hidden="true">{{ $category->icon }}</span>@endif{{ $category->title }}
-                </button>
-                @endforeach
-            </div>
-            @if($csrCategories->count() > 1)
-            <div class="sb-arrows">
-                <button type="button" class="sb-btn" data-sb-nav="-1" aria-label="Program CSR sebelumnya">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
-                </button>
-                <span class="sb-count" id="sbCount" aria-live="polite">{{ str_pad(1, 2, '0', STR_PAD_LEFT) }} / {{ str_pad($csrCategories->count(), 2, '0', STR_PAD_LEFT) }}</span>
-                <button type="button" class="sb-btn" data-sb-nav="1" aria-label="Program CSR selanjutnya">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
-                </button>
-            </div>
-            @endif
+        <div class="sb-tabs" role="tablist" aria-label="Kategori program CSR">
+            @foreach($csrCategories as $index => $category)
+            <button type="button" class="sb-tab" role="tab" data-sb-tab
+                    aria-selected="{{ $index === 0 ? 'true' : 'false' }}" tabindex="{{ $index === 0 ? '0' : '-1' }}">
+                @if($category->icon)<span class="sb-tab-ico" aria-hidden="true">{{ $category->icon }}</span>@endif
+                <span class="sb-tab-name">{{ $category->title }}</span>
+            </button>
+            @endforeach
         </div>
 
         @foreach($csrCategories as $index => $category)
         <div class="sb-panel" data-sb-panel role="tabpanel" @unless($index === 0) hidden @endunless>
-            <div class="sb-panel-head {{ $category->icon ? 'has-icon' : '' }}">
+            <div class="sb-panel-head">
                 @if($category->icon)
                     <span class="sb-panel-icon" aria-hidden="true">{{ $category->icon }}</span>
                 @endif
-                <div>
+                <div class="sb-panel-text">
                     <h3>{{ $category->title }}</h3>
                     <p>{{ $category->description }}</p>
                     <span class="sb-pill">{{ $category->activities->count() }} kegiatan</span>
                 </div>
+                @if($csrCategories->count() > 1)
+                <div class="sb-head-nav">
+                    <button type="button" class="sb-btn" data-sb-nav="-1" aria-label="Program CSR sebelumnya">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+                    </button>
+                    <span class="sb-count">{{ str_pad($index + 1, 2, '0', STR_PAD_LEFT) }} / {{ str_pad($csrCategories->count(), 2, '0', STR_PAD_LEFT) }}</span>
+                    <button type="button" class="sb-btn" data-sb-nav="1" aria-label="Program CSR selanjutnya">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
+                    </button>
+                </div>
+                @endif
             </div>
 
             @if($category->activities->isNotEmpty())
@@ -291,17 +298,16 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
-    // Tab kategori CSR + tombol panah + penghitung (tab aktif ikut tergeser ke area terlihat di layar sempit)
+    // Tab kategori CSR + tombol panah (di layar sempit, tab aktif digeser ke tengah baris tab; halaman tidak ikut bergulir)
     (function () {
         const tabs = [...document.querySelectorAll('[data-sb-tab]')];
         const panels = [...document.querySelectorAll('[data-sb-panel]')];
-        const count = document.getElementById('sbCount');
         if (!tabs.length) return;
         let cur = 0;
-        const pad = function (n) { return String(n).padStart(2, '0'); };
 
         function show(i) {
             cur = (i + tabs.length) % tabs.length;
@@ -310,8 +316,11 @@
                 t.tabIndex = k === cur ? 0 : -1;
             });
             panels.forEach(function (p, k) { p.hidden = k !== cur; });
-            if (count) count.textContent = pad(cur + 1) + ' / ' + pad(tabs.length);
-            tabs[cur].scrollIntoView({ inline: 'nearest', block: 'nearest', behavior: 'smooth' });
+
+            const row = tabs[cur].parentElement;
+            if (row.scrollWidth > row.clientWidth) {
+                row.scrollTo({ left: tabs[cur].offsetLeft - (row.clientWidth - tabs[cur].offsetWidth) / 2, behavior: 'smooth' });
+            }
         }
 
         tabs.forEach(function (t, k) {
