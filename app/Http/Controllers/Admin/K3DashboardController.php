@@ -22,6 +22,7 @@ use Illuminate\View\View;
  *
  *  k3_dokumen     : status ('aktif'/'arsip'), tanggal, judul, kategori, file
  *  k3_kesehatan   : nama, hasil, tanggal_berikutnya (dihitung dari pemeriksaan terbaru tiap karyawan)
+ *  k3_ergonomi    : tingkat_risiko, status_tindak (risiko tinggi yang belum ditindaklanjuti)
  *  k3_peralatan   : kategori ('APD'/'APAR'/'P3K'), nama, lokasi, jumlah, tanggal_kedaluwarsa
  *  k3_patrol      : tanggal, lokasi, uraian, hasil ('sesuai'/'temuan'), status_tindak ('terbuka'/'selesai')
  *  k3_pengukuran  : tanggal, titik, parameter, nilai
@@ -136,6 +137,16 @@ class K3DashboardController extends Controller
                 ->count();
         }
 
+        // ===== Ergonomi: penilaian berisiko tinggi yang tindak lanjutnya belum selesai =====
+        $ergonomiPerhatian = 0;
+
+        if (Schema::hasTable('k3_ergonomi')) {
+            $ergonomiPerhatian = DB::table('k3_ergonomi')
+                ->whereIn('tingkat_risiko', ['tinggi', 'sangat_tinggi'])
+                ->where('status_tindak', 'terbuka')
+                ->count();
+        }
+
         // ===== Agenda (3 kegiatan terdekat yang belum lewat) =====
         $agenda = [];
 
@@ -176,6 +187,7 @@ class K3DashboardController extends Controller
             'k3_patrol'     => 'Safety Patrol',
             'k3_kesehatan'  => 'Monitoring Kesehatan',
             'k3_pengukuran' => 'Pengukuran Lingkungan',
+            'k3_ergonomi'   => 'Ergonomi',
             'k3_program'    => 'Program K3L',
             'k3_sertifikat' => 'Sertifikat',
             'k3_agenda'     => 'Agenda',
@@ -217,6 +229,7 @@ class K3DashboardController extends Controller
             'sertifikat_hampir' => $sertifikatHampir,
             'mcu_jatuh_tempo'   => $mcuJatuhTempo,
             'karyawan_tidak_fit' => $karyawanTidakFit,
+            'ergonomi_perhatian' => $ergonomiPerhatian,
         ];
 
         // Sapaan sesuai jam WIB
@@ -238,6 +251,7 @@ class K3DashboardController extends Controller
             // Tombol/tautan ke modul dokumen hanya ditampilkan kalau route-nya sudah ada
             'bisaDokumen'     => Route::has('k3.dokumen.index'),
             'bisaKesehatan'   => Route::has('k3.kesehatan.index'),
+            'bisaErgonomi'    => Route::has('k3.ergonomi.index'),
         ]);
     }
 }

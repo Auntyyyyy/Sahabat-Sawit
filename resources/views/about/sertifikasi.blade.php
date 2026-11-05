@@ -5,9 +5,19 @@
 @section('content')
 @include('about._style')
 
+@php
+    // Bila penghargaan banyak (lebih dari 6), tampilkan terurut dari tahun terbaru dengan penanda tahun per kelompok.
+    $daftarPenghargaan = collect($penghargaan);
+    $kelompokTahun = $daftarPenghargaan->count() > 6;
+    if ($kelompokTahun) {
+        $daftarPenghargaan = $daftarPenghargaan->sortByDesc('tahun')->values();
+    }
+    $tahunSebelumnya = null;
+@endphp
+
 <style>
     /* Sertifikasi & penghargaan — sertifikat (section terang, kartu seperti kertas) dan penghargaan (section gelap, kartu beraksen emas). Class berawalan "sf-". */
-    .sf-sec { --sf-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(4rem, 10vh, 7rem) var(--sf-gutter); }
+    .sf-sec { --sf-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(3rem, 8vh, 5rem) var(--sf-gutter); scroll-margin-top: calc(var(--nav-h) + var(--tabs-h)); }
     .sf-light { background: #f2f4ec; color: #16321f; }
     .sf-dark { border-top: 1px solid rgba(242,244,236,.12); }
 
@@ -21,7 +31,7 @@
     .sf-light .sf-p { color: rgba(22,50,31,.8); }
 
     /* Sertifikat: kartu putih seperti lembar kertas */
-    .sf-certs { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
+    .sf-certs { list-style: none; margin: clamp(2rem, 5vh, 3rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
     @media (min-width: 640px)  { .sf-certs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (min-width: 1024px) { .sf-certs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
     .sf-cert { overflow: hidden; border: 1px solid rgba(22,50,31,.12); border-radius: .5rem; background: #fff; box-shadow: 0 1px 2px rgba(22,50,31,.06); transition: transform .3s, box-shadow .3s, border-color .3s; }
@@ -35,9 +45,12 @@
     .sf-cert-desc { margin-top: .35rem; font-size: .9rem; line-height: 1.45; color: rgba(22,50,31,.68); }
 
     /* Penghargaan: kartu gelap beraksen emas */
-    .sf-awards { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .sf-awards { list-style: none; margin: clamp(2rem, 5vh, 3rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
     @media (min-width: 700px)  { .sf-awards { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (min-width: 1100px) { .sf-awards { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+    .sf-yearhead { grid-column: 1 / -1; display: flex; align-items: center; gap: .75rem; margin-top: .75rem; font-size: 1.1rem; font-weight: 700; color: rgba(242,244,236,.85); }
+    .sf-yearhead:first-child { margin-top: 0; }
+    .sf-yearhead::after { content: ''; flex: 1; height: 1px; background: rgba(242,244,236,.18); }
     .sf-award { position: relative; padding: 1.75rem 1.5rem 2rem; border: 1px solid rgba(242,244,236,.14); border-radius: .5rem; background: rgba(242,244,236,.05); transition: transform .25s, border-color .25s, background .25s; }
     .sf-award::before { content: ''; position: absolute; left: 1.5rem; top: -1px; width: 2.5rem; height: 3px; background: #e3a72f; }
     .sf-award-top { display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
@@ -58,9 +71,16 @@
     /* Lightbox */
     .sf-lightbox { position: fixed; inset: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 2rem; background: rgba(5,8,5,.92); }
     .sf-lightbox[hidden] { display: none; }
-    .sf-lightbox img { max-width: min(92vw, 60rem); max-height: 88vh; object-fit: contain; border-radius: .25rem; background: #f2f4ec; }
-    .sf-lightbox-close { position: absolute; top: 1rem; right: 1.25rem; width: 44px; height: 44px; border: 1px solid rgba(242,244,236,.4); border-radius: 50%; background: transparent; color: #f2f4ec; font-size: 1.6rem; line-height: 1; cursor: pointer; }
-    .sf-lightbox-close:hover { background: #e3a72f; border-color: #e3a72f; color: #16321f; }
+    .sf-lb-fig { margin: 0; text-align: center; }
+    .sf-lb-fig img { display: block; max-width: min(88vw, 60rem); max-height: 80vh; margin: 0 auto; object-fit: contain; border-radius: .25rem; background: #f2f4ec; }
+    .sf-lb-fig figcaption { margin-top: .75rem; font-size: .95rem; color: rgba(242,244,236,.8); }
+    .sf-lightbox-close, .sf-lb-nav { position: absolute; width: 44px; height: 44px; border: 1px solid rgba(242,244,236,.4); border-radius: 50%; background: rgba(15,36,23,.6); color: #f2f4ec; font-size: 1.6rem; line-height: 1; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .sf-lightbox-close { top: 1rem; right: 1.25rem; }
+    .sf-lb-nav { top: 50%; margin-top: -22px; }
+    .sf-lb-prev { left: 1rem; }
+    .sf-lb-next { right: 1rem; }
+    .sf-lightbox-close:hover, .sf-lb-nav:hover { background: #e3a72f; border-color: #e3a72f; color: #16321f; }
+    .sf-lightbox[data-single] .sf-lb-nav { display: none; }
 </style>
 
 <div class="ab">
@@ -119,54 +139,85 @@
         </p>
 
         <ul class="sf-awards">
-            @foreach($penghargaan as $item)
-            <li class="sf-award">
-                <div class="sf-award-top">
-                    <span class="sf-ico" aria-hidden="true">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a6 6 0 100-12 6 6 0 000 12zM8.5 14.2L7 21l5-3 5 3-1.5-6.8"/></svg>
-                    </span>
-                    <span class="sf-award-year">{{ $item['tahun'] ?? '' }}</span>
-                </div>
-                <h3>{{ $item['nama'] }}</h3>
-                <p class="sf-award-desc">{{ $item['deskripsi'] ?? '' }}</p>
-            </li>
+            @foreach($daftarPenghargaan as $item)
+                @if($kelompokTahun && ($item['tahun'] ?? null) !== $tahunSebelumnya)
+                    @php $tahunSebelumnya = $item['tahun'] ?? null; @endphp
+                    <li class="sf-yearhead" role="presentation">{{ $tahunSebelumnya }}</li>
+                @endif
+                <li class="sf-award">
+                    <div class="sf-award-top">
+                        <span class="sf-ico" aria-hidden="true">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 15a6 6 0 100-12 6 6 0 000 12zM8.5 14.2L7 21l5-3 5 3-1.5-6.8"/></svg>
+                        </span>
+                        <span class="sf-award-year">{{ $item['tahun'] ?? '' }}</span>
+                    </div>
+                    <h3>{{ $item['nama'] }}</h3>
+                    <p class="sf-award-desc">{{ $item['deskripsi'] ?? '' }}</p>
+                </li>
             @endforeach
         </ul>
     </section>
 
-    {{-- Lightbox: klik sertifikat untuk memperbesar; tutup dengan tombol, klik latar, atau Escape --}}
+    {{-- Lightbox: klik sertifikat untuk memperbesar; geser dengan tombol atau panah keyboard; tutup dengan tombol, klik latar, atau Escape --}}
     <div class="sf-lightbox" id="sfLightbox" role="dialog" aria-modal="true" aria-label="Sertifikat diperbesar" hidden>
         <button type="button" class="sf-lightbox-close" id="sfLightboxClose" aria-label="Tutup">&times;</button>
-        <img id="sfLightboxImg" src="" alt="">
+        <button type="button" class="sf-lb-nav sf-lb-prev" id="sfPrev" aria-label="Sertifikat sebelumnya">&#8249;</button>
+        <figure class="sf-lb-fig">
+            <img id="sfLightboxImg" src="" alt="">
+            <figcaption id="sfCaption"></figcaption>
+        </figure>
+        <button type="button" class="sf-lb-nav sf-lb-next" id="sfNext" aria-label="Sertifikat berikutnya">&#8250;</button>
     </div>
 
 </div>
 
 <script>
     (function () {
-        const box = document.getElementById('sfLightbox');
-        const img = document.getElementById('sfLightboxImg');
-        const closeBtn = document.getElementById('sfLightboxClose');
-        let trigger = null;
+        var box = document.getElementById('sfLightbox');
+        var img = document.getElementById('sfLightboxImg');
+        var cap = document.getElementById('sfCaption');
+        var closeBtn = document.getElementById('sfLightboxClose');
+        var prevBtn = document.getElementById('sfPrev');
+        var nextBtn = document.getElementById('sfNext');
+        var triggers = Array.prototype.slice.call(document.querySelectorAll('[data-cert]'));
+        var idx = 0;
 
-        function open(src, alt, from) {
-            img.src = src; img.alt = alt;
+        if (!box || !triggers.length) return;
+        if (triggers.length < 2) box.setAttribute('data-single', '');
+
+        function show(i) {
+            idx = (i + triggers.length) % triggers.length;
+            var b = triggers[idx];
+            img.src = b.dataset.cert;
+            img.alt = b.dataset.alt;
+            cap.textContent = b.dataset.alt + ' · ' + (idx + 1) + ' dari ' + triggers.length;
+        }
+        function open(i) {
+            show(i);
             box.hidden = false;
             document.body.style.overflow = 'hidden';   // cegah scroll di belakang
-            trigger = from;
             closeBtn.focus();
         }
         function close() {
-            box.hidden = true; img.src = '';
+            box.hidden = true;
+            img.src = '';
             document.body.style.overflow = '';
-            if (trigger) trigger.focus();
+            if (triggers[idx]) triggers[idx].focus();
         }
 
-        document.querySelectorAll('[data-cert]').forEach(function (b) {
-            b.addEventListener('click', function () { open(b.dataset.cert, b.dataset.alt, b); });
+        triggers.forEach(function (b, i) {
+            b.addEventListener('click', function () { open(i); });
         });
-        box.addEventListener('click', function (e) { if (e.target !== img) close(); });
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !box.hidden) close(); });
+        prevBtn.addEventListener('click', function () { show(idx - 1); });
+        nextBtn.addEventListener('click', function () { show(idx + 1); });
+        closeBtn.addEventListener('click', close);
+        box.addEventListener('click', function (e) { if (e.target === box) close(); });
+        document.addEventListener('keydown', function (e) {
+            if (box.hidden) return;
+            if (e.key === 'Escape') close();
+            else if (e.key === 'ArrowLeft') show(idx - 1);
+            else if (e.key === 'ArrowRight') show(idx + 1);
+        });
     })();
 </script>
 @endsection

@@ -21,14 +21,14 @@
 @endphp
 
 <style>
-    /* Profil perusahaan — pengantar berfoto, garis waktu (terang), kisah dengan kutipan. Class berawalan "pf-". */
-    .pf-sec { --pf-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(4rem, 10vh, 7rem) var(--pf-gutter); }
+    /* Profil perusahaan — pengantar berfoto + garis waktu, lalu kisah dengan kutipan. Class berawalan "pf-". */
+    .pf-sec { --pf-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(3rem, 8vh, 5rem) var(--pf-gutter); scroll-margin-top: calc(var(--nav-h) + var(--tabs-h)); }
     .pf-dark { border-top: 1px solid rgba(242,244,236,.12); }
-    .pf-light { background: #f2f4ec; color: #16321f; }
+    .pf-deep { background: #0f2417; border-top: 1px solid rgba(242,244,236,.12); }
 
     .pf-label { font-size: .95rem; color: rgba(242,244,236,.6); }
-    .pf-light .pf-label { color: rgba(22,50,31,.6); }
     .pf-h2 { margin-top: .5rem; max-width: 20ch; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+    .pf-h3 { margin-top: .5rem; font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; }
 
     /* Pengantar: foto berbingkai emas + teks */
     .pf-intro { overflow-x: clip; }
@@ -36,7 +36,7 @@
     @media (min-width: 900px) { .pf-intro-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); gap: 5rem; } }
     .pf-photo { position: relative; isolation: isolate; margin: 0; }
     .pf-photo::before { content: ''; position: absolute; z-index: -1; inset: 1rem -1rem -1rem 1rem; border: 2px solid #e3a72f; border-radius: .5rem; }
-    .pf-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; max-height: 38rem; object-fit: cover; border-radius: .5rem; background: linear-gradient(145deg, #2f5a3a, #16321f); }
+    .pf-photo img { display: block; width: 100%; aspect-ratio: 4 / 5; max-height: 34rem; object-fit: cover; border-radius: .5rem; background: linear-gradient(145deg, #2f5a3a, #16321f); }
     .pf-badge { position: absolute; left: -.75rem; bottom: 1.75rem; padding: .7rem 1.1rem; border-radius: .25rem; background: #e3a72f; color: #16321f; box-shadow: 0 14px 30px rgba(0,0,0,.3); }
     .pf-badge small { display: block; font-size: .8rem; font-weight: 600; opacity: .8; }
     .pf-badge b { display: block; font-size: 1.9rem; font-weight: 800; line-height: 1; letter-spacing: -.03em; }
@@ -49,23 +49,27 @@
     .pf-tile dt { font-size: .85rem; color: rgba(242,244,236,.55); }
     .pf-tile dd { margin: .25rem 0 0; font-weight: 700; line-height: 1.3; }
 
-    /* Garis waktu */
-    .pf-timeline { margin: clamp(2.5rem, 6vh, 4rem) 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
-    .pf-ms { position: relative; padding: 0 0 0 2rem; border-left: 2px solid rgba(22,50,31,.25); }
-    .pf-ms::before { content: ''; position: absolute; left: -.55rem; top: .5rem; width: 1rem; height: 1rem; border-radius: 50%; background: #e3a72f; box-shadow: 0 0 0 5px #f2f4ec; }
+    /* Garis waktu ringkas (di dalam pengantar) */
+    .pf-timewrap { margin-top: clamp(3rem, 8vh, 4.5rem); padding-top: clamp(2rem, 5vh, 3rem); border-top: 1px solid rgba(242,244,236,.12); }
+    .pf-timeline { margin: 2rem 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; }
+    .pf-ms { position: relative; padding: 0 0 0 1.75rem; border-left: 2px solid rgba(242,244,236,.22); }
+    .pf-ms::before { content: ''; position: absolute; left: -.5rem; top: .4rem; width: .9rem; height: .9rem; border-radius: 50%; background: #e3a72f; box-shadow: 0 0 0 4px #16321f; }
     .pf-ms dt { margin: 0; }
-    .pf-day { display: block; font-size: 1rem; font-weight: 600; color: rgba(22,50,31,.65); }
-    .pf-year { display: block; font-size: clamp(3.5rem, 9vw, 6.5rem); font-weight: 800; line-height: 1; letter-spacing: -.05em; color: #16321f; }
-    .pf-ms dd { margin: .75rem 0 0; max-width: 24rem; font-size: 1.1rem; color: rgba(22,50,31,.85); }
-    @media (min-width: 800px) {
+    .pf-day { display: block; font-size: .95rem; font-weight: 600; color: rgba(242,244,236,.6); }
+    .pf-year { display: block; font-size: clamp(2.6rem, 6vw, 4rem); font-weight: 800; line-height: 1; letter-spacing: -.05em; color: #f2f4ec; }
+    .pf-ms dd { margin: .6rem 0 0; max-width: 24rem; color: rgba(242,244,236,.78); }
+    @media (min-width: 700px) {
         .pf-timeline { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3rem; }
-        .pf-ms { padding: 2.25rem 0 0; border-left: 0; border-top: 2px solid rgba(22,50,31,.25); }
-        .pf-ms::before { left: 0; top: -.55rem; }
+        .pf-ms { padding: 1.75rem 0 0; border-left: 0; border-top: 2px solid rgba(242,244,236,.22); }
+        .pf-ms::before { left: 0; top: -.5rem; }
     }
 
     /* Kisah perusahaan */
     .pf-story { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem; }
-    @media (min-width: 900px) { .pf-story { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 5rem; align-items: start; } .pf-sticky { position: sticky; top: 7rem; } }
+    @media (min-width: 900px) {
+        .pf-story { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 5rem; align-items: start; }
+        .pf-sticky { position: sticky; top: calc(var(--nav-h) + var(--tabs-h) + 1.5rem); }
+    }
     .pf-prose { max-width: 42rem; font-size: 1.08rem; line-height: 1.8; text-align: justify; text-justify: inter-word; hyphens: auto; color: rgba(242,244,236,.8); }
     .pf-prose p + p { margin-top: 1.4rem; }
     .pf-prose strong { color: #f2f4ec; }
@@ -80,9 +84,10 @@
     @include('about._hero', [
         'title' => 'Mengenal PT. Sahabat Sawit Rokan Sejahtera',
         'lead'  => 'Perusahaan perkebunan kelapa sawit yang tumbuh dan berkembang di Kabupaten Rokan Hilir, Provinsi Riau.',
+        'chips' => true,
     ])
 
-    {{-- PENGANTAR: foto berbingkai + profil singkat --}}
+    {{-- PENGANTAR: foto berbingkai + profil singkat + garis waktu ringkas --}}
     <section class="pf-sec pf-intro">
         <div class="pf-intro-grid">
             <figure class="pf-photo">
@@ -107,28 +112,27 @@
                 </dl>
             </div>
         </div>
-    </section>
 
-    {{-- GARIS WAKTU (section terang sebagai jeda) --}}
-    <section class="pf-sec pf-light" id="awal-perjalanan">
-        <p class="pf-label">Awal perjalanan</p>
-        <h2 class="pf-h2">Latar Belakang Perusahaan</h2>
+        <div class="pf-timewrap" id="awal-perjalanan">
+            <p class="pf-label">Awal perjalanan</p>
+            <h3 class="pf-h3">Latar Belakang Perusahaan</h3>
 
-        <dl class="pf-timeline">
-            @foreach($tonggak as $t)
-            <div class="pf-ms">
-                <dt>
-                    @if($t['tanggal'])<span class="pf-day">{{ $t['tanggal'] }}</span>@endif
-                    <span class="pf-year">{{ $t['tahun'] }}</span>
-                </dt>
-                <dd>{{ $t['teks'] }}</dd>
-            </div>
-            @endforeach
-        </dl>
+            <dl class="pf-timeline">
+                @foreach($tonggak as $t)
+                <div class="pf-ms">
+                    <dt>
+                        @if($t['tanggal'])<span class="pf-day">{{ $t['tanggal'] }}</span>@endif
+                        <span class="pf-year">{{ $t['tahun'] }}</span>
+                    </dt>
+                    <dd>{{ $t['teks'] }}</dd>
+                </div>
+                @endforeach
+            </dl>
+        </div>
     </section>
 
     {{-- KISAH PERUSAHAAN --}}
-    <section class="pf-sec pf-dark">
+    <section class="pf-sec pf-deep">
         <div class="pf-story">
             <div class="pf-sticky">
                 <p class="pf-label">Perjalanan kami</p>

@@ -4,8 +4,21 @@
 
 @section('content')
 
-    {{-- 1. HERO (komponen lama dibiarkan) --}}
+    {{-- 1. HERO (komponen x-hero: sapaan, panel statistik 3D, video latar) --}}
     <x-hero :stats="$stats" />
+
+@php
+    // Sertifikasi untuk strip kepercayaan (file ada di public/images, sama dengan yang dipakai footer).
+    $sertifikat = [
+        ['file' => 'halal.jpeg', 'nama' => 'Halal'],
+        ['file' => 'ispo.jpeg',  'nama' => 'ISPO'],
+        ['file' => 'tsi.jpeg',   'nama' => 'TSI'],
+        ['file' => 'kan.jpeg',   'nama' => 'KAN'],
+    ];
+
+    // Nama kategori produk yang ramah dibaca (untuk teaser produk).
+    $labelKategori = ['CPO' => 'CPO', 'PKO' => 'PKO', 'Kernel' => 'Inti Sawit', 'Turunan' => 'Produk Turunan'];
+@endphp
 
 <style>
     /* Gaya Home disamakan dengan landing page. Semua class berawalan "hm-" supaya tidak bentrok. */
@@ -20,10 +33,11 @@
     }
     .hm *, .hm *::before, .hm *::after { box-sizing: border-box; }
     .hm a { color: inherit; text-decoration: none; }
-    .hm a:focus-visible { outline: 3px solid var(--krem); outline-offset: 3px; }
+    .hm a:focus-visible { outline: 3px solid var(--emas); outline-offset: 3px; }
 
     .hm-sec { padding: clamp(4rem, 10vh, 7rem) clamp(1.25rem, 5vw, 3.5rem); }
     .hm-sec + .hm-sec { border-top: 1px solid rgba(242,244,236,.12); }
+    .hm-pad { padding: clamp(3rem, 8vh, 5rem) clamp(1.25rem, 5vw, 3.5rem); }
     .hm-inner { max-width: 80rem; margin: 0 auto; }
 
     .hm-split { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
@@ -64,6 +78,19 @@
     .hm-link:hover { color: var(--emas); }
     .hm-link svg { width: 16px; height: 16px; }
 
+    /* Strip sertifikasi (section terang tepat di bawah hero) */
+    .hm-trust { background: var(--krem); color: var(--hijau); scroll-margin-top: 4rem; }
+    .hm-trust-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.75rem; align-items: center; }
+    @media (min-width: 900px) { .hm-trust-grid { grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr); gap: 3rem; } }
+    .hm-trust .hm-label { color: rgba(22,50,31,.6); }
+    .hm-trust h2 { margin-top: .35rem; font-size: clamp(1.5rem, 2.6vw, 2.2rem); font-weight: 800; line-height: 1.1; letter-spacing: -.03em; }
+    .hm-trust .hm-link { margin-top: 1rem; }
+    .hm-trust .hm-link:hover { color: var(--hijau-muda); }
+    .hm-logos { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .9rem; }
+    .hm-logo { display: flex; align-items: center; justify-content: center; width: 6.5rem; height: 5rem; padding: .6rem; border: 1px solid rgba(22,50,31,.14); border-radius: .5rem; background: #fff; transition: border-color .25s, box-shadow .25s; }
+    .hm-logo img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
+    .hm-logo:hover { border-color: var(--hijau-muda); box-shadow: 0 12px 24px rgba(22,50,31,.12); }
+
     /* Keunggulan: section menempel di layar, scroll ke bawah menggeser kartu ke samping */
     .hm-hscroll {
         --gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2));
@@ -92,24 +119,43 @@
         display: flex; flex-direction: column; justify-content: space-between; gap: 1rem;
         padding: 1.5rem;
         border: 1px solid rgba(242,244,236,.18);
-        border-radius: .25rem;
-        transition: border-color .25s;
+        border-radius: .5rem;
+        background: linear-gradient(160deg, rgba(242,244,236,.08), rgba(242,244,236,.02));
+        transition: border-color .25s, transform .25s ease-out;
     }
+    .hm-adv-no { align-self: flex-start; display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; border-radius: .35rem; background: rgba(227,167,47,.14); border: 1px solid rgba(227,167,47,.4); color: var(--emas); font-size: 1rem; font-weight: 800; }
     .hm-adv h3 { font-size: clamp(1.4rem, 2.2vw, 1.9rem); font-weight: 700; letter-spacing: -.02em; line-height: 1.15; transition: color .25s; }
-    .hm-adv p { font-size: .95rem; color: rgba(242,244,236,.7); }
+    .hm-adv p { margin-top: .6rem; font-size: .95rem; color: rgba(242,244,236,.7); }
     .hm-adv:hover { border-color: var(--emas); }
     .hm-adv:hover h3 { color: var(--emas); }
     /* Cadangan: tanpa pin (kurangi gerakan / kartu muat di layar) → baris biasa yang bisa digeser */
     .hm-hscroll.is-native .hm-hscroll-pin { position: static; height: auto; overflow: visible; padding: clamp(4rem, 10vh, 7rem) 0; }
     .hm-hscroll.is-native .hm-hscroll-track { width: auto; overflow-x: auto; }
 
+    /* Produk unggulan (teaser) */
+    .hm-prods { margin-top: clamp(2rem, 5vh, 3.5rem); display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr)); gap: 1.5rem; }
+    .hm-prod { display: flex; flex-direction: column; overflow: hidden; border: 1px solid rgba(242,244,236,.12); border-radius: .5rem; background: rgba(242,244,236,.05); transition: border-color .3s, background .3s, transform .25s ease-out; }
+    .hm-prod-img { position: relative; aspect-ratio: 4 / 3; overflow: hidden; background: linear-gradient(145deg, var(--hijau-muda), #1d4129); }
+    .hm-prod-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s ease; }
+    .hm-prod-tag { position: absolute; left: .75rem; top: .75rem; padding: .15rem .7rem; border-radius: 99px; background: rgba(15,36,23,.82); color: var(--emas); font-size: .75rem; font-weight: 700; }
+    .hm-prod-body { display: flex; flex: 1; flex-direction: column; padding: 1.1rem 1.25rem 1.25rem; }
+    .hm-prod-body h3 { font-size: 1.2rem; font-weight: 800; letter-spacing: -.02em; line-height: 1.2; }
+    .hm-prod-body p { margin-top: .5rem; font-size: .92rem; color: rgba(242,244,236,.7); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    .hm-prod-body .hm-more { align-self: flex-start; margin-top: auto; }
+    .hm-prod-body p + .hm-more, .hm-prod-body h3 + .hm-more { margin-top: 1rem; }
+    .hm-prod:hover { border-color: rgba(227,167,47,.5); background: rgba(242,244,236,.09); }
+    .hm-prod:hover .hm-prod-img img { transform: scale(1.06); }
+    .hm-prod:hover .hm-more { color: var(--emas); }
+
     /* Perkebunan */
-    .hm-stats { margin: 2rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .hm-stats { margin: 2rem 0 0; display: grid; grid-template-columns: 1fr 1fr; gap: .9rem; }
+    .hm-stats > div { padding: 1rem 1.1rem; border: 1px solid rgba(242,244,236,.14); border-radius: .5rem; background: rgba(242,244,236,.05); }
     .hm-stats dt { font-size: .85rem; color: rgba(242,244,236,.6); }
     .hm-stats dd { margin: .15rem 0 0; font-size: 1.35rem; font-weight: 700; letter-spacing: -.01em; }
     .hm-note { margin-top: 1rem; font-size: .75rem; color: rgba(242,244,236,.45); }
-    .hm-map { border-radius: .25rem; overflow: hidden; }
-    .hm-map iframe { display: block; width: 100%; height: 380px; border: 0; }
+    .hm-map { position: relative; isolation: isolate; border-radius: .5rem; }
+    .hm-map::before { content: ''; position: absolute; z-index: -1; inset: .9rem -.9rem -.9rem .9rem; border: 2px solid var(--emas); border-radius: .5rem; }
+    .hm-map iframe { display: block; width: 100%; height: 380px; border: 0; border-radius: .5rem; }
 
     /* Berita & Pengetahuan */
     .hm-head { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 1rem; }
@@ -129,11 +175,52 @@
     .hm-more { display: inline-block; margin-top: 1rem; font-size: .9rem; font-weight: 600; border-bottom: 2px solid var(--emas); padding-bottom: .15rem; }
     .hm-card:hover .hm-more { color: var(--emas); }
     .hm-empty { margin-top: clamp(2rem, 5vh, 3.5rem); padding: 2.5rem 1rem; text-align: center; color: rgba(242,244,236,.6); border: 1px solid rgba(242,244,236,.15); border-radius: .25rem; }
+
+    /* Ajakan penutup */
+    .hm-cta { background: #0f2417; }
+    .hm-cta-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2rem; align-items: center; }
+    @media (min-width: 900px) { .hm-cta-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 4rem; } }
+    .hm-cta .hm-body { margin-top: 1rem; }
+    .hm-cta-btns { display: flex; flex-wrap: wrap; gap: .9rem; }
+    @media (min-width: 900px) { .hm-cta-btns { justify-content: flex-end; } }
+    .hm-btn { display: inline-flex; align-items: center; padding: .9rem 1.7rem; border: 2px solid rgba(242,244,236,.6); border-radius: .25rem; font-weight: 700; font-size: .95rem; transition: background .2s, border-color .2s, color .2s; }
+    .hm-btn:hover { background: var(--krem); border-color: var(--krem); color: var(--hijau); }
+    .hm-btn--gold { background: var(--emas); border-color: var(--emas); color: var(--hijau); }
+    .hm-btn--gold:hover { background: #f0b84a; border-color: #f0b84a; }
+
+    /* Efek miring 3D saat kursor di atas kartu (diatur JS; hanya di perangkat dengan mouse) */
+    [data-tilt] { transform-style: preserve-3d; will-change: transform; }
+
+    /* Kemunculan bertahap saat masuk layar (aktif bila JavaScript jalan) */
+    @keyframes hmUp { from { opacity: 0; transform: translateY(18px); } }
+    .hm-js [data-rv]:not(.is-in) { opacity: 0; }
+    @media (prefers-reduced-motion: no-preference) { .hm-js [data-rv].is-in { animation: hmUp .55s ease backwards; animation-delay: calc(var(--i, 0) * 70ms); } }
 </style>
 
 <div class="hm">
 
-    {{-- 2. TENTANG KAMI --}}
+    {{-- 2. SERTIFIKASI (strip kepercayaan, section terang) --}}
+    <section class="hm-trust hm-pad" id="hmLanjut">
+        <div class="hm-inner hm-trust-grid">
+            <div>
+                <p class="hm-label">Standar &amp; Sertifikasi</p>
+                <h2>Dipercaya dan diakui secara resmi</h2>
+                <a href="{{ route('about.sertifikasi') }}" class="hm-link">
+                    Lihat Semua Sertifikasi
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+            <ul class="hm-logos">
+                @foreach($sertifikat as $c)
+                <li class="hm-logo" data-rv style="--i: {{ $loop->index }}">
+                    <img src="{{ asset('images/' . $c['file']) }}" alt="Sertifikat {{ $c['nama'] }}" loading="lazy" onerror="this.style.display='none'">
+                </li>
+                @endforeach
+            </ul>
+        </div>
+    </section>
+
+    {{-- 3. TENTANG KAMI --}}
     <section class="hm-sec">
         <div class="hm-inner hm-split">
             <p class="hm-label">Tentang Kami</p>
@@ -152,7 +239,7 @@
         </div>
     </section>
 
-    {{-- 3. KEUNGGULAN --}}
+    {{-- 4. KEUNGGULAN --}}
     <section class="hm-hscroll" id="hmKeunggulan">
         <div class="hm-hscroll-pin">
             <div class="hm-hscroll-head">
@@ -160,16 +247,54 @@
             </div>
             <div class="hm-hscroll-track" id="hmTrack">
                 @foreach($advantages as $adv)
-                <article class="hm-adv">
-                    <h3>{{ $adv['title'] }}</h3>
-                    <p>{{ $adv['desc'] }}</p>
+                <article class="hm-adv" data-tilt="7">
+                    <span class="hm-adv-no" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                    <div>
+                        <h3>{{ $adv['title'] }}</h3>
+                        <p>{{ $adv['desc'] }}</p>
+                    </div>
                 </article>
                 @endforeach
             </div>
         </div>
     </section>
 
-    {{-- 4. PERKEBUNAN --}}
+    {{-- 5. PRODUK UNGGULAN (muncul bila controller mengirim $featuredProducts) --}}
+    @if(isset($featuredProducts) && $featuredProducts->isNotEmpty())
+    <section class="hm-sec">
+        <div class="hm-inner">
+            <div class="hm-head">
+                <h2 class="hm-title">Produk Unggulan</h2>
+                <a href="{{ route('products') }}" class="hm-link">
+                    Lihat Semua Produk
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/></svg>
+                </a>
+            </div>
+
+            <div class="hm-prods">
+                @foreach($featuredProducts as $product)
+                <a href="{{ route('products.show', $product->slug) }}" class="hm-prod" data-tilt="5" data-rv style="--i: {{ $loop->index }}">
+                    <div class="hm-prod-img">
+                        @if($product->image)
+                        <img src="{{ asset('storage/' . $product->image) }}" alt="{{ $product->name }}" loading="lazy" onerror="this.style.display='none'">
+                        @endif
+                        @if($product->category)
+                            <span class="hm-prod-tag">{{ $labelKategori[$product->category] ?? $product->category }}</span>
+                        @endif
+                    </div>
+                    <div class="hm-prod-body">
+                        <h3>{{ $product->name }}</h3>
+                        @if($product->description)<p>{{ $product->description }}</p>@endif
+                        <span class="hm-more">Lihat detail</span>
+                    </div>
+                </a>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
+    {{-- 6. PERKEBUNAN --}}
     <section class="hm-sec">
         <div class="hm-inner hm-grid2">
             <div>
@@ -182,9 +307,9 @@
                     <div><dt>Lokasi</dt><dd>Rokan Hilir, Riau</dd></div>
                     <div><dt>Luas Area</dt><dd>11.392+ (Ha)</dd></div>
                     <div><dt>Kemitraan</dt><dd>9348,891(Ha)</dd></div>
-                    <div><dt>Diusahan sendiri</dt><dd>2043,75(Ha)</dd></div>
+                    <div><dt>Diusahakan sendiri</dt><dd>2043,75(Ha)</dd></div>
                 </dl>
-                <p class="hm-note">*SK : SK : 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
+                <p class="hm-note">*SK: 903/MENLHK/SETJEN/PLA.2/12/2016 RIAU.</p>
 
                 <a href="{{ route('plantation') }}" class="hm-link">
                     Lihat Detail Perkebunan
@@ -200,7 +325,7 @@
         </div>
     </section>
 
-    {{-- 5. BERITA & GALERI KEGIATAN --}}
+    {{-- 7. BERITA & GALERI KEGIATAN --}}
     <section class="hm-sec">
         <div class="hm-inner">
             <div class="hm-head">
@@ -214,7 +339,7 @@
             @if(isset($latestBerita) && $latestBerita->isNotEmpty())
             <div class="hm-cards">
                 @foreach($latestBerita as $item)
-                <a href="{{ route('media.berita.show', $item->slug) }}" class="hm-card">
+                <a href="{{ route('media.berita.show', $item->slug) }}" class="hm-card" data-rv style="--i: {{ $loop->index }}">
                     <div class="hm-card-img">
                         <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x400/1F5F3B/F5F1E8?text=' . urlencode($item->judul) }}"
                              alt="{{ $item->judul }}" loading="lazy"
@@ -235,7 +360,7 @@
         </div>
     </section>
 
-    {{-- 6. PENGETAHUAN (SahabatPedia) --}}
+    {{-- 8. PENGETAHUAN (SahabatPedia) --}}
     <section class="hm-sec">
         <div class="hm-inner">
             <div class="hm-head">
@@ -249,7 +374,7 @@
             @if(isset($latestPengetahuan) && $latestPengetahuan->isNotEmpty())
             <div class="hm-cards">
                 @foreach($latestPengetahuan as $item)
-                <a href="{{ route('media.pengetahuan.show', $item->slug) }}" class="hm-card">
+                <a href="{{ route('media.pengetahuan.show', $item->slug) }}" class="hm-card" data-rv style="--i: {{ $loop->index }}">
                     <div class="hm-card-img">
                         <img src="{{ $item->gambar ? asset('storage/' . $item->gambar) : 'https://placehold.co/600x400/2F6B3F/F5F1E8?text=' . urlencode($item->judul) }}"
                              alt="{{ $item->judul }}" loading="lazy"
@@ -264,6 +389,20 @@
             @else
             <p class="hm-empty">Belum ada konten pengetahuan yang dipublikasikan.</p>
             @endif
+        </div>
+    </section>
+
+    {{-- 9. AJAKAN PENUTUP --}}
+    <section class="hm-sec hm-cta">
+        <div class="hm-inner hm-cta-grid">
+            <div>
+                <h2 class="hm-title" style="max-width:20ch">Mari bermitra dengan kami</h2>
+                <p class="hm-body">Tim kami siap membantu kebutuhan Anda, baik untuk informasi produk, penawaran, maupun kerja sama.</p>
+            </div>
+            <div class="hm-cta-btns">
+                <a class="hm-btn hm-btn--gold" href="https://wa.me/628139654581" target="_blank" rel="noopener noreferrer">Hubungi via WhatsApp</a>
+                <a class="hm-btn" href="{{ route('contact') }}">Halaman Kontak</a>
+            </div>
         </div>
     </section>
 
@@ -333,6 +472,44 @@
         window.addEventListener('resize', layout);
         window.addEventListener('load', layout);
         layout();
+    })();
+</script>
+
+<script>
+    // Efek 3D (kartu miring mengikuti kursor) + kemunculan bertahap saat masuk layar.
+    (function () {
+        const root = document.querySelector('.hm');
+        if (!root) return;
+        const calm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+        // Kemunculan bertahap
+        const items = [...document.querySelectorAll('[data-rv]')];
+        if (items.length) {
+            root.classList.add('hm-js');
+            if ('IntersectionObserver' in window && !calm) {
+                const io = new IntersectionObserver(function (entries) {
+                    entries.forEach(function (e) {
+                        if (e.isIntersecting) { e.target.classList.add('is-in'); io.unobserve(e.target); }
+                    });
+                }, { threshold: 0.12 });
+                items.forEach(function (el) { io.observe(el); });
+            } else {
+                items.forEach(function (el) { el.classList.add('is-in'); });
+            }
+        }
+
+        // Miring 3D: hanya di perangkat dengan mouse dan bila gerakan tidak dikurangi
+        if (calm || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        document.querySelectorAll('[data-tilt]').forEach(function (el) {
+            const max = Number(el.dataset.tilt) || 6;
+            el.addEventListener('pointermove', function (e) {
+                const r = el.getBoundingClientRect();
+                const x = (e.clientX - r.left) / r.width - 0.5;
+                const y = (e.clientY - r.top) / r.height - 0.5;
+                el.style.transform = 'perspective(900px) rotateX(' + (-y * max) + 'deg) rotateY(' + (x * max) + 'deg) translateZ(0)';
+            });
+            el.addEventListener('pointerleave', function () { el.style.transform = ''; });
+        });
     })();
 </script>
 

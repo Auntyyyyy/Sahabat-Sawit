@@ -248,7 +248,7 @@
         ['icon' => 'bi-clipboard-check',  'label' => 'Safety Patrol', 'route' => \Illuminate\Support\Facades\Route::has('k3.patrol.index') ? 'k3.patrol.index' : null, 'active' => request()->routeIs('k3.patrol.*')],
         ['icon' => 'bi-heart-pulse',      'label' => 'Monitoring Kesehatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.kesehatan.index') ? 'k3.kesehatan.index' : null, 'active' => request()->routeIs('k3.kesehatan.*')],
         ['icon' => 'bi-wind',             'label' => 'Pengukuran Lingkungan', 'route' => \Illuminate\Support\Facades\Route::has('k3.pengukuran.index') ? 'k3.pengukuran.index' : null, 'active' => request()->routeIs('k3.pengukuran.*')],
-        ['icon' => 'bi-person-gear',      'label' => 'Ergonomi'],
+        ['icon' => 'bi-person-gear',      'label' => 'Ergonomi', 'route' => \Illuminate\Support\Facades\Route::has('k3.ergonomi.index') ? 'k3.ergonomi.index' : null, 'active' => request()->routeIs('k3.ergonomi.*')],
         ['icon' => 'bi-award',            'label' => 'Sertifikat'],
         ['icon' => 'bi-fire',             'label' => 'Peralatan', 'route' => \Illuminate\Support\Facades\Route::has('k3.peralatan.index') ? 'k3.peralatan.index' : null, 'active' => request()->routeIs('k3.peralatan.*')],
         ['icon' => 'bi-calendar-check',   'label' => 'Program K3L', 'route' => \Illuminate\Support\Facades\Route::has('k3.program.index') ? 'k3.program.index' : null, 'active' => request()->routeIs('k3.program.*')],

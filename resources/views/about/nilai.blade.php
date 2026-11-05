@@ -15,7 +15,7 @@
         'Menjadi mitra bisnis yang andal dan terpercaya bagi seluruh vendor, dengan menjunjung tinggi profesionalisme, komunikasi terbuka, serta membangun hubungan jangka panjang yang saling menguntungkan.',
     ];
 
-    // Visi: teks lengkap + tiga kata kunci yang tampil sebagai label kecil di bawahnya (sesuaikan bila isi visi berubah).
+    // Visi: teks lengkap + kata kunci yang tampil sebagai label kecil di bawahnya (sesuaikan bila isi visi berubah).
     $visi  = 'Menjadi perusahaan PKS dengan standar ISPO dan RSPO berskala internasional, berteknologi tinggi, dan berwawasan lingkungan.';
     $pilar = ['Standar ISPO & RSPO', 'Berskala internasional', 'Berteknologi tinggi', 'Berwawasan lingkungan'];
 
@@ -30,6 +30,9 @@
         ['Tunjangan Hari Raya',          'THR dan bonus tahunan sebagai bentuk apresiasi atas kinerja karyawan.'],
     ];
 
+    // Bila jumlah fasilitas menyisakan 3 kartu di baris terakhir (grid 4 kolom), kartu pertama dilebarkan agar baris terisi penuh.
+    $kartuPertamaLebar = count($fasilitas) % 4 === 3;
+
     // Ikon fasilitas (urutannya sama dengan $fasilitas di atas). Garis sederhana 24x24.
     $ikon = [
         'M12 20.5s-7.5-4.6-9.5-9.3A5.2 5.2 0 0112 6.6a5.2 5.2 0 019.5 4.6c-2 4.7-9.5 9.3-9.5 9.3z',                       // kesehatan: hati
@@ -43,29 +46,30 @@
 @endphp
 
 <style>
-    /* Nilai perusahaan — visi (terang), misi (kartu), fasilitas (ikon). Class berawalan "nl-". */
-    .nl-sec { --nl-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(4rem, 10vh, 7rem) var(--nl-gutter); }
+    /* Nilai perusahaan — visi & misi (gelap, satu alur), fasilitas (terang, satu-satunya jeda terang). Class berawalan "nl-". */
+    .nl-sec { --nl-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(3rem, 8vh, 5rem) var(--nl-gutter); scroll-margin-top: calc(var(--nav-h) + var(--tabs-h)); }
     .nl-dark { border-top: 1px solid rgba(242,244,236,.12); }
-    .nl-deep { background: #0f2417; border-top: 1px solid rgba(242,244,236,.12); }
     .nl-light { background: #f2f4ec; color: #16321f; }
 
     .nl-label { font-size: .95rem; color: rgba(242,244,236,.6); }
     .nl-h2 { margin-top: .5rem; max-width: 20ch; font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
     .nl-p { margin-top: 1.25rem; max-width: 40rem; color: rgba(242,244,236,.78); }
     .nl-light .nl-label { color: rgba(22,50,31,.6); }
+    .nl-light .nl-p { color: rgba(22,50,31,.8); }
 
     /* Visi */
-    .nl-quote { display: block; margin-top: clamp(2rem, 5vh, 3rem); font-size: clamp(4.5rem, 10vw, 8rem); font-weight: 800; line-height: .6; color: #e3a72f; }
+    .nl-quote { display: block; margin-top: clamp(1.5rem, 4vh, 2.5rem); font-size: clamp(4.5rem, 10vw, 8rem); font-weight: 800; line-height: .6; color: #e3a72f; }
     .nl-vision { margin-top: .5rem; max-width: 26em; font-size: clamp(1.8rem, 4.2vw, 3.4rem); font-weight: 800; line-height: 1.12; letter-spacing: -.03em; }
-    .nl-pillars { list-style: none; margin: clamp(2rem, 5vh, 3rem) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
-    .nl-pillars li { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem 1rem; border: 1px solid rgba(22,50,31,.3); border-radius: 99px; font-size: .9rem; font-weight: 600; }
+    .nl-pillars { list-style: none; margin: clamp(1.5rem, 4vh, 2.5rem) 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: .6rem; }
+    .nl-pillars li { display: inline-flex; align-items: center; gap: .5rem; padding: .35rem 1rem; border: 1px solid rgba(242,244,236,.3); border-radius: 99px; font-size: .9rem; font-weight: 600; }
     .nl-pillars li::before { content: ''; width: .5rem; height: .5rem; border-radius: 50%; background: #e3a72f; }
 
-    /* Misi */
+    /* Misi (satu alur dengan visi, dipisah garis tipis) */
+    .nl-misi { margin-top: clamp(3rem, 8vh, 4.5rem); padding-top: clamp(2rem, 5vh, 3rem); border-top: 1px solid rgba(242,244,236,.12); }
     .nl-h3-row { display: flex; flex-wrap: wrap; align-items: baseline; gap: .5rem 1rem; }
-    .nl-h3 { font-size: clamp(1.8rem, 4vw, 3rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
+    .nl-h3 { font-size: clamp(1.6rem, 3.2vw, 2.4rem); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; }
     .nl-count { font-size: .95rem; color: rgba(242,244,236,.55); }
-    .nl-missions { list-style: none; margin: clamp(2rem, 5vh, 3rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    .nl-missions { list-style: none; margin: clamp(1.5rem, 4vh, 2.25rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
     @media (min-width: 700px)  { .nl-missions { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (min-width: 1100px) { .nl-missions { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
     .nl-mission { position: relative; padding: 1.5rem 1.5rem 1.75rem; border: 1px solid rgba(242,244,236,.14); border-radius: .5rem; background: rgba(242,244,236,.045); transition: transform .25s, border-color .25s, background .25s; }
@@ -73,18 +77,19 @@
     .nl-no { display: block; font-size: 2.4rem; font-weight: 800; line-height: 1; letter-spacing: -.04em; color: #e3a72f; }
     .nl-mission p { margin-top: 1rem; color: rgba(242,244,236,.85); }
 
-    /* Fasilitas */
-    .nl-facs { list-style: none; margin: clamp(2.5rem, 6vh, 4rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
-    @media (min-width: 640px)  { .nl-facs { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    /* Fasilitas (section terang) */
+    .nl-facs { list-style: none; margin: clamp(2rem, 5vh, 3rem) 0 0; padding: 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+    @media (min-width: 640px)  { .nl-facs { grid-template-columns: repeat(2, minmax(0, 1fr)); } .nl-facs--wide .nl-fac:first-child { grid-column: span 2; } }
     @media (min-width: 1000px) { .nl-facs { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
-    .nl-fac { padding: 1.5rem; border: 1px solid rgba(242,244,236,.12); border-radius: .5rem; background: rgba(242,244,236,.04); transition: transform .25s, border-color .25s, background .25s; }
-    .nl-ico { display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: .5rem; background: rgba(227,167,47,.12); border: 1px solid rgba(227,167,47,.35); color: #e3a72f; }
+    .nl-fac { padding: 1.5rem; border: 1px solid rgba(22,50,31,.12); border-radius: .5rem; background: #fff; transition: transform .25s, border-color .25s, box-shadow .25s; }
+    .nl-ico { display: flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: .5rem; background: rgba(227,167,47,.18); border: 1px solid rgba(154,106,5,.35); color: #9a6a05; }
     .nl-ico svg { width: 1.5rem; height: 1.5rem; }
     .nl-fac h3 { margin-top: 1.1rem; font-size: 1.2rem; font-weight: 700; letter-spacing: -.02em; line-height: 1.2; }
-    .nl-fac p { margin-top: .5rem; font-size: .95rem; color: rgba(242,244,236,.7); }
+    .nl-fac p { margin-top: .5rem; font-size: .95rem; color: rgba(22,50,31,.72); }
 
     @media (hover: hover) and (prefers-reduced-motion: no-preference) {
-        .nl-mission:hover, .nl-fac:hover { transform: translateY(-4px); background: rgba(242,244,236,.09); border-color: rgba(227,167,47,.55); }
+        .nl-mission:hover { transform: translateY(-4px); background: rgba(242,244,236,.09); border-color: rgba(227,167,47,.55); }
+        .nl-fac:hover { transform: translateY(-4px); border-color: rgba(47,90,58,.45); box-shadow: 0 14px 30px rgba(22,50,31,.12); }
     }
 </style>
 
@@ -96,8 +101,8 @@
         'crumb' => 'Nilai Perusahaan',
     ])
 
-    {{-- VISI (section terang, pernyataan besar) --}}
-    <section class="nl-sec nl-light">
+    {{-- VISI & MISI: satu alur — visi sebagai pernyataan besar, misi langsung di bawahnya --}}
+    <section class="nl-sec nl-dark">
         <p class="nl-label">Arah kami</p>
         <h2 class="nl-h2">Visi & Misi</h2>
 
@@ -109,34 +114,33 @@
                 <li>{{ $p }}</li>
             @endforeach
         </ul>
-    </section>
 
-    {{-- MISI (kartu bernomor) --}}
-    <section class="nl-sec nl-dark">
-        <div class="nl-h3-row">
-            <h3 class="nl-h3">Misi</h3>
-            <span class="nl-count">{{ count($misi) }} langkah</span>
+        <div class="nl-misi">
+            <div class="nl-h3-row">
+                <h3 class="nl-h3">Misi</h3>
+                <span class="nl-count">{{ count($misi) }} langkah</span>
+            </div>
+
+            <ol class="nl-missions">
+                @foreach($misi as $item)
+                <li class="nl-mission">
+                    <span class="nl-no" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
+                    <p>{{ $item }}</p>
+                </li>
+                @endforeach
+            </ol>
         </div>
-
-        <ol class="nl-missions">
-            @foreach($misi as $item)
-            <li class="nl-mission">
-                <span class="nl-no" aria-hidden="true">{{ str_pad($loop->iteration, 2, '0', STR_PAD_LEFT) }}</span>
-                <p>{{ $item }}</p>
-            </li>
-            @endforeach
-        </ol>
     </section>
 
-    {{-- FASILITAS & KESEJAHTERAAN KARYAWAN --}}
-    <section class="nl-sec nl-deep">
+    {{-- FASILITAS & KESEJAHTERAAN KARYAWAN (section terang sebagai jeda) --}}
+    <section class="nl-sec nl-light">
         <p class="nl-label">Kepedulian kami</p>
         <h2 class="nl-h2">Fasilitas & Kesejahteraan Karyawan</h2>
         <p class="nl-p">
             Kami berkomitmen menjaga kesejahteraan seluruh karyawan melalui berbagai fasilitas dan program pendukung, sebagai bentuk apresiasi atas dedikasi mereka.
         </p>
 
-        <ul class="nl-facs">
+        <ul class="nl-facs{{ $kartuPertamaLebar ? ' nl-facs--wide' : '' }}">
             @foreach($fasilitas as [$judul, $deskripsi])
             <li class="nl-fac">
                 <span class="nl-ico" aria-hidden="true">

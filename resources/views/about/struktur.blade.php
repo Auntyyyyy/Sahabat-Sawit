@@ -10,6 +10,7 @@
     - Foto belum ada  : tampil siluet (pria / wanita berambut sanggul).
     - Penanda wanita  : tambahkan 'jk' => 'p' pada anggota di AboutController (tanpa 'jk' dianggap pria).
     - Foto asli       : tambahkan 'foto' => 'nama-file.jpg' (file di public/images/struktur/), otomatis menggantikan siluet.
+    - Level 5 ke atas : enam kartu pertama tampil, sisanya dilipat di balik tombol "Tampilkan semua".
 --}}
 @php
     $orgLevelLabels = [
@@ -22,12 +23,15 @@
 
     $orgLevels = collect($organisasi)->groupBy('level')->sortKeys();
 
-    // Tiga bagian halaman: pimpinan (gelap), manajer + supervisor (terang, sebagai jeda), officer & staf (gelap)
+    // Tiga bagian halaman: pimpinan (gelap), manajer + supervisor (terang, satu-satunya jeda terang), officer & staf (gelap)
     $bagian = [
-        ['class' => 'ab-sec so-top',        'grid' => 'so-groups--lead', 'levels' => $orgLevels->only([1, 2])],
-        ['class' => 'so-band so-light',     'grid' => '',                'levels' => $orgLevels->only([3, 4])],
-        ['class' => 'so-band so-dark',      'grid' => '',                'levels' => $orgLevels->filter(fn ($v, $k) => $k >= 5)],
+        ['id' => 'struktur-organisasi', 'chip' => 'Pimpinan & Direksi',  'class' => 'ab-sec so-top',    'grid' => 'so-groups--lead', 'levels' => $orgLevels->only([1, 2])],
+        ['id' => 'manajer',             'chip' => 'Manajer & Supervisor', 'class' => 'so-band so-light', 'grid' => '',                'levels' => $orgLevels->only([3, 4])],
+        ['id' => 'staf',                'chip' => 'Officer & Staf',      'class' => 'so-band so-dark',  'grid' => '',                'levels' => $orgLevels->filter(fn ($v, $k) => $k >= 5)],
     ];
+
+    // Chip lompat hanya untuk bagian yang benar-benar berisi
+    $jump = collect($bagian)->filter(fn ($b) => $b['levels']->isNotEmpty())->values();
 @endphp
 
 <style>
@@ -36,11 +40,11 @@
     /* Sprite siluet (disembunyikan, dipakai lewat <use>) */
     .so-sprite { position: absolute; width: 0; height: 0; overflow: hidden; }
 
-    .so-band { --so-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(3.5rem, 8vh, 5.5rem) var(--so-gutter); }
+    .so-band { --so-gutter: max(clamp(1.25rem, 5vw, 3.5rem), calc((100vw - 80rem) / 2)); padding: clamp(3rem, 7vh, 4.5rem) var(--so-gutter); scroll-margin-top: calc(var(--nav-h) + var(--tabs-h)); }
     .so-dark { border-top: 1px solid rgba(242,244,236,.12); }
     .so-light { background: #f2f4ec; color: #16321f; }
 
-    .so-groups { margin-top: clamp(2.5rem, 6vh, 4rem); }
+    .so-groups { margin-top: clamp(2rem, 5vh, 3rem); }
     .so-band .so-groups { margin-top: 0; }
     .so-groups--lead { display: grid; grid-template-columns: minmax(0, 1fr); gap: 2.5rem 2rem; }
     @media (min-width: 900px) { .so-groups--lead { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
@@ -90,6 +94,11 @@
     .so-card--lv5 .so-name { font-size: 1rem; }
     .so-card--lv5 .so-role { font-size: .85rem; }
 
+    /* Lipat daftar panjang: enam kartu pertama tampil, sisanya muncul lewat tombol */
+    .so-group.is-fold:not(.is-open) .so-extra { display: none; }
+    .so-more { margin-top: 1rem; padding: .6rem 1.2rem; border: 1px solid rgba(242,244,236,.35); border-radius: 99px; background: transparent; color: inherit; font: inherit; font-size: .9rem; font-weight: 600; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
+    .so-more:hover { background: #e3a72f; border-color: #e3a72f; color: #16321f; }
+
     @media (hover: hover) and (prefers-reduced-motion: no-preference) {
         .so-card:hover { transform: translateY(-3px); background: rgba(242,244,236,.1); border-color: rgba(227,167,47,.55); }
         .so-light .so-card:hover { background: #fff; border-color: rgba(47,90,58,.45); box-shadow: 0 14px 30px rgba(22,50,31,.12); }
@@ -122,7 +131,7 @@
     @foreach($bagian as $b)
         @if($b['levels']->isEmpty() && !$loop->first) @continue @endif
 
-        <section class="{{ $b['class'] }}" @if($loop->first) id="struktur-organisasi" @endif>
+        <section class="{{ $b['class'] }}" id="{{ $b['id'] }}">
             @if($loop->first)
                 <p class="ab-label">Tim kami</p>
                 <h2 class="ab-h2">Struktur Organisasi</h2>
@@ -130,12 +139,23 @@
                     Dipimpin oleh tim profesional yang berpengalaman di industri kelapa sawit,
                     berkomitmen menjalankan perusahaan secara transparan dan bertanggung jawab.
                 </p>
+
+                @if($jump->count() > 1)
+                    <nav class="ab-jump" aria-label="Lompat ke bagian">
+                        @foreach($jump as $j)
+                            <a href="#{{ $j['id'] }}">{{ $j['chip'] }}</a>
+                        @endforeach
+                    </nav>
+                @endif
             @endif
 
             <div class="so-groups {{ $b['grid'] }}">
                 @foreach($b['levels'] as $level => $anggota)
-                    @php $kelas = $level <= 2 ? 'lead' : 'lv' . min($level, 5); @endphp
-                    <div class="so-group">
+                    @php
+                        $kelas = $level <= 2 ? 'lead' : 'lv' . min($level, 5);
+                        $lipat = $level >= 5 && $anggota->count() > 6;
+                    @endphp
+                    <div class="so-group{{ $lipat ? ' is-fold' : '' }}">
                         <h3 class="so-head">
                             {{ $orgLevelLabels[$level] ?? 'Level ' . $level }}
                             @if($level >= 3)<span class="so-count">· {{ $anggota->count() }} orang</span>@endif
@@ -143,7 +163,7 @@
 
                         <ul class="so-cards so-cards--{{ $kelas }}">
                             @foreach($anggota as $o)
-                            <li class="so-card so-card--{{ $kelas }}">
+                            <li class="so-card so-card--{{ $kelas }}{{ $lipat && $loop->iteration > 6 ? ' so-extra' : '' }}">
                                 <span class="so-av" aria-hidden="true">
                                     <svg viewBox="0 0 100 100" focusable="false"><use href="#{{ ($o['jk'] ?? 'l') === 'p' ? 'so-wanita' : 'so-pria' }}" width="100" height="100"/></svg>
                                     @if(!empty($o['foto']))
@@ -157,6 +177,10 @@
                             </li>
                             @endforeach
                         </ul>
+
+                        @if($lipat)
+                            <button type="button" class="so-more" data-n="{{ $anggota->count() }}" aria-expanded="false">Tampilkan semua ({{ $anggota->count() }} orang)</button>
+                        @endif
                     </div>
                 @endforeach
             </div>
@@ -164,4 +188,20 @@
     @endforeach
 
 </div>
+
+<script>
+    (function () {
+        document.querySelectorAll('.so-group.is-fold').forEach(function (g) {
+            var btn = g.querySelector('.so-more');
+            if (!btn) return;
+            var n = btn.getAttribute('data-n');
+            btn.addEventListener('click', function () {
+                var open = !g.classList.contains('is-open');
+                g.classList.toggle('is-open', open);
+                btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+                btn.textContent = open ? 'Ringkas daftar' : 'Tampilkan semua (' + n + ' orang)';
+            });
+        });
+    })();
+</script>
 @endsection

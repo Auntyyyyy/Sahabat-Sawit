@@ -5,9 +5,6 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PageContentController;
 use App\Http\Controllers\Admin\ProductController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\HrDashboardController;
-use App\Http\Controllers\Admin\KaryawanController;
-use App\Http\Controllers\Admin\KehadiranController;
 use App\Http\Controllers\Admin\BeritaController;
 use App\Http\Controllers\Admin\CsrCategoryController;
 use App\Http\Controllers\Admin\CsrActivityController;
@@ -17,8 +14,13 @@ use App\Http\Controllers\Admin\PengetahuanKategoriController;
 use App\Http\Controllers\Admin\DivisionController;
 use App\Http\Controllers\Admin\SettingController;
 
+// Dashboard HR
+use App\Http\Controllers\Admin\HrDashboardController;
+use App\Http\Controllers\Admin\KaryawanController;
+use App\Http\Controllers\Admin\KehadiranController;
+use App\Http\Controllers\Admin\HrCutiController;
+
 // Dashboard GA
-// di-import sama sekali — bakal error "Class not found" begitu dipanggil.
 use App\Http\Controllers\Admin\GeneralOfficerDashboardController;
 use App\Http\Controllers\Admin\AssetController;
 use App\Http\Controllers\Admin\AtkItemController;
@@ -150,7 +152,11 @@ Route::middleware(['auth', 'admin:hr'])
 
         Route::get('dokumen', [DokumenKepegawaianController::class, 'index'])->name('dokumen.index');
         Route::get('dokumen/{dokumen}/berkas', [DokumenKepegawaianController::class, 'berkas'])->name('dokumen.berkas');
-    });
+        Route::get('cuti', [HrCutiController::class, 'index'])->name('cuti.index');
+        Route::post('cuti/{pengajuan}/setujui', [HrCutiController::class, 'setujui'])->name('cuti.setujui');
+        Route::post('cuti/{pengajuan}/tolak', [HrCutiController::class, 'tolak'])->name('cuti.tolak');
+    
+        });
 
     // Dashboard K3 (Keselamatan & Kesehatan Kerja)
 Route::middleware(['auth', 'admin:k3'])
@@ -188,7 +194,11 @@ Route::middleware(['auth', 'admin:k3'])
         Route::resource('pengukuran', \App\Http\Controllers\Admin\K3PengukuranController::class)
             ->except(['show'])
             ->parameters(['pengukuran' => 'pengukuran']);    
-            
+                // Modul Ergonomi → URL /k3/ergonomi, nama route k3.ergonomi.*
+        Route::patch('ergonomi/{ergonomi}/selesai', [\App\Http\Controllers\Admin\K3ErgonomiController::class, 'selesaikan'])->name('ergonomi.selesai');
+        Route::resource('ergonomi', \App\Http\Controllers\Admin\K3ErgonomiController::class)
+            ->except(['show'])
+            ->parameters(['ergonomi' => 'ergonomi']);
             });
 
 
@@ -222,5 +232,11 @@ Route::middleware(['auth', 'admin:personalia'])
             ->parameters(['performance' => 'penilaian']);        Route::view('training', 'admin.personalia.training.index')->name('training.index');
         Route::get('dokumen/{dokumen}/berkas', [DokumenKepegawaianController::class, 'berkas'])->name('dokumen.berkas');
         Route::resource('dokumen', DokumenKepegawaianController::class)->except(['show']);        Route::view('setup', 'admin.personalia.setup.index')->name('setup.index');
+
+        // Cuti
+Route::get('cuti', [PersonaliaCutiController::class, 'index'])->name('cuti.index');
+Route::get('cuti/ajukan', [PersonaliaCutiController::class, 'create'])->name('cuti.create');
+Route::post('cuti', [PersonaliaCutiController::class, 'store'])->name('cuti.store');
+Route::delete('cuti/pengajuan/{pengajuan}', [PersonaliaCutiController::class, 'batal'])->name('cuti.batal');
     });
 

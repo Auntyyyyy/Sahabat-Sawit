@@ -10,7 +10,16 @@
         $maxBulan = max(collect($perBulan)->max('jumlah') ?? 0, 1);
         $totalJenis = max($perJenis->sum(), 1);
         $adaFilter = request('search') || request('division');
+
+        $tgl = fn ($d) => $d->copy()->locale('id')->translatedFormat('d M Y');
+        $rentang = fn ($p) => $p->tanggal_mulai->isSameDay($p->tanggal_selesai)
+            ? $tgl($p->tanggal_mulai)
+            : $tgl($p->tanggal_mulai) . ' - ' . $tgl($p->tanggal_selesai);
     @endphp
+
+    @if ($errors->any())
+        <div class="alert-error">{{ $errors->first() }}</div>
+    @endif
 
     {{-- ================= JUDUL + PILIH TAHUN ================= --}}
     <div class="dash-head">
@@ -26,7 +35,7 @@
                     @endforeach
                 </select>
             </form>
-            <a href="{{ route('personalia.absensi.create', ['status' => 'cuti']) }}" class="btn btn-primary">+ Catat cuti</a>
+            <a href="{{ route('personalia.cuti.create') }}" class="btn btn-primary">+ Ajukan cuti</a>
         </div>
     </div>
 
@@ -53,6 +62,57 @@
             <div class="dash-sub">pada tahun {{ $tahun }}</div>
         </div>
     </div>
+
+    {{-- ================= PENGAJUAN MENUNGGU ================= --}}
+    @if ($pengajuanMenunggu->isNotEmpty())
+        <div class="panel">
+            <div class="panel-head">
+                <h2>Menunggu Persetujuan HR</h2>
+                <span class="count-badge">{{ $pengajuanMenunggu->count() }}</span>
+            </div>
+            @foreach ($pengajuanMenunggu as $p)
+                <div class="list-row">
+                    <div class="avatar-mini">{{ $inisial($p->karyawan?->name) }}</div>
+                    <div class="list-main">
+                        <div class="list-name">{{ $p->karyawan?->name ?? '-' }}</div>
+                        <div class="list-sub">{{ $p->jenis_cuti }} &middot; {{ $rentang($p) }} ({{ $p->jumlah_hari }} hari)</div>
+                    </div>
+                    <div class="list-side list-side-actions">
+                        <span class="pill-menunggu">Menunggu</span>
+                        <form method="POST" action="{{ route('personalia.cuti.batal', $p) }}" onsubmit="return confirm('Batalkan pengajuan cuti ini?');">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="link-batal">Batalkan</button>
+                        </form>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
+
+    {{-- ================= PENGAJUAN DITOLAK (30 HARI TERAKHIR) ================= --}}
+    @if ($pengajuanDitolak->isNotEmpty())
+        <div class="panel">
+            <div class="panel-head">
+                <h2>Pengajuan Ditolak (30 Hari Terakhir)</h2>
+                <span class="count-badge">{{ $pengajuanDitolak->count() }}</span>
+            </div>
+            @foreach ($pengajuanDitolak as $p)
+                <div class="list-row">
+                    <div class="avatar-mini">{{ $inisial($p->karyawan?->name) }}</div>
+                    <div class="list-main">
+                        <div class="list-name">{{ $p->karyawan?->name ?? '-' }}</div>
+                        <div class="list-sub">{{ $p->jenis_cuti }} &middot; {{ $rentang($p) }} ({{ $p->jumlah_hari }} hari)</div>
+                        <div class="list-reason">Alasan: {{ $p->alasan_tolak ?: 'tidak ada alasan yang dicatat' }}</div>
+                    </div>
+                    <div class="list-side list-side-actions">
+                        <span class="pill-ditolak">Ditolak</span>
+                        <a href="{{ route('personalia.cuti.create', ['karyawan_id' => $p->karyawan_id]) }}" class="link-ulang">Ajukan ulang</a>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    @endif
 
     {{-- ================= SEDANG CUTI + CUTI MENDATANG ================= --}}
     <div class="two-col">
@@ -233,6 +293,8 @@
     .head-actions { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; }
     .head-actions select { padding: .58rem .85rem; border: 1px solid var(--line); border-radius: 8px; font-size: .85rem; font-family: 'Inter', sans-serif; background: #fff; }
 
+    .alert-error { background: #FBE7E8; border: 1px solid #F2CFD1; color: var(--red); border-radius: 10px; padding: .85rem 1.25rem; font-size: .85rem; margin-bottom: 1.5rem; }
+
     /* ===== Kartu ringkasan ===== */
     .cards-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 1.75rem; }
     .dash-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 1.25rem 1.4rem; }
@@ -249,9 +311,20 @@
     .list-main { flex: 1; min-width: 0; }
     .list-name { font-size: .88rem; font-weight: 600; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .list-sub { font-size: .76rem; color: var(--muted); }
+    .list-reason { font-size: .78rem; color: var(--red); margin-top: .2rem; }
     .list-side { text-align: right; flex-shrink: 0; }
+    .list-side-actions { display: flex; flex-direction: column; align-items: flex-end; gap: .35rem; }
+    .list-side-actions form { margin: 0; }
     .list-strong { font-size: .86rem; font-weight: 600; color: var(--navy); }
     .list-more { padding: .75rem 1.5rem; border-top: 1px solid var(--line); font-size: .8rem; color: var(--muted); text-align: center; }
+
+    .pill-menunggu, .pill-ditolak { display: inline-block; padding: .25rem .65rem; border-radius: 6px; font-size: .76rem; font-weight: 600; }
+    .pill-menunggu { background: #FDF1DF; color: #B9791F; }
+    .pill-ditolak { background: #FBE7E8; color: var(--red); }
+    .link-batal { border: none; background: none; padding: 0; cursor: pointer; font-family: 'Inter', sans-serif; font-size: .78rem; font-weight: 600; color: var(--red); }
+    .link-batal:hover { text-decoration: underline; }
+    .link-ulang { font-size: .78rem; font-weight: 600; color: var(--blue); }
+    .link-ulang:hover { text-decoration: underline; }
 
     /* ===== Grafik batang tegak ===== */
     .vbar-chart { display: flex; gap: .5rem; height: 220px; align-items: stretch; }

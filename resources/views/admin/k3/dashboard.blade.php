@@ -330,6 +330,21 @@
                         </div>
                         <span class="k3-pill pill-navy">{{ $stats['karyawan_tidak_fit'] }}</span>
                     </div>
+
+                    <div class="k3-equip-row">
+                        <div class="k3-kpi-icon is-black flex-shrink-0"><i class="bi bi-person-gear"></i></div>
+                        <div class="flex-grow-1">
+                            <div class="fw-semibold">
+                                @if ($bisaErgonomi)
+                                    <a href="{{ route('k3.ergonomi.index', ['status' => 'terbuka']) }}" class="text-decoration-none" style="color:inherit">Ergonomi berisiko tinggi belum ditindaklanjuti</a>
+                                @else
+                                    Ergonomi berisiko tinggi belum ditindaklanjuti
+                                @endif
+                            </div>
+                            <div class="small text-muted">Risiko tinggi atau sangat tinggi, tindak lanjut belum selesai</div>
+                        </div>
+                        <span class="k3-pill pill-red">{{ $stats['ergonomi_perhatian'] }}</span>
+                    </div>
                 </div>
 
                 <div class="k3-card">
