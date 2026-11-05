@@ -4,10 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Karyawan;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
+/**
+ * Panel HR hanya MELIHAT data karyawan (daftar dan detail).
+ * Menambah, mengubah, dan menghapus karyawan dilakukan lewat panel Personalia
+ * (PersonaliaKaryawanController), supaya aturan datanya cukup ada di satu tempat.
+ */
 class KaryawanController extends Controller
 {
     /**
@@ -176,60 +180,9 @@ class KaryawanController extends Controller
         ));
     }
 
-    public function create(): View
-    {
-        return view('admin.hr.karyawan.create');
-    }
-
-    public function store(Request $request): RedirectResponse
-    {
-        $validated = $this->validateData($request);
-        Karyawan::create($validated);
-
-        return redirect()->route('hr.karyawan.index')->with('success', 'Data karyawan berhasil ditambahkan.');
-    }
-
     public function show(Karyawan $karyawan): View
     {
         return view('admin.hr.karyawan.show', compact('karyawan'));
-    }
-
-    public function edit(Karyawan $karyawan): View
-    {
-        return view('admin.hr.karyawan.edit', compact('karyawan'));
-    }
-
-    public function update(Request $request, Karyawan $karyawan): RedirectResponse
-    {
-        $validated = $this->validateData($request, $karyawan->id);
-        $karyawan->update($validated);
-
-        return redirect()->route('hr.karyawan.index')->with('success', 'Data karyawan berhasil diperbarui.');
-    }
-
-    public function destroy(Karyawan $karyawan): RedirectResponse
-    {
-        $karyawan->delete();
-
-        return redirect()->route('hr.karyawan.index')->with('success', 'Data karyawan berhasil dihapus.');
-    }
-
-    protected function validateData(Request $request, ?int $ignoreId = null): array
-    {
-        $emailRule = 'unique:karyawans,email' . ($ignoreId ? ",{$ignoreId}" : '');
-
-        return $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'email', 'max:255', $emailRule],
-            'phone' => ['nullable', 'string', 'max:20'],
-            'gender' => ['required', 'in:L,P'],
-            'birth_date' => ['nullable', 'date'],
-            'division' => ['required', 'string', 'max:100'],
-            'position' => ['required', 'string', 'max:100'],
-            'join_date' => ['required', 'date'],
-            'status' => ['required', 'in:aktif,kontrak,trainee,resign'],
-            'address' => ['nullable', 'string'],
-        ]);
     }
 
     /**

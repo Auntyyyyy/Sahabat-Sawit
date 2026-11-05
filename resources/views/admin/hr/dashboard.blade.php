@@ -5,8 +5,8 @@
 
 @section('content')
 
-    {{-- ================= KARTU STATISTIK (5 Kolom) ================= --}}
-    <div class="stat-cards-row stat-cards-row-5">
+    {{-- ================= KARTU STATISTIK (6 Kolom) ================= --}}
+    <div class="stat-cards-row stat-cards-row-6">
         <div class="stat-card">
             <div class="stat-card-label">Total Karyawan</div>
             <div class="stat-card-value">{{ $totalKaryawan }}</div>
@@ -16,8 +16,13 @@
             <div class="stat-card-value">{{ $karyawanAktif }}</div>
         </div>
         <div class="stat-card">
-            <div class="stat-card-label">Karyawan Kontrak</div>
-            <div class="stat-card-value">{{ $karyawanKontrak }}</div>
+            <div class="stat-card-label">Hadir Hari Ini</div>
+            <div class="stat-card-value">{{ $hadirHariIni }}</div>
+            <div class="stat-card-sub">dari {{ $karyawanAktif }} karyawan aktif</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-card-label">Sedang Cuti</div>
+            <div class="stat-card-value">{{ $sedangCutiHariIni }}</div>
         </div>
         <div class="stat-card">
             <div class="stat-card-label">Tingkat Kehadiran</div>
@@ -148,16 +153,17 @@
     </div>
 
 @section('extra-style')
-    .stat-cards-row-5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+    .stat-cards-row-6 { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
     .stat-card { background: #fff; border: 1px solid var(--line); border-radius: 12px; padding: 1.15rem 1.25rem; }
     .stat-card-label { font-size: .74rem; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; margin-bottom: .5rem; }
     .stat-card-value { font-family: 'Poppins', sans-serif; font-size: 1.6rem; font-weight: 700; color: var(--navy); }
+    .stat-card-sub { margin-top: .25rem; font-size: .74rem; color: var(--muted); }
 
     @media (max-width: 1200px) {
-        .stat-cards-row-5 { grid-template-columns: repeat(3, 1fr); }
+        .stat-cards-row-6 { grid-template-columns: repeat(3, 1fr); }
         .three-col { grid-template-columns: 1fr !important; }
     }
-    @media (max-width: 640px) { .stat-cards-row-5 { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 640px) { .stat-cards-row-6 { grid-template-columns: repeat(2, 1fr); } }
 
     /* ===== SVG charts ===== */
     .line-chart { width: 100%; height: auto; overflow: visible; }

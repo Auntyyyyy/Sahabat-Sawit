@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Karyawan;
-use App\Models\Kehadiran;
+use App\Services\StatistikSdm;
 use Illuminate\Support\Carbon;
 use Illuminate\View\View;
 
@@ -19,7 +19,8 @@ class HrDashboardController extends Controller
         $totalKaryawan = $all->count();
 
         // ===== Kartu statistik =====
-        $karyawanAktif = $all->where('status', 'aktif')->count();
+        // "Aktif" memakai definisi bersama (bukan resign/nonaktif), sama dengan panel Personalia.
+        $karyawanAktif = StatistikSdm::jumlahKaryawanAktif();
         $karyawanKontrak = $all->where('status', 'kontrak')->count();
         $jumlahResign = $all->where('status', 'resign')->count();
 
@@ -28,7 +29,11 @@ class HrDashboardController extends Controller
         $turnoverRate = $this->persenFormat($jumlahResign, $totalKaryawan, 1);
 
         // Tingkat kehadiran bulan ini, dari tabel kehadirans (0% kalau belum ada data)
-        $tingkatKehadiran = $this->tingkatKehadiranBulan(Carbon::today()) . '%';
+        $tingkatKehadiran = StatistikSdm::tingkatKehadiranBulan(Carbon::today()) . '%';
+
+        // Kartu baru (belum ditampilkan sampai view dashboard diperbarui)
+        $hadirHariIni = StatistikSdm::hadirHariIni();
+        $sedangCutiHariIni = StatistikSdm::sedangCutiHariIni();
 
         // ===== Donut divisi =====
         $perDivisi = $all->groupBy('division')->map->count()->sortDesc();
@@ -57,7 +62,7 @@ class HrDashboardController extends Controller
         $kehadiranTrend = [];
         for ($b = 5; $b >= 0; $b--) {
             $bulan = Carbon::today()->subMonthsNoOverflow($b);
-            $kehadiranTrend[$bulan->translatedFormat('M')] = $this->tingkatKehadiranBulan($bulan);
+            $kehadiranTrend[$bulan->translatedFormat('M')] = StatistikSdm::tingkatKehadiranBulan($bulan);
         }
 
         // ===== Jenis kelamin =====
@@ -109,14 +114,14 @@ class HrDashboardController extends Controller
             }
         }
 
-        // PENTING: kalau di projectmu method ini sebelumnya memanggil view dengan nama lain,
-        // samakan nama view di baris bawah ini dengan yang lama.
         return view('admin.hr.dashboard', compact(
             'totalKaryawan',
             'karyawanAktif',
             'karyawanKontrak',
             'tingkatKehadiran',
             'turnoverRate',
+            'hadirHariIni',
+            'sedangCutiHariIni',
             'divisiDonutCss',
             'divisiList',
             'kehadiranTrend',
@@ -125,24 +130,6 @@ class HrDashboardController extends Controller
             'masaKerja',
             'usiaList'
         ));
-    }
-
-    protected function tingkatKehadiranBulan(Carbon $bulan): int
-    {
-        $total = Kehadiran::whereYear('tanggal', $bulan->year)
-            ->whereMonth('tanggal', $bulan->month)
-            ->count();
-
-        if ($total === 0) {
-            return 0;
-        }
-
-        $hadir = Kehadiran::whereYear('tanggal', $bulan->year)
-            ->whereMonth('tanggal', $bulan->month)
-            ->where('status', 'hadir')
-            ->count();
-
-        return (int) round($hadir / $total * 100);
     }
 
     protected function persenFormat(int $bagian, int $total, int $desimal): string

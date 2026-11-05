@@ -16,6 +16,7 @@ class Kehadiran extends Model
         'menit_terlambat',
         'jenis_izin',
         'jenis_cuti',
+        'pengajuan_cuti_id',
         'jam_lembur',
     ];
 
@@ -27,5 +28,11 @@ class Kehadiran extends Model
     public function karyawan(): BelongsTo
     {
         return $this->belongsTo(Karyawan::class);
+    }
+
+    /** Pengajuan cuti yang menghasilkan baris ini. Kosong untuk catatan cuti lama atau status lain. */
+    public function pengajuanCuti(): BelongsTo
+    {
+        return $this->belongsTo(PengajuanCuti::class);
     }
 }

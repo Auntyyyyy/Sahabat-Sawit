@@ -48,6 +48,7 @@
             display: flex;
             flex-direction: column;
             padding: 1.75rem 1.25rem;
+            overflow-y: auto;
         }
 
         .sidebar .brand { display: flex; align-items: center; gap: .65rem; margin-bottom: 2.5rem; padding: 0 .25rem; }
@@ -155,8 +156,9 @@
 
         .status-pill { display: inline-block; padding: .25rem .65rem; border-radius: 6px; font-size: .76rem; font-weight: 600; }
         .status-pill.aktif { background: #E4F1EA; color: var(--green); }
-        .status-pill.cuti { background: #FDF1DF; color: #B9791F; }
-        .status-pill.nonaktif { background: #FBE7E8; color: var(--red); }
+        .status-pill.cuti, .status-pill.kontrak { background: #FDF1DF; color: #B9791F; }
+        .status-pill.trainee { background: #E4E9F3; color: var(--blue); }
+        .status-pill.nonaktif, .status-pill.resign { background: #FBE7E8; color: var(--red); }
 
         .empty-note { padding: 2rem 1.5rem; text-align: center; color: var(--muted); font-size: .88rem; }
 
@@ -235,20 +237,22 @@
                 <p class="nav-label">DATA</p>
                 <a href="{{ route('hr.karyawan.index') }}" class="nav-item {{ request()->routeIs('hr.karyawan.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                    Dashboard Karyawan
+                    Karyawan
                 </a>
-                <a href="{{ route('hr.kehadiran.dashboard') }}" class="nav-item {{ request()->routeIs('hr.kehadiran.*') ? 'active' : '' }}">                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-                    Dashboard Kehadiran
-                </a>
-                <a href="{{ route('hr.performa.dashboard') }}" class="nav-item {{ request()->routeIs('hr.performa.*') ? 'active' : '' }}">                    
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M18 9l-5 5-3-3-4 4"/></svg>
-                    Dashboard Performa
-                </a>
-                <a href="{{ route('hr.dokumen.index') }}" class="nav-item {{ request()->routeIs('hr.dokumen.*') ? 'active' : '' }}">
+                <a href="{{ route('hr.kehadiran.dashboard') }}" class="nav-item {{ request()->routeIs('hr.kehadiran.*') ? 'active' : '' }}">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="m9 16 2 2 4-4"/></svg>
-                    Dashboard Dokumen
+                    Kehadiran
                 </a>
+                <a href="{{ route('hr.performa.dashboard') }}" class="nav-item {{ request()->routeIs('hr.performa.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 6l-9.5 9.5-5-5L1 18"/><path d="M17 6h6v6"/></svg>
+                    Performa
+                </a>
+
                 <p class="nav-label">LAINNYA</p>
+                <a href="{{ route('hr.dokumen.index') }}" class="nav-item {{ request()->routeIs('hr.dokumen.*') ? 'active' : '' }}">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+                    Dokumen
+                </a>
                 <a href="#" class="nav-item">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
                     Pengaturan

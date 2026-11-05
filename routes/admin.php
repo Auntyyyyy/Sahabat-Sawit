@@ -178,6 +178,17 @@ Route::middleware(['auth', 'admin:k3'])
         Route::resource('peralatan', \App\Http\Controllers\Admin\K3PeralatanController::class)
             ->except(['show'])
             ->parameters(['peralatan' => 'peralatan']);
+
+                // Modul Program K3L → URL /k3/program, nama route k3.program.*
+        Route::patch('program/{program}/selesai', [\App\Http\Controllers\Admin\K3ProgramController::class, 'selesaikan'])->name('program.selesai');
+        Route::resource('program', \App\Http\Controllers\Admin\K3ProgramController::class)
+            ->except(['show'])
+            ->parameters(['program' => 'program']);
+                // Modul Pengukuran Lingkungan → URL /k3/pengukuran, nama route k3.pengukuran.*
+        Route::resource('pengukuran', \App\Http\Controllers\Admin\K3PengukuranController::class)
+            ->except(['show'])
+            ->parameters(['pengukuran' => 'pengukuran']);    
+            
             });
 
 

@@ -25,7 +25,7 @@ use Illuminate\View\View;
  *  k3_peralatan   : kategori ('APD'/'APAR'/'P3K'), nama, lokasi, jumlah, tanggal_kedaluwarsa
  *  k3_patrol      : tanggal, lokasi, uraian, hasil ('sesuai'/'temuan'), status_tindak ('terbuka'/'selesai')
  *  k3_pengukuran  : tanggal, titik, parameter, nilai
- *  k3_program     : nama, status ('rencana'/'berjalan'/'selesai'), target_tanggal
+ *  k3_program     : tahun, nama, status ('rencana'/'berjalan'/'selesai'), target_tanggal (dihitung untuk tahun berjalan)
  *  k3_sertifikat  : nama, nomor, tanggal_kedaluwarsa
  *  k3_agenda      : judul, pic, tanggal, waktu
  *  k3_pengaturan  : kunci, nilai   (kunci 'lti_terakhir' = tanggal insiden LTI terakhir)
@@ -99,8 +99,11 @@ class K3DashboardController extends Controller
         $programTotal = $programSelesai = 0;
 
         if (Schema::hasTable('k3_program')) {
-            $programTotal   = DB::table('k3_program')->count();
-            $programSelesai = DB::table('k3_program')->where('status', 'selesai')->count();
+            // Hanya program tahun berjalan (sesuai tulisan "tahun berjalan" di dashboard)
+            $tahunIni = (int) $hariIni->format('Y');
+
+            $programTotal   = DB::table('k3_program')->where('tahun', $tahunIni)->count();
+            $programSelesai = DB::table('k3_program')->where('tahun', $tahunIni)->where('status', 'selesai')->count();
         }
 
         $programPersen = $programTotal > 0 ? (int) round($programSelesai / $programTotal * 100) : 0;
